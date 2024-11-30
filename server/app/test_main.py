@@ -20,6 +20,9 @@ def test_first_launch():
         print("Creating tables...")
 
         cursor.execute("CREATE TABLE first_launch (yes INT)")
+        cursor.execute("CREATE TABLE items (id INT AUTO_INCREMENT PRIMARY KEY, find_val VARCHAR(255))")
+        cursor.execute("INSERT INTO items (find_val) VALUES ('bruh')")
+        db.commit()
         print("Table first_launch created")
         first_launch_flag = True
 
