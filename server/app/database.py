@@ -16,3 +16,13 @@ connection_pool = pooling.MySQLConnectionPool(
     pool_size=5,
     **dbconfig
 )
+
+def get_db():
+    conn = connection_pool.get_connection()
+    cursor = conn.cursor(dictionary=True)
+    try:
+        cursor.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")
+        yield cursor, conn
+    finally:
+        cursor.close()
+        conn.close()
