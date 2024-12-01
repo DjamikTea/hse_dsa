@@ -1,6 +1,6 @@
 import copy
+import struct
 
-# Инициализация констант
 IV_512 = bytes.fromhex(
     "8e20faa72ba0b4708b9c692f6a9d90f2"
     + "7f33d0e448c0f3ff0333a9d62c1b3f89"
@@ -121,7 +121,6 @@ A = [
     bytes.fromhex("641C314B2B8EE083"),
 ]
 
-# Таблица перестановок
 PI = [
     252,
     238,
@@ -449,80 +448,91 @@ T = [
 ]
 
 
-def xor(a, b) -> bytes:
-    assert len(a) == len(b)
-    return bytes(i^j for i, j in zip(a, b))
+class GostHash:
+    def __init__(self, message: bytes, is_256: bool = True):
+        self.message = message
+        self.is_256 = is_256
+
+    def xor(self, a, b) -> bytes:
+        assert len(a) == len(b)
+        return bytes(i ^ j for i, j in zip(a, b))
+
+    def S(self, x: bytes) -> bytes:
+        return bytes(PI[b] for b in x)
+
+    def P(self, x: bytes) -> bytes:
+        return bytes(x[T[i]] for i in range(64))
+
+    def L(self, a: bytes) -> bytes:
+        input_u64 = [
+            int.from_bytes(a[i : i + 8], byteorder="big") for i in range(0, 64, 8)
+        ]
+
+        buffers = [0] * 8
+
+        for i in range(8):
+            for j in range(64):
+                if (input_u64[i] >> j) & 1 == 1:
+                    buffers[i] ^= int.from_bytes(A[63 - j])
+
+        buffer = b"".join(struct.pack(">Q", b) for b in buffers)
+        res = [0] * 64
+        for index, byte in enumerate(buffer):
+            res[index] = byte
+
+        return bytes(res)
+
+    def X(self, k, a) -> bytes:
+        return self.xor(k, a)
+
+    def E(self, K, m) -> bytes:
+        Ks = [K] * 13
+        for i in range(1, 13):
+            Ks[i] = self.L(self.P(self.S(self.xor(Ks[i - 1], C[i - 1]))))
+        print(len(m))
+        e = self.L(self.P(self.S(self.X(Ks[0], m))))
+        es = []
+        for i in range(1, 12):
+            e = self.L(self.P(self.S(self.X(Ks[i], e))))
+            es.append(e)
+        e = self.X(Ks[12], e)
+        return e
+
+    def g_n(self, N, h, m):
+        K = self.L(self.P(self.S(self.xor(h, N))))
+        return self.xor(self.xor(self.E(K, m), h), m)
+
+    def MSB(self, z: bytes, n: int = 256) -> bytes:
+        return z[: n // 8]
+
+    def hash(self) -> str:
+        h = b"\x00" * 64
+        N = b"\x00" * 64
+        S = b"\x00" * 64
+
+        while len(self.message) > 64:
+            block = self.message[-64:]
+            h = self.g_n(N, h, block)
+            Nint = int.from_bytes(N) + len(self.message) * 8
+            N = bytes.fromhex(hex(Nint)[2:].zfill(128))
+            Sint = int.from_bytes(S) + int.from_bytes(block)
+            S = bytes.fromhex(hex(Sint)[2:].zfill(128))
+            print(S.hex())
+            self.message = self.message[:-64]
+        m = b"\x00" * (63 - len(self.message)) + b"\x01" + self.message
+        h = self.g_n(N, h, m)
+        Nint = int.from_bytes(N) + len(self.message) * 8
+        N = bytes.fromhex(hex(Nint)[2:].zfill(128))
+        Sint = int.from_bytes(S) + int.from_bytes(m)
+        S = bytes.fromhex(hex(Sint)[2:].zfill(128))
+        h = self.g_n(b"\x00" * 64, h, N)
+
+        h = self.g_n(b"\x00" * 64, h, S)
+        if self.is_256:
+            h = self.MSB(h, 256)
+        return h.hex()
 
 
-# Функция замены S
-def S(x: bytes) -> bytes:
-    return bytes(PI[b] for b in x)
-
-
-# Функция перестановки P
-def P(x: bytes) -> bytes:
-    return bytes(x[T[i]] for i in range(64))
-
-
-# Функция перестановки l по 8 байт
-def l(x: bytes):
-    b = [int(i) for i in bin(int.from_bytes(x))[2:].zfill(64)]
-    cv = b[0] * int.from_bytes(bytes(j for j in A[0][::-1]))
-    for i in range(64):
-        cv = cv ^ (b[i]*int.from_bytes(bytes(j for j in A[i][::-1])))
-    return bytes.fromhex(hex(cv)[2:].zfill(16))
-
-def L(x: bytes):
-    La = []
-    for i in range(0, 64, 8):
-        xa = x[i:i+8]
-        La.append(l(xa))
-    
-    res = b''
-    for i in La[::-1]:
-        res += i
-    return res
-
-def X(k, a) -> bytes:
-    return xor(k, a)
-
-
-# Основная преобразующая функция E
-def E(K, m):
-    Ks = [K]*13
-    for i in range(1, 14):
-        Ks[i] = L(P(S(xor(K[i - 1], C[i - 1]))))
-        # m = L(P(Sbytes(x ^ y for x, y in zip(K, m)))))
-    return m
-
-
-# Функция сжатия
-def g_n(N, h, m):
-    K = L(P(S(h ^ N)))
-    return E(K, m) ^ h ^ m
-
-
-# Основная функция
-# def streebog(message, is_256=True):
-#     h = IV_256 if is_256 else IV_512
-#     N = 0
-#     Σ = 0
-
-#     # Разбиение сообщения на блоки
-#     while len(message) >= 64:
-#         block = message[bytes.fromhex(:"64")]
-#         message = message[bytes.fromhex("64:]")
-#         h = g_n(N, h, block)
-
-#     # Обработка последнего блока
-#     if message:
-#         last_block = message.ljust(64, b'\x00')
-#         h = g_n(h, last_block)
-
-#     return h
-
-print(L(P(S(b"\x90\x89\x89\x89\x90\x00\x89\x98" + b'\x00'*56))))
-print(len(A))
-# # Пример вызова
-# hash_value = streebogb"test", is_256=True)
-# print(hash_value.hex())
+# h = GostHash(message=bytes.fromhex("fbe2e5f0eee3c820fbeafaebef20fffbf0e1e0f0f520e0ed20e8ece0ebe5f0f2f120fff0eeec20f120faf2fee5e2202ce8f6f3ede220e8e6eee1e8f0f2d1202ce8f0f2e5e220e5d1"))
+# print(h.hash())
+# # print(h.L(bytes.fromhex("fcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfc")).hex())
