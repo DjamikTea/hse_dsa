@@ -487,24 +487,26 @@ class GostHash:
         return self.xor(self.xor(self.E(K, m), h), m)
 
     def MSB(self, z: bytes, n: int = 256) -> bytes:
-        return z[: n // 8]
+        return z[n // 8 :]
 
     def hash(self) -> str:
-        h = b"\x00" * 64
+        h = b"\x00" * 64 if not self.is_256 else b"\x01"*64
         N = b"\x00" * 64
         S = b"\x00" * 64
+        
+        M = self.message
 
-        while len(self.message) > 64:
-            block = self.message[-64:]
+        while len(M) >= 64:
+            block = M[-64:]
             h = self.g_n(N, h, block)
-            Nint = int.from_bytes(N) + len(self.message) * 8
+            Nint = int.from_bytes(N) + len(M) * 8
             N = bytes.fromhex(hex(Nint)[2:].zfill(128))
             Sint = int.from_bytes(S) + int.from_bytes(block)
             S = bytes.fromhex(hex(Sint)[2:].zfill(128))
-            self.message = self.message[:-64]
-        m = b"\x00" * (63 - len(self.message)) + b"\x01" + self.message
+            M = M[:-64]
+        m = b"\x00" * (63 - len(M)) + b"\x01" + M
         h = self.g_n(N, h, m)
-        Nint = int.from_bytes(N) + len(self.message) * 8
+        Nint = int.from_bytes(N) + len(M) * 8
         N = bytes.fromhex(hex(Nint)[2:].zfill(128))
         Sint = int.from_bytes(S) + int.from_bytes(m)
         S = bytes.fromhex(hex(Sint)[2:].zfill(128))
@@ -516,6 +518,6 @@ class GostHash:
         return h.hex()
 
 
-# h = GostHash(message=bytes.fromhex("fbe2e5f0eee3c820fbeafaebef20fffbf0e1e0f0f520e0ed20e8ece0ebe5f0f2f120fff0eeec20f120faf2fee5e2202ce8f6f3ede220e8e6eee1e8f0f2d1202ce8f0f2e5e220e5d1"))
+# h = GostHash(message=bytes.fromhex("323130393837363534333231303938373635343332313039383736353433323130393837363534333231303938373635343332313039383736353433323130"), is_256=True)
 # print(h.hash())
 # # print(h.L(bytes.fromhex("fcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfc")).hex())
