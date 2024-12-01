@@ -13,6 +13,8 @@ from server.app.main import app
 from server.app.telegram_gateway import TelegramGatewayAPI
 client = TestClient(app)
 
+#TODO: мокировать TelegramGatewayAPI
+
 def test_first_launch():
     db = connection_pool.get_connection()
     cursor = db.cursor()

@@ -2,3 +2,4 @@ fastapi
 uvicorn[standard]
 mysql-connector-python
 httpx
+aiohttp
