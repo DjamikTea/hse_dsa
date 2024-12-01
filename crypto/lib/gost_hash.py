@@ -1,19 +1,4 @@
-import copy
 import struct
-
-IV_512 = bytes.fromhex(
-    "8e20faa72ba0b4708b9c692f6a9d90f2"
-    + "7f33d0e448c0f3ff0333a9d62c1b3f89"
-    + "4a2c8b163e1d9d1e52cc0f133c90837f"
-    + "1d95b0a144d3cdb71de0a8a1f611a62c"
-)
-
-IV_256 = bytes.fromhex(
-    "9e8ba222b2a3f104a8fa31bb8db5f5ed"
-    + "63a6cf963b7b43c4b35b626b0b5c3e41"
-    + "d0c242bda01d8b3b949121aad2e9ae13"
-    + "c579982af1b42b2d3721b5b74dff0f8e"
-)
 
 C = [
     bytes.fromhex(
@@ -489,7 +474,6 @@ class GostHash:
         Ks = [K] * 13
         for i in range(1, 13):
             Ks[i] = self.L(self.P(self.S(self.xor(Ks[i - 1], C[i - 1]))))
-        print(len(m))
         e = self.L(self.P(self.S(self.X(Ks[0], m))))
         es = []
         for i in range(1, 12):
@@ -517,7 +501,6 @@ class GostHash:
             N = bytes.fromhex(hex(Nint)[2:].zfill(128))
             Sint = int.from_bytes(S) + int.from_bytes(block)
             S = bytes.fromhex(hex(Sint)[2:].zfill(128))
-            print(S.hex())
             self.message = self.message[:-64]
         m = b"\x00" * (63 - len(self.message)) + b"\x01" + self.message
         h = self.g_n(N, h, m)
