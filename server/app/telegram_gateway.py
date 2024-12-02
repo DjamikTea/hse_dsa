@@ -112,24 +112,26 @@ class TelegramGatewayAPI:
             async with session.post(f'{self.api_url}{endpoint}', json=payload, headers=headers) as response:
                 return await response.json()
 
-#
-# async def main():
-#     api_token = os.getenv("TELEGRAM_GATEWAY_API_TOKEN")
-#     phone_number = os.getenv("TELEGRAM_TEST_PHONE")
-#
-#     tg_gateway = TelegramGatewayAPI(api_token)
-#
-#     response = await tg_gateway.check_send_ability(phone_number)
-#     print(response)
-#
-#     response = await tg_gateway.send_verification_message(phone_number, code="333444")
-#     print(response)
-#
-#     response = await tg_gateway.check_verification_status(response['result']['request_id'])
-#     print(response)
-#
-#     response = await tg_gateway.revoke_verification_message(response['result']['request_id'])
-#     print(response)
-#
-# if __name__ == "__main__":
-#     asyncio.run(main())
+def mock_http(mocked_aiohttp, test_phone_number):
+    mocked_aiohttp.post(
+        "https://gatewayapi.telegram.org/sendVerificationMessage",
+        payload={'ok': True, 'result':
+            {'request_id': '345452344', 'phone_number': test_phone_number, 'request_cost': 0, 'remaining_balance': 0, 'delivery_status': {'status': 'sent', 'updated_at': 1733119413}}},  # Ответ, который вернет мок
+    )
+
+    mocked_aiohttp.post(
+        "https://gatewayapi.telegram.org/checkSendAbility",
+        payload={'ok': True, 'result':
+            {'request_id': '345452344', 'phone_number': test_phone_number, 'request_cost': 0, 'remaining_balance': 0}},  # Ответ, который вернет мок
+    )
+
+    mocked_aiohttp.post(
+        "https://gatewayapi.telegram.org/checkVerificationStatus",
+        payload={'ok': True, 'result':
+            {'request_id': '345452344', 'phone_number': test_phone_number, 'request_cost': 0, 'delivery_status': {'status': 'sent', 'updated_at': 1733119413}}}
+    )
+
+    mocked_aiohttp.post(
+        "https://gatewayapi.telegram.org/revokeVerificationMessage",
+        payload={'ok': True, 'result': True}
+    )

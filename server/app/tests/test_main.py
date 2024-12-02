@@ -3,17 +3,22 @@
 #  All rights reserved.
 import asyncio
 import os
-from http.client import responses
+import pytest
+from aioresponses import aioresponses
 
 from fastapi.testclient import TestClient
 from mysql.connector import ProgrammingError
 
 from server.app.database import connection_pool
 from server.app.main import app
-from server.app.telegram_gateway import TelegramGatewayAPI
+from server.app.telegram_gateway import TelegramGatewayAPI, mock_http
 client = TestClient(app)
 
 #TODO: мокировать TelegramGatewayAPI
+@pytest.fixture
+def mocked_aiohttp():
+    with aioresponses() as mock:
+        yield mock
 
 def test_first_launch():
     db = connection_pool.get_connection()
@@ -81,39 +86,36 @@ def test_mysql_select():
     assert response.status_code == 200
     assert response.json() == {'find_val': 'bruh', 'id': 1}
 
-async def test_telegram_gateway():
-    tg_gateway = TelegramGatewayAPI()
+async def test_telegram_gateway(mocked_aiohttp):
     test_phone_number = os.getenv("TELEGRAM_TEST_PHONE")
+    tg_gateway = TelegramGatewayAPI()
     if not test_phone_number:
         print("Telegram test phone number not found")
         assert False
 
+    mock_http(mocked_aiohttp, test_phone_number)
+
     response = await tg_gateway.check_send_ability(test_phone_number)
-    print(response)
     assert response['ok'] == True
     assert response['result']['phone_number'] == test_phone_number
     assert response['result']['request_cost'] == 0
-    await asyncio.sleep(5)
 
     response = await tg_gateway.send_verification_message(test_phone_number, code="123456")
-    print(response)
     assert response['ok'] == True
-    await asyncio.sleep(1)
 
     response = await tg_gateway.check_verification_status(response['result']['request_id'])
-    print(response)
     assert response['ok'] == True
     assert response['result']['delivery_status']['status'] == 'sent'
-    await asyncio.sleep(1)
 
     response = await tg_gateway.revoke_verification_message(response['result']['request_id'])
-    print(response)
     assert response['ok'] == True
     assert response['result'] == True
-    await asyncio.sleep(60)
 
-def test_register():
+def test_register(mocked_aiohttp):
     test_phone_number = os.getenv("TELEGRAM_TEST_PHONE")
+
+    mock_http(mocked_aiohttp, test_phone_number)
+
     response = client.get("/login/register", params={"phone_number": test_phone_number, "fio": "Test User", "public_key": "1234567890"})
     assert response.json() == {"message": "Verification code sent"}
     assert response.status_code == 200

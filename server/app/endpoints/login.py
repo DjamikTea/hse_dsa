@@ -24,6 +24,7 @@ async def register(phone_number: str, fio: str, public_key: str, request: Reques
             raise HTTPException(status_code=400, detail=f"Too many requests, try again later")
         else:
             cursor.execute("DELETE FROM user_register WHERE phone_number = %s", (phone_number,))
+            conn.commit()
 
     cursor.execute("SELECT * FROM users WHERE phone_number = %s", (phone_number,))
     user = cursor.fetchone()
