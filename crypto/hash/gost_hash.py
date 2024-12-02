@@ -490,10 +490,10 @@ class GostHash:
         return z[n // 8 :]
 
     def hash(self) -> str:
-        h = b"\x00" * 64 if not self.is_256 else b"\x01"*64
+        h = b"\x00" * 64 if not self.is_256 else b"\x01" * 64
         N = b"\x00" * 64
         S = b"\x00" * 64
-        
+
         M = self.message
 
         while len(M) >= 64:

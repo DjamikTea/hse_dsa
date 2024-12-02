@@ -33,7 +33,6 @@ class EllipticCurve:
         """
         return (y**2 - (x**3 + self.a * x + self.b)) % self.p == 0
 
-
     def _count_quadratic_residues(self, n: int) -> int:
         """
         Считает количество решений y^2 ≡ n (mod p).
@@ -80,6 +79,42 @@ class Point:
             if current.x is None and current.y is None:
                 return n
             n += 1
+
+    def compress(self) -> str:
+        """
+        Возращает строковое представление сжатой точки
+        :return: 16-ричная строка длины 64 
+        """
+        bx = bytes.fromhex(hex(self.x)[2:].zfill(64))
+        by = bytes.fromhex(hex(self.y)[2:].zfill(64))
+        y = 2 + (by[-1] & 1)
+        out = bytearray(len(bx) + 1)
+        out[0] = y
+        out[1:] = bx
+        return out.hex()
+
+    @classmethod
+    def uncompress(self, curve: EllipticCurve, compressed: str) -> str:
+        """
+        Конвертирует сжатую точку в объект Point, находя Y координату
+        :return: Point(curve, x, y) 
+        """
+        compressed_bytes = bytes.fromhex(compressed)
+        sign_y = compressed_bytes[0] - 2
+        x = int.from_bytes(compressed_bytes[1:], byteorder="big")
+
+        rhs = (x**3 + curve.a * x + curve.b) % curve.p
+
+        if pow(rhs, (curve.p - 1) // 2, curve.p) != 1:
+            raise ValueError("The point is not on the given curve.")
+
+        y = Point.mod_sqrt(rhs, curve.p)
+
+        if y % 2 != sign_y:
+            y = curve.p - y
+
+        print(y)
+        return Point(curve, x, y)
 
     def __neg__(self):
         """
@@ -145,22 +180,6 @@ class Point:
         if self.x is None or self.y is None:
             return "Point() on infinity"
         return f"Point({self.x}, {self.y}) on {self.curve.__str__()}"
-
-    @staticmethod
-    def land(curve: EllipticCurve, x: int) -> "Point":
-        """
-        Возращает точку по x координате на кривой
-        :param x: x-координата
-        :return: Точка на кривой
-        """
-        rhs = (x**3 + curve.a * x + curve.b) % curve.p
-
-        if pow(rhs, (curve.p - 1) // 2, curve.p) != 1:
-            raise ValueError("The point is not on the given curve.")
-
-        y = Point.mod_sqrt(rhs, curve.p)
-
-        return Point(curve, x, y)
 
     @staticmethod
     def mod_sqrt(a: int, p: int):

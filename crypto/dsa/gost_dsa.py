@@ -21,25 +21,28 @@ class GostDSA:
         self.q = 0x8000000000000000000000000000000150FE8A1892976154C59CFC193ACCF5B3
         self.m = 0x8000000000000000000000000000000150FE8A1892976154C59CFC193ACCF5B3
 
-    def generate_key_pair(self) -> tuple[int, Point]:
+    def generate_key_pair(self) -> tuple[str, str]:
         """
         Генерирует ключевую пару: закрытый и открытый ключи
         
-        :return: Кортеж, содержащий закрытый и открытый ключи
+        :return (public_key, private_key): Кортеж, содержащий закрытый и открытый ключи
         """
         d = randint(0, self.q)
         Q = d * self.P
-        return d, Q
+        private_key = Q.compress()
+        public_key  = hex(d)[2:].zfill(64)
+        
+        return public_key, private_key
 
-    def sign(self, message: bytes, d: int) -> str:
+    def sign(self, message: bytes, private_key: str) -> str:
         """
         Возвращает цифровую подпись в виде шестнадцетиричной строки по переданному сообщению и закрытому ключу
         
         :param message: Подписываемое сообщение в байтах
-        :param d: Закрытый ключ в виде числа
+        :param private_key: Закрытый ключ
         :return: Шестнадцетиричная строка из конкатенированных двух векторов (r|s)
         """
-
+        d = int(private_key, 16)
         z = int(sha256(message).hexdigest(), 16)
         e = z % self.q
         if e == 0:
@@ -53,16 +56,18 @@ class GostDSA:
         sig = bytes.fromhex(hex(r)[2:].zfill(64)) + bytes.fromhex(hex(s)[2:].zfill(64))
         return sig.hex()
 
-    def check(self, signature: str, message: bytes, Q: Point) -> bool:
+    def check(self, signature: str, message: bytes, public_key: str) -> bool:
         """
         Проверяет валидность цифровой подписи
 
         :param signature: Цифровая подпись в виде шестнадцетиричной строки
         :param message: Изначальное сообщение в байтах
-        :param Q: Открытый ключ для проверки подписи
+        :param public_key: Открытый ключ для проверки подписи
 
         :return: True, если подпись валидная, False если нет
         """
+        Q = Point.uncompress(self.curve,public_key)
+    
         r_b, s_b = bytes.fromhex(signature[: len(signature) // 2]), bytes.fromhex(
             signature[len(signature) // 2 :]
         )
