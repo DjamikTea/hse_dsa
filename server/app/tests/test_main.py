@@ -91,7 +91,7 @@ async def test_telegram_gateway():
     response = await tg_gateway.check_send_ability(test_phone_number)
     print(response)
     assert response['ok'] == True
-    assert '+' + response['result']['phone_number'] == test_phone_number
+    assert response['result']['phone_number'] == test_phone_number
     assert response['result']['request_cost'] == 0
     await asyncio.sleep(5)
 
