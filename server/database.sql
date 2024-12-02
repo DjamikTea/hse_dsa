@@ -1,9 +1,3 @@
-/*
- * Copyright (c) 2024 DjamikTea.
- * Created by Dzhamal on 2024-12-1.
- * All rights reserved.
- */
-
 create table user_register
 (
     id           bigint auto_increment
@@ -30,11 +24,35 @@ create table users
     phone_number text(16)      not null,
     pubkey       text(255)     not null,
     time_register         timestamp     not null,
+    token text(128) not null,
     constraint users_pk_2
         unique (phone_number(16)),
     constraint users_pk_3
-        unique (pubkey(255))
+        unique (pubkey(255)),
+    constraint users_pk_4
+        unique (token(128))
 );
 
-INSERT INTO user_register (fio, phone_number, pubkey, ip, time, verif_code, request_id)
-VALUES ('шими я шими я шими я', '996555555555', 'pubkey', '8.8.8.8', NOW(), '123456', 'request_id');
+create table auth
+(
+    id           bigint    not null
+        primary key,
+    phone_number text(16)  not null,
+    trs          text(128) not null,
+    timestamp    timestamp not null,
+    constraint auth_pk_2
+        unique (phone_number(16))
+);
+
+CREATE TABLE first_launch (yes INT);
+CREATE TABLE items (id INT AUTO_INCREMENT PRIMARY KEY, find_val VARCHAR(255));
+INSERT INTO items (find_val) VALUES ('bruh');
+
+/*
+ * Copyright (c) 2024 DjamikTea.
+ * Created by Dzhamal on 2024-12-2.
+ * All rights reserved.
+ */
+
+#INSERT INTO user_register (fio, phone_number, pubkey, ip, time, verif_code, request_id)
+#VALUES ('шими я шими я шими я', '996555555555', 'pubkey', '8.8.8.8', NOW(), '123456', 'request_id');

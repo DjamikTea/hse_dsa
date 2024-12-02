@@ -14,7 +14,8 @@ from server.app.main import app
 from server.app.telegram_gateway import TelegramGatewayAPI, mock_http
 client = TestClient(app)
 
-#TODO: мокировать TelegramGatewayAPI
+auth_token = ""
+
 @pytest.fixture
 def mocked_aiohttp():
     with aioresponses() as mock:
@@ -34,42 +35,12 @@ def test_first_launch():
         print("First launch flag not found")
         print("Creating tables...")
 
-        # create table user_register
-        # (
-        #     id           bigint auto_increment
-        #         primary key,
-        #     fio          text(255)     not null,
-        #     phone_number text(16)      not null,
-        #     pubkey       text(255)     not null,
-        #     ip           text(20)      not null,
-        #     time         timestamp     not null,
-        #     tries        int default 0 not null,
-        #     verif_code   text(6)       not null,
-        #     request_id   text(255)     not null,
-        #     constraint user_register_pk_2
-        #         unique (phone_number(16)),
-        #     constraint user_register_pk_3
-        #         unique (pubkey(255))
-        # );
+        sql = open("server/database.sql", "r").read()  # Updated path
+        for query in sql.split(";"):
+            if query != '':
+                if str(query).replace("\n", "")[0] != '#':
+                    cursor.execute(query.replace("\n", ""))
 
-        cursor.execute("CREATE TABLE user_register (id BIGINT AUTO_INCREMENT PRIMARY KEY, fio TEXT(255) NOT NULL, phone_number TEXT(16) NOT NULL, pubkey TEXT(255) NOT NULL, ip TEXT(20) NOT NULL, time TIMESTAMP NOT NULL, tries INT DEFAULT 0 NOT NULL, verif_code TEXT(6) NOT NULL, request_id TEXT(255) NOT NULL, CONSTRAINT user_register_pk_2 UNIQUE (phone_number(16)), CONSTRAINT user_register_pk_3 UNIQUE (pubkey(255)))")
-        # create table users
-        # (
-        #     id           bigint auto_increment
-        #         primary key,
-        #     fio          text(255)     not null,
-        #     phone_number text(16)      not null,
-        #     pubkey       text(255)     not null,
-        #     time_register         timestamp     not null,
-        #     constraint users_pk_2
-        #         unique (phone_number(16)),
-        #     constraint users_pk_3
-        #         unique (pubkey(255))
-        # );
-        cursor.execute("CREATE TABLE users (id BIGINT AUTO_INCREMENT PRIMARY KEY, fio TEXT(255) NOT NULL, phone_number TEXT(16) NOT NULL, pubkey TEXT(255) NOT NULL, time_register TIMESTAMP NOT NULL, CONSTRAINT users_pk_2 UNIQUE (phone_number(16)), CONSTRAINT users_pk_3 UNIQUE (pubkey(255)))")
-        cursor.execute("CREATE TABLE first_launch (yes INT)")
-        cursor.execute("CREATE TABLE items (id INT AUTO_INCREMENT PRIMARY KEY, find_val VARCHAR(255))")
-        cursor.execute("INSERT INTO items (find_val) VALUES ('bruh')")
         db.commit()
         print("Table first_launch created")
         first_launch_flag = True
@@ -116,11 +87,11 @@ def test_register(mocked_aiohttp):
 
     mock_http(mocked_aiohttp, test_phone_number)
 
-    response = client.get("/login/register", params={"phone_number": test_phone_number, "fio": "Test User", "public_key": "1234567890"})
+    response = client.post("/login/register", params={"phone_number": test_phone_number, "fio": "Test User", "public_key": "1234567890"})
     assert response.json() == {"message": "Verification code sent"}
     assert response.status_code == 200
 
-    response = client.get("/login/register", params={"phone_number": test_phone_number, "fio": "Test User", "public_key": "1234567890"})
+    response = client.post("/login/register", params={"phone_number": test_phone_number, "fio": "Test User", "public_key": "1234567890"})
     assert response.json() == {"detail": "Too many requests, try again later"}
     assert response.status_code == 400
 
@@ -139,9 +110,22 @@ def test_verify():
     code = user['verif_code']
     response = client.get("/login/verify", params={"phone_number": test_phone_number, "code": code})
     assert response.status_code == 200
-    assert response.json() == {"message": "User registered"}
+    global auth_token
+    auth_token = response.json()['token']
 
     response = client.get("/login/verify", params={"phone_number": test_phone_number, "code": code})
     assert response.status_code == 400
     assert response.json() == {"detail": "Register not found"}
-
+#
+# def test_auth():
+#     response = client.get("/login/auth", headers={"Authorization": f"Bearer {auth_token}"})
+#     assert response.status_code == 200
+#     assert response.json() == {"message": "User authenticated"}
+#
+#     response = client.get("/login/auth", headers={"Authorization": "Bearer 123456"})
+#     assert response.status_code == 400
+#     assert response.json() == {"detail": "Invalid token"}
+#
+#     response = client.get("/login/auth")
+#     assert response.status_code == 400
+#     assert response.json() == {"detail": "Not authenticated"}
