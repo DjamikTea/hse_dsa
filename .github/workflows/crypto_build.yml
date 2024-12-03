@@ -36,3 +36,4 @@ jobs:
                 bodyFile: "/home/runner/work/hse_dsa/hse_dsa/crypto/README.md"
                 name: DSA Crypto lib ${{ env.TAG }}
                 tag: ${{ env.TAG }}
+                skipIfReleaseExists: true

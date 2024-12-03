@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "hsecrypto"
-version = "0.1.0"
+version = "0.1.1"
 description = ""
 authors = ["Morzan6 <morzann09@gmail.com>"]
 readme = "README.md"
