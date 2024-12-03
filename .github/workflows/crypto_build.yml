@@ -25,11 +25,14 @@ jobs:
                 $POETRY_HOME/bin/pip install poetry
                 $POETRY_HOME/bin/poetry --version
                 $POETRY_HOME/bin/poetry build
-                git tag 1.0
+                TAG=$($POETRY_HOME/bin/poetry version)
+                echo "TAG=$TAG" >> $GITHUB_ENV
+                git tag $TAG
             - name: Creste release
               id: create_release
               uses: ncipollo/release-action@v1
               with:
                 artifacts: "/home/runner/work/hse_dsa/hse_dsa/crypto/dist/hsecrypto-0.1.0-py3-none-any.whl"
                 bodyFile: "/home/runner/work/hse_dsa/hse_dsa/crypto/README.md"
-                tag: 1.0
+                name: DSA Crypto lib
+                tag: ${{ env.TAG }}
