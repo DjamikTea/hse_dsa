@@ -31,6 +31,7 @@ jobs:
               with:
                 artifacts: "/home/runner/work/hse_dsa/hse_dsa/crypto/dist/hsecrypto-0.1.0-py3-none-any.whl"
                 bodyFile: "/home/runner/work/hse_dsa/hse_dsa/crypto/README.md"
+                commit: HEAD
             # - name: Create release
             #   id: create_release
             #   uses: actions/create-release@v1
