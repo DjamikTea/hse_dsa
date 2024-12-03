@@ -25,14 +25,14 @@ class GostDSA:
         """
         Генерирует ключевую пару: закрытый и открытый ключи
         
-        :return (public_key, private_key): Кортеж, содержащий закрытый и открытый ключи
+        :return (private_key, public_key): Кортеж, содержащий закрытый и открытый ключи
         """
         d = randint(0, self.q)
         Q = d * self.P
-        private_key = Q.compress()
-        public_key  = hex(d)[2:].zfill(64)
+        public_key = Q.compress()
+        private_key  = hex(d)[2:].zfill(64)
         
-        return public_key, private_key
+        return private_key, public_key
 
     def sign(self, message: bytes, private_key: str) -> str:
         """
