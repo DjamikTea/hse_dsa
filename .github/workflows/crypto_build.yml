@@ -32,7 +32,7 @@ jobs:
               id: create_release
               uses: ncipollo/release-action@v1
               with:
-                artifacts: "/home/runner/work/hse_dsa/hse_dsa/crypto/dist/hsecrypto-0.1.0-py3-none-any.whl"
+                artifacts: "/home/runner/work/hse_dsa/hse_dsa/crypto/dist/hsecrypto-${{ env.TAG }}-py3-none-any.whl"
                 bodyFile: "/home/runner/work/hse_dsa/hse_dsa/crypto/README.md"
-                name: DSA Crypto lib
+                name: DSA Crypto lib ${{ env.TAG }}
                 tag: ${{ env.TAG }}
