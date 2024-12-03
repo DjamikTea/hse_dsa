@@ -1,4 +1,4 @@
-from lib.curve import EllipticCurve, Point
+from ..lib.curve import EllipticCurve, Point
 from random import randint
 from hashlib import sha256
 
