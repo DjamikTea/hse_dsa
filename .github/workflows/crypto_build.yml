@@ -37,3 +37,4 @@ jobs:
                 name: DSA Crypto lib ${{ env.TAG }}
                 tag: ${{ env.TAG }}
                 skipIfReleaseExists: true
+                makeLatest: true
