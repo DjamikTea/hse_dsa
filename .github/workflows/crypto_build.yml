@@ -10,6 +10,8 @@ jobs:
             contents: write
         steps:
             - uses: actions/checkout@v4
+              with:
+                fetch-depth: 0
             - name: Set up Python 3.13
               uses: actions/setup-python@v3
               with:
@@ -17,11 +19,10 @@ jobs:
             - name: Build crypto lib
               run: |
                 python -m pip install --upgrade pip
-                pip install flake8 pytest pytest-asyncio coverage 
                 cd /home/runner/work/hse_dsa/hse_dsa/crypto
                 export POETRY_HOME=/opt/poetry
                 python3 -m venv $POETRY_HOME
-                $POETRY_HOME/bin/pip install poetry==1.2.0
+                $POETRY_HOME/bin/pip install poetry
                 $POETRY_HOME/bin/poetry --version
                 $POETRY_HOME/bin/poetry build
             - name: Creste release
