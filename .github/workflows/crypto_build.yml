@@ -4,6 +4,8 @@ on:
     push:
       branches:
         - main
+      paths:
+        - crypto/**
 jobs:
     build:
         runs-on: ubuntu-latest
