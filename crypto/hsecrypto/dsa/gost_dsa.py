@@ -24,20 +24,20 @@ class GostDSA:
     def generate_key_pair(self) -> tuple[str, str]:
         """
         Генерирует ключевую пару: закрытый и открытый ключи
-        
+
         :return (private_key, public_key): Кортеж, содержащий закрытый и открытый ключи
         """
         d = randint(0, self.q)
         Q = d * self.P
         public_key = Q.compress()
-        private_key  = hex(d)[2:].zfill(64)
-        
+        private_key = hex(d)[2:].zfill(64)
+
         return private_key, public_key
 
     def sign(self, message: bytes, private_key: str) -> str:
         """
         Возвращает цифровую подпись в виде шестнадцетиричной строки по переданному сообщению и закрытому ключу
-        
+
         :param message: Подписываемое сообщение в байтах
         :param private_key: Закрытый ключ
         :return: Шестнадцетиричная строка из конкатенированных двух векторов (r|s)
@@ -66,8 +66,8 @@ class GostDSA:
 
         :return: True, если подпись валидная, False если нет
         """
-        Q = Point.uncompress(self.curve,public_key)
-    
+        Q = Point.uncompress(self.curve, public_key)
+
         r_b, s_b = bytes.fromhex(signature[: len(signature) // 2]), bytes.fromhex(
             signature[len(signature) // 2 :]
         )

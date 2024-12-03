@@ -31,6 +31,8 @@ class EllipticCurve:
         :param y: y-координата
         :return: True если точка лежит на кривой, False если нет
         """
+        if x == None and y == None:
+            return True
         return (y**2 - (x**3 + self.a * x + self.b)) % self.p == 0
 
     def _count_quadratic_residues(self, n: int) -> int:
@@ -83,7 +85,7 @@ class Point:
     def compress(self) -> str:
         """
         Возращает строковое представление сжатой точки
-        :return: 16-ричная строка длины 64 
+        :return: 16-ричная строка длины 64
         """
         bx = bytes.fromhex(hex(self.x)[2:].zfill(64))
         by = bytes.fromhex(hex(self.y)[2:].zfill(64))
@@ -97,7 +99,7 @@ class Point:
     def uncompress(self, curve: EllipticCurve, compressed: str) -> str:
         """
         Конвертирует сжатую точку в объект Point, находя Y координату
-        :return: Point(curve, x, y) 
+        :return: Point(curve, x, y)
         """
         compressed_bytes = bytes.fromhex(compressed)
         sign_y = compressed_bytes[0] - 2

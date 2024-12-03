@@ -15,3 +15,7 @@ g.check(signature, b'test', public_key) # True
 ```bash
 poetry add dist/hsecrypto-0.1.0-py3-none-any.whl
 ```
+or
+```bash
+pip install dist/hsecrypto-0.1.0-py3-none-any.whl
+```
