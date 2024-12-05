@@ -1,7 +1,7 @@
 from sys import prefix
 
 from fastapi import FastAPI
-from server.app.endpoints import tests, root, auth
+from app.endpoints import tests, root, auth
 import logging
 
 logging.basicConfig(level=logging.INFO)

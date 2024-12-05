@@ -4,10 +4,10 @@ from datetime import datetime, timedelta, timezone
 from fastapi import APIRouter, Depends, HTTPException, Request
 from random import randint
 
-# from crypto.dsa import GostDSA
+from hsecrypto import GostDSA
 
-from server.app.database import connection_pool, get_db
-from server.app.telegram_gateway import TelegramGatewayAPI
+from app.database import connection_pool, get_db
+from app.telegram_gateway import TelegramGatewayAPI
 import secrets
 
 router = APIRouter()
@@ -96,35 +96,30 @@ async def get_auth(phone: str, db=Depends(get_db)):
             conn.commit()
 
     trs = generate_trs()
-    cursor.execute("INSERT INTO auth (phone_number, trs, timestamp) VALUES (%s, %s, NOW())", (phone, str(trs)))
+    cursor.execute("INSERT INTO auth (phone_number, trs, timestamp, pubkey) VALUES (%s, %s, NOW(), %s)", (phone, str(trs), user['pubkey']))
     conn.commit()
-    return {"message": "TRS generated", "trs": trs}
+    return {"message": "TRS generated, you have 5 seconds", "trs": trs}
 
 
 
 @router.get("/auth")
 async def auth(phone: str, signed_trs: str, db=Depends(get_db)):
-    pass
-    #TODO: Implement auth
+    cursor, conn = db
 
-    # cursor, conn = db
-    # cursor.execute("SELECT * FROM auth WHERE phone_number = %s", (phone,))
-    # auth = cursor.fetchone()
-    # if auth is None:
-    #     raise HTTPException(status_code=400, detail="Auth not found")
-    # if auth['timestamp'].replace(tzinfo=timezone.utc) < datetime.now(timezone.utc) - timedelta(seconds=10):
-    #     raise HTTPException(status_code=400, detail="Auth expired")
-    #
-    # cursor.execute("SELECT * FROM users WHERE phone_number = %s", (phone,))
-    # user = cursor.fetchone()
-    # if user is None:
-    #     raise HTTPException(status_code=400, detail="User not found")
-    # pubkey = user['pubkey']
-    # dsa = GostDSA
-    #
-    # if not dsa.check(signed_trs, auth['trs'], pubkey):
-    #     raise HTTPException(status_code=400, detail="Invalid signature")
-    #
-    # cursor.execute("DELETE FROM auth WHERE phone_number = %s", (phone,))
-    # conn.commit()
-    # return {"message": "User authenticated"}
+    cursor.execute("SELECT * FROM auth WHERE phone_number = %s", (phone,))
+    user = cursor.fetchone()
+    if user is None:
+        raise HTTPException(status_code=400, detail="User not found")
+
+    if user['timestamp'].replace(tzinfo=timezone.utc) < datetime.now(timezone.utc) - timedelta(seconds=5):
+        raise HTTPException(status_code=400, detail="TRS expired")
+
+    crypto = GostDSA()
+    if crypto.check(signed_trs, user['trs'].encode(), user['pubkey']):
+        cursor.execute("DELETE FROM auth WHERE phone_number = %s", (phone,))
+        token = generate_bearer_token()
+        cursor.execute("UPDATE users SET token = %s WHERE phone_number = %s", (token, phone))
+        conn.commit()
+        return {"message": "Auth success", "token": token}
+    else:
+        raise HTTPException(status_code=400, detail="Invalid signature")

@@ -7,8 +7,8 @@ from datetime import datetime, timedelta, timezone
 from fastapi import APIRouter, Depends, HTTPException, Request
 from random import randint
 
-from server.app.database import connection_pool, get_db
-from server.app.telegram_gateway import TelegramGatewayAPI
+from app.database import connection_pool, get_db
+from app.telegram_gateway import TelegramGatewayAPI
 router = APIRouter()
 
 logger = logging.getLogger(__name__)

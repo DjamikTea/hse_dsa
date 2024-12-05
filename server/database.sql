@@ -35,11 +35,12 @@ create table users
 
 create table auth
 (
-    id           bigint    not null
+    id           bigint auto_increment
         primary key,
     phone_number text(16)  not null,
     trs          text(128) not null,
     timestamp    timestamp not null,
+    pubkey text(255) not null,
     constraint auth_pk_2
         unique (phone_number(16))
 );

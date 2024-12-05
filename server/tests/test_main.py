@@ -6,15 +6,20 @@ import os
 import pytest
 from aioresponses import aioresponses
 
+from hsecrypto import GostDSA
+
 from fastapi.testclient import TestClient
 from mysql.connector import ProgrammingError
 
-from server.app.database import connection_pool
-from server.app.main import app
-from server.app.telegram_gateway import TelegramGatewayAPI, mock_http
+from app.database import connection_pool
+from app.main import app
+from app.telegram_gateway import TelegramGatewayAPI, mock_http
 client = TestClient(app)
 
 auth_token = ""
+crypto = GostDSA()
+
+private_key, public_key = crypto.generate_key_pair()
 
 @pytest.fixture
 def mocked_aiohttp():
@@ -35,7 +40,7 @@ def test_first_launch():
         print("First launch flag not found")
         print("Creating tables...")
 
-        sql = open("server/database.sql", "r").read()  # Updated path
+        sql = open("../database.sql", "r").read()  # Updated path
         for query in sql.split(";"):
             if query != '':
                 if str(query).replace("\n", "")[0] != '#':
@@ -87,11 +92,11 @@ def test_register(mocked_aiohttp):
 
     mock_http(mocked_aiohttp, test_phone_number)
 
-    response = client.post("/login/register", params={"phone_number": test_phone_number, "fio": "Test User", "public_key": "1234567890"})
+    response = client.post("/login/register", params={"phone_number": test_phone_number, "fio": "Test User", "public_key": public_key})
     assert response.json() == {"message": "Verification code sent"}
     assert response.status_code == 200
 
-    response = client.post("/login/register", params={"phone_number": test_phone_number, "fio": "Test User", "public_key": "1234567890"})
+    response = client.post("/login/register", params={"phone_number": test_phone_number, "fio": "Test User", "public_key": public_key})
     assert response.json() == {"detail": "Too many requests, try again later"}
     assert response.status_code == 400
 
@@ -116,16 +121,20 @@ def test_verify():
     response = client.get("/login/verify", params={"phone_number": test_phone_number, "code": code})
     assert response.status_code == 400
     assert response.json() == {"detail": "Register not found"}
-#
-# def test_auth():
-#     response = client.get("/login/auth", headers={"Authorization": f"Bearer {auth_token}"})
-#     assert response.status_code == 200
-#     assert response.json() == {"message": "User authenticated"}
-#
-#     response = client.get("/login/auth", headers={"Authorization": "Bearer 123456"})
-#     assert response.status_code == 400
-#     assert response.json() == {"detail": "Invalid token"}
-#
-#     response = client.get("/login/auth")
-#     assert response.status_code == 400
-#     assert response.json() == {"detail": "Not authenticated"}
+
+def test_auth():
+    response = client.get("/login/get_auth", params={"phone": os.getenv("TELEGRAM_TEST_PHONE")})
+    assert response.status_code == 200
+    trs = response.json()['trs']
+
+    response = client.get("/login/get_auth", params={"phone": os.getenv("TELEGRAM_TEST_PHONE")})
+    assert response.status_code == 400
+    assert response.json() == {"detail": "Too many requests, try again later"}
+
+    signed_trs = crypto.sign(str(trs).encode(), private_key=private_key)
+    response = client.get("/login/auth", params={"phone": os.getenv("TELEGRAM_TEST_PHONE"), "signed_trs": signed_trs})
+    assert response.status_code == 200
+
+    response = client.get("/login/auth", params={"phone": os.getenv("TELEGRAM_TEST_PHONE"), "signed_trs": signed_trs})
+    assert response.status_code == 400
+    assert response.json() == {"detail": "User not found"}
