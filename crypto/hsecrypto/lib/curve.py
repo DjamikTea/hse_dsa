@@ -115,7 +115,6 @@ class Point:
         if y % 2 != sign_y:
             y = curve.p - y
 
-        print(y)
         return Point(curve, x, y)
 
     def __neg__(self):
