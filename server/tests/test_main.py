@@ -44,7 +44,7 @@ def test_first_launch():
         print("First launch flag not found")
         print("Creating tables...")
 
-        sql = open("../database.sql", "r").read()  # Updated path
+        sql = open("database.sql", "r").read()  # Updated path
         for query in sql.split(";"):
             if query != '':
                 if str(query).replace("\n", "")[0] != '#':
