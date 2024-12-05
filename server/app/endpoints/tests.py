@@ -12,3 +12,4 @@ async def read_item(item_id: str, db=Depends(get_db)):
     if item is None:
         raise HTTPException(status_code=404, detail="Item not found")
     return item
+

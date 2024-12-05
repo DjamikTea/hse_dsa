@@ -1,3 +1,27 @@
+create table root_key
+(
+    id           int auto_increment
+        primary key,
+    pubkey         text(255)   not null,
+    private_key    text(255)   not null,
+    cert           text(4096)  not null,
+    created        timestamp   not null,
+    constraint root_key_pk
+        unique (pubkey(255))
+);
+
+create table user_certs
+(
+    id           int auto_increment
+        primary key,
+    pubkey         text(255)   not null,
+    cert           text(4096)  not null,
+    user_id        bigint   not null,
+    created        timestamp   not null,
+    constraint root_key_pk
+        unique (pubkey(255))
+);
+
 create table user_register
 (
     id           bigint auto_increment
@@ -45,9 +69,41 @@ create table auth
         unique (phone_number(16))
 );
 
+create table revoke_requests
+(
+    id           bigint auto_increment
+        primary key,
+    phone_number text(16)      not null,
+    pubkey       text(255)     not null,
+    ip           text(20)      not null,
+    time         timestamp     not null,
+    tries        int default 0 not null,
+    verif_code   text(6)       not null,
+    request_id   text(255)     not null,
+    constraint revoke_requests_pk_2
+        unique (phone_number(16)),
+    constraint revoke_requests_pk_3
+        unique (pubkey(255))
+);
+
+create table revoked_keys
+(
+    id           bigint auto_increment
+        primary key,
+    phone_number text(16)      not null,
+    pubkey       text(255)     not null,
+    ip           text(20)      not null,
+    time         timestamp     not null,
+    constraint revoke_keys_pk_2
+        unique (pubkey(255))
+);
+
+
 CREATE TABLE first_launch (yes INT);
 CREATE TABLE items (id INT AUTO_INCREMENT PRIMARY KEY, find_val VARCHAR(255));
 INSERT INTO items (find_val) VALUES ('bruh');
+
+
 
 /*
  * Copyright (c) 2024 DjamikTea.

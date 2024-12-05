@@ -51,7 +51,8 @@ jobs:
         sleep 20
     - name: Test with coverage
       run: |
-        poetry run coverage run -m pytest /home/runner/work/hse_dsa/hse_dsa/server/tests/test_main.py
+        cd /home/runner/work/hse_dsa/hse_dsa/server/
+        poetry run coverage run -m pytest tests/test_main.py
         poetry run coverage report -m
         echo '## Отчет покрытия' >> $GITHUB_STEP_SUMMARY
         echo '```' >> $GITHUB_STEP_SUMMARY
