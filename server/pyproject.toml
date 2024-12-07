@@ -17,6 +17,7 @@ aioresponses = "^0.7.7"
 pytest-asyncio = "^0.24.0"
 pytest = "^8.3.4"
 coverage = "^7.6.8"
+python-multipart = "^0.0.19"
 
 [build-system]
 requires = ["poetry-core"]

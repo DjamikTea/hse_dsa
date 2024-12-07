@@ -68,7 +68,6 @@ async def verify(phone_number: str, code: str, csr: str, request: Request, db=De
     if user['time'].replace(tzinfo=timezone.utc) < datetime.now(timezone.utc) - timedelta(minutes=5):
         raise HTTPException(status_code=400, detail="Verification code expired")
     ip = request.client.host
-    print(ip)
     if user['ip'] != ip:
         raise HTTPException(status_code=400, detail="IP address mismatch")
     if user['tries'] >= 3:
@@ -91,11 +90,12 @@ async def verify(phone_number: str, code: str, csr: str, request: Request, db=De
     except ValueError:
         raise HTTPException(status_code=400, detail="CSR client signature is invalid")
     token = generate_bearer_token()
-    cursor.execute("INSERT INTO users (fio, phone_number, pubkey, time_register, token) "
-        "VALUES (%s, %s, %s, NOW(), %s)", (user['fio'], user['phone_number'], user['pubkey'], token))
+    cursor.execute("INSERT INTO users (fio, phone_number, pubkey, time_register, token, cert) "
+        "VALUES (%s, %s, %s, NOW(), %s, %s)",
+        (user['fio'], user['phone_number'], user['pubkey'], token, json.dumps(signed_csr)))
     cursor.execute("DELETE FROM user_register WHERE phone_number = %s", (phone_number,))
     conn.commit()
-    return {"message": "User registered", "token": token, "csr": json.dumps(signed_csr)}
+    return {"message": "User registered", "token": token, "cert": json.dumps(signed_csr)}
 
 @router.get("/get_auth")
 async def get_auth(phone: str, db=Depends(get_db)):
@@ -105,9 +105,9 @@ async def get_auth(phone: str, db=Depends(get_db)):
     if user is None:
         raise HTTPException(status_code=400, detail="User not found")
     cursor.execute("SELECT * FROM auth WHERE phone_number = %s", (phone,))
-    auth = cursor.fetchone()
-    if auth is not None:
-        if auth['timestamp'].replace(tzinfo=timezone.utc) > datetime.now(timezone.utc) - timedelta(minutes=5):
+    authx = cursor.fetchone()
+    if authx is not None:
+        if authx['timestamp'].replace(tzinfo=timezone.utc) > datetime.now(timezone.utc) - timedelta(minutes=5):
             raise HTTPException(status_code=400, detail="Too many requests, try again later")
         else:
             cursor.execute("DELETE FROM auth WHERE phone_number = %s", (phone,))
