@@ -10,18 +10,6 @@ create table root_key
         unique (pubkey(255))
 );
 
-create table user_certs
-(
-    id           int auto_increment
-        primary key,
-    pubkey         text(255)   not null,
-    cert           text(4096)  not null,
-    user_id        bigint   not null,
-    created        timestamp   not null,
-    constraint root_key_pk
-        unique (pubkey(255))
-);
-
 create table user_register
 (
     id           bigint auto_increment
@@ -47,7 +35,8 @@ create table users
     fio          text(255)     not null,
     phone_number text(16)      not null,
     pubkey       text(255)     not null,
-    time_register         timestamp     not null,
+    time_register timestamp    not null,
+    cert         text(4096)    not null,
     token text(128) not null,
     constraint users_pk_2
         unique (phone_number(16)),
@@ -96,6 +85,37 @@ create table revoked_keys
     time         timestamp     not null,
     constraint revoke_keys_pk_2
         unique (pubkey(255))
+);
+
+create table documents
+(
+    timeuuid     CHAR(36)      not null,
+    path         VARCHAR(255)  not null,
+    filename     VARCHAR(255)  not null,
+    user_id      bigint        not null,
+    created      timestamp     not null,
+    sign         VARCHAR(4096),
+    sign_verified BOOLEAN      not null DEFAULT FALSE,
+    sha256       CHAR(64)      not null,
+    can_access   varchar(255),
+    PRIMARY KEY (timeuuid),
+    UNIQUE (path),
+    UNIQUE (sha256),
+    INDEX (user_id)
+);
+
+create table new_docs_available
+(
+    id           bigint auto_increment
+        primary key,
+    user_id      bigint        not null,
+    timeuuid     CHAR(36)      not null,
+    filename     VARCHAR(255)  not null,
+    created      timestamp     not null,
+    sign         VARCHAR(4096),
+    sha256       CHAR(64)      not null,
+    INDEX (user_id),
+    INDEX (timeuuid)
 );
 
 

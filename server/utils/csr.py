@@ -81,17 +81,22 @@ def sign_csr(csr: dict, root_private_key: str, root_ca: dict, phone_number: str 
     else:
         raise ValueError("CSR client signature is invalid")
 
-def check_csr_root(csr: dict, server_domain: str = None) -> bool:
+def check_csr_root(csr: dict, server_domain: str = None, server_pubkey: str = None) -> bool:
     """
     Проверка подписи корневого центра CSR.
 
     :param csr: CSR в формате json.
+    :param server_domain: Домен сервера.
+    :param server_pubkey: Публичный ключ сервера.
     :return: Результат проверки.
     """
     crypto = GostDSA()
     root_ca = {
         "root_ca": csr['root']['root_ca'],
     }
+    if server_pubkey:
+        if csr['root']['root_ca']['public_key'] != server_pubkey:
+            return False
     if crypto.check(csr['root']['root_sign'], str(root_ca).encode(), csr['root']['root_ca']['public_key']):
         if server_domain:
             if csr['root']['root_ca']['domain'] != server_domain:
@@ -141,7 +146,7 @@ def check_csr_root(csr: dict, server_domain: str = None) -> bool:
 #     # ----- end sign csr (server side) -----
 #
 #     # ----- check csr (client side) -----
-#     print(check_csr_root(signed_csr, "secr.gopass.dev"))
+#     print(check_csr_root(signed_csr, "secr.gopass.dev", pubkeyroot))
 #     # ----- end check csr (client side) -----
 #     signed_csr_str = json.dumps(signed_csr)
 #     signed_csr = json.loads(signed_csr_str)

@@ -1,5 +1,6 @@
 import os
 from mysql.connector import pooling
+from fastapi import HTTPException
 
 dbconfig = {
     "host": os.getenv("DB_HOST", "your_host"),
@@ -26,3 +27,11 @@ def get_db():
     finally:
         cursor.close()
         conn.close()
+
+def check_token(token: str, cursor) -> dict:
+    cursor.execute("SELECT * FROM users WHERE token = %s", (token,))
+    user = cursor.fetchone()
+    if user:
+        return user
+    else:
+        raise HTTPException(status_code=401, detail="Unauthorized")
