@@ -44,7 +44,7 @@ async def register(phone_number: str, fio: str, public_key: str, request: Reques
     cursor.execute("SELECT * FROM users WHERE phone_number = %s", (phone_number,))
     user = cursor.fetchone()
     if user is not None:
-        raise HTTPException(status_code=400, detail=f"User already exists {user}")
+        raise HTTPException(status_code=400, detail=f"User already exists")
     cursor.execute("SELECT * FROM revoked_keys WHERE pubkey = %s", (public_key,))
     user = cursor.fetchone()
     if user is not None:
@@ -105,9 +105,9 @@ async def get_auth(phone: str, db=Depends(get_db)):
     if user is None:
         raise HTTPException(status_code=400, detail="User not found")
     cursor.execute("SELECT * FROM auth WHERE phone_number = %s", (phone,))
-    auth = cursor.fetchone()
-    if auth is not None:
-        if auth['timestamp'].replace(tzinfo=timezone.utc) > datetime.now(timezone.utc) - timedelta(minutes=5):
+    authx = cursor.fetchone()
+    if authx is not None:
+        if authx['timestamp'].replace(tzinfo=timezone.utc) > datetime.now(timezone.utc) - timedelta(minutes=5):
             raise HTTPException(status_code=400, detail="Too many requests, try again later")
         else:
             cursor.execute("DELETE FROM auth WHERE phone_number = %s", (phone,))
