@@ -289,7 +289,7 @@ def test_get_list():
 
 
 def test_register_second(mocked_aiohttp):
-    test_phone_number = 79999999999
+    test_phone_number = "79999999999"
 
     mock_http(mocked_aiohttp, test_phone_number)
 
