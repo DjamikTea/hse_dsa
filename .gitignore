@@ -2,8 +2,3 @@ __pycache__/
 .venv
 .env
 .pytest_cache
-.idea/
-.idea
-.benchmarks
-build
-dist
