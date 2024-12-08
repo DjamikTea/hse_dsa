@@ -10,6 +10,7 @@ Subpackages
    server.app
    server.hsedsa-backend
    server.tests
+   server.utils
 
 Module contents
 ---------------
