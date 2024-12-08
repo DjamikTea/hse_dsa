@@ -2,9 +2,10 @@ class EllipticCurve:
     def __init__(self, a: int, b: int, p: int):
         """
         Создает эллиптическую кривую в формк y^2 = x^3 + ax + b (mod p)
-        :param a: Коэффицент a
-        :param b: Коэффицент b
-        :param p: Простой модуль конечного поля
+
+        :param: a: Коэффицент a
+        :param: b: Коэффицент b
+        :param: p: Простой модуль конечного поля
         """
         if (4 * a**3 + 27 * b**2) % p == 0:
             raise ValueError("The curve is singular, choose different a and b.")
@@ -16,6 +17,7 @@ class EllipticCurve:
     def calculate_j_invariant(self) -> int:
         """
         Вычисляет инвариант кривой
+        
         :return: J-Инвариант
         """
         numerator = 1728 * 4 * self.a**3
@@ -27,8 +29,9 @@ class EllipticCurve:
     def is_point_on_curve(self, x, y) -> bool:
         """
         Проверяет, что точка (x, y) lлежит на кривой.
-        :param x: x-координата
-        :param y: y-координата
+
+        :param: x: x-координата
+        :param: y: y-координата
         :return: True если точка лежит на кривой, False если нет
         """
         if x == None and y == None:
@@ -38,7 +41,8 @@ class EllipticCurve:
     def _count_quadratic_residues(self, n: int) -> int:
         """
         Считает количество решений y^2 ≡ n (mod p).
-        :param n: Правая часть уравнения кривой
+
+        :param: n: Правая часть уравнения кривой
         :return: Количество решений (0, 1, или 2)
         """
         if pow(n, (self.p - 1) // 2, self.p) != 1:
@@ -55,9 +59,10 @@ class Point:
     def __init__(self, curve: EllipticCurve, x: int, y: int):
         """
         Новая точка на эллиптической кривой
-        :param curve: Эллиптическая кривая
-        :param x: x-координата точки
-        :param y: y-координата точки
+
+        :param: curve: Эллиптическая кривая
+        :param: x: x-координата точки
+        :param: y: y-координата точки
         """
         self.curve = curve
         self.x = x
@@ -71,6 +76,7 @@ class Point:
     def order(self) -> int:
         """
         Вычисляет порядок точки (минимальное n такое, что n * P = O).
+
         :return: Порядок точки
         """
         current = Point(self.curve, None, None)
@@ -85,6 +91,7 @@ class Point:
     def compress(self) -> str:
         """
         Возращает строковое представление сжатой точки
+
         :return: 16-ричная строка длины 64
         """
         bx = bytes.fromhex(hex(self.x)[2:].zfill(64))
@@ -99,6 +106,7 @@ class Point:
     def uncompress(self, curve: EllipticCurve, compressed: str) -> str:
         """
         Конвертирует сжатую точку в объект Point, находя Y координату
+
         :return: Point(curve, x, y)
         """
         compressed_bytes = bytes.fromhex(compressed)
@@ -129,7 +137,7 @@ class Point:
     def __add__(self, other):
         """
         Сложение двух точек на кривой
-        :param other: Другая точка
+        :param: other: Другая точка
         :return: Новая точка P + Q
         """
         if not isinstance(other, Point):
@@ -186,8 +194,9 @@ class Point:
     def mod_sqrt(a: int, p: int):
         """
         Вычисляет квадратный корень по модулю p, используя алгоритм Тонелли-Шанкса.
-        :param a: Число для извлечения корня
-        :param p: Простой модуль
+        
+        :param: a: Число для извлечения корня
+        :param: p: Простой модуль
         :return: Квадратный корень по модлю p
         """
         if pow(a, (p - 1) // 2, p) != 1:

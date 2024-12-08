@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
 from hsecrypto import GostDSA
-from utils.csr import check_csr_root
+from .csr import check_csr_root
 
 def sign_document(timeuuid: str, sha256: str, private_key: str, certificate: str) -> dict:
     """
