@@ -46,17 +46,29 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="hsecrypto.lib.curve.EllipticCurve.calculate_j_invariant">
 <span class="sig-name descname"><span class="pre">calculate_j_invariant</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/hsecrypto/lib/curve.html#EllipticCurve.calculate_j_invariant"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hsecrypto.lib.curve.EllipticCurve.calculate_j_invariant" title="Link to this definition">¶</a></dt>
-<dd><p>Вычисляет инвариант кривой
-:return: J-Инвариант</p>
+<dd><p>Вычисляет инвариант кривой</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>J-Инвариант</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hsecrypto.lib.curve.EllipticCurve.is_point_on_curve">
 <span class="sig-name descname"><span class="pre">is_point_on_curve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/hsecrypto/lib/curve.html#EllipticCurve.is_point_on_curve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hsecrypto.lib.curve.EllipticCurve.is_point_on_curve" title="Link to this definition">¶</a></dt>
-<dd><p>Проверяет, что точка (x, y) lлежит на кривой.
-:param x: x-координата
-:param y: y-координата
-:return: True если точка лежит на кривой, False если нет</p>
+<dd><p>Проверяет, что точка (x, y) lлежит на кривой.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Param<span class="colon">:</span></dt>
+<dd class="field-odd"><p>x: x-координата</p>
+</dd>
+<dt class="field-even">Param<span class="colon">:</span></dt>
+<dd class="field-even"><p>y: y-координата</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True если точка лежит на кривой, False если нет</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -68,31 +80,51 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="hsecrypto.lib.curve.Point.compress">
 <span class="sig-name descname"><span class="pre">compress</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/hsecrypto/lib/curve.html#Point.compress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hsecrypto.lib.curve.Point.compress" title="Link to this definition">¶</a></dt>
-<dd><p>Возращает строковое представление сжатой точки
-:return: 16-ричная строка длины 64</p>
+<dd><p>Возращает строковое представление сжатой точки</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>16-ричная строка длины 64</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hsecrypto.lib.curve.Point.mod_sqrt">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mod_sqrt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hsecrypto/lib/curve.html#Point.mod_sqrt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hsecrypto.lib.curve.Point.mod_sqrt" title="Link to this definition">¶</a></dt>
-<dd><p>Вычисляет квадратный корень по модулю p, используя алгоритм Тонелли-Шанкса.
-:param a: Число для извлечения корня
-:param p: Простой модуль
-:return: Квадратный корень по модлю p</p>
+<dd><p>Вычисляет квадратный корень по модулю p, используя алгоритм Тонелли-Шанкса.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Param<span class="colon">:</span></dt>
+<dd class="field-odd"><p>a: Число для извлечения корня</p>
+</dd>
+<dt class="field-even">Param<span class="colon">:</span></dt>
+<dd class="field-even"><p>p: Простой модуль</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Квадратный корень по модлю p</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hsecrypto.lib.curve.Point.order">
 <span class="sig-name descname"><span class="pre">order</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/hsecrypto/lib/curve.html#Point.order"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hsecrypto.lib.curve.Point.order" title="Link to this definition">¶</a></dt>
-<dd><p>Вычисляет порядок точки (минимальное n такое, что n * P = O).
-:return: Порядок точки</p>
+<dd><p>Вычисляет порядок точки (минимальное n такое, что n * P = O).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Порядок точки</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hsecrypto.lib.curve.Point.uncompress">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">uncompress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">curve</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hsecrypto.lib.curve.EllipticCurve" title="hsecrypto.lib.curve.EllipticCurve"><span class="pre">EllipticCurve</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">compressed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/hsecrypto/lib/curve.html#Point.uncompress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hsecrypto.lib.curve.Point.uncompress" title="Link to this definition">¶</a></dt>
-<dd><p>Конвертирует сжатую точку в объект Point, находя Y координату
-:return: Point(curve, x, y)</p>
+<dd><p>Конвертирует сжатую точку в объект Point, находя Y координату</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Point(curve, x, y)</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -131,7 +163,7 @@
 <script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="modules.html">server</a><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">HSE_DSA</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="server.html">server package</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="hsecrypto.html">hsecrypto package</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="hsecrypto.html#subpackages">Subpackages</a><ul class="current">
@@ -151,7 +183,7 @@
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-  <li><a href="modules.html">server</a><ul>
+  <li><a href="modules.html">HSE_DSA</a><ul>
   <li><a href="hsecrypto.html">hsecrypto package</a><ul>
       <li>Previous: <a href="hsecrypto.hash.html" title="previous chapter">hsecrypto.hash package</a></li>
   </ul></li>

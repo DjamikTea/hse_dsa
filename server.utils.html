@@ -114,8 +114,31 @@
 <section id="server-utils-file-module">
 <h2>server.utils.file module<a class="headerlink" href="#server-utils-file-module" title="Link to this heading">¶</a></h2>
 </section>
-<section id="server-utils-sign-module">
-<h2>server.utils.sign module<a class="headerlink" href="#server-utils-sign-module" title="Link to this heading">¶</a></h2>
+<section id="module-server.utils.sign">
+<span id="server-utils-sign-module"></span><h2>server.utils.sign module<a class="headerlink" href="#module-server.utils.sign" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="server.utils.sign.check_document">
+<span class="sig-prename descclassname"><span class="pre">server.utils.sign.</span></span><span class="sig-name descname"><span class="pre">check_document</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sha256</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pubkey</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeuuid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">server_pubkey</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/server/utils/sign.html#check_document"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.utils.sign.check_document" title="Link to this definition">¶</a></dt>
+<dd><p>Проверяет подпись документа
+:param signature: подпись документа
+:param sha256: sha256 файла
+:param pubkey: публичный ключ
+:param timeuuid: timeuuid документа
+:param server_pubkey: публичный ключ сервера
+:return: результат проверки</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="server.utils.sign.sign_document">
+<span class="sig-prename descclassname"><span class="pre">server.utils.sign.</span></span><span class="sig-name descname"><span class="pre">sign_document</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeuuid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sha256</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">private_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">certificate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/server/utils/sign.html#sign_document"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.utils.sign.sign_document" title="Link to this definition">¶</a></dt>
+<dd><p>Подписывает документ
+:param timeuuid: timeuuid документа
+:param private_key: приватный ключ
+:param certificate: сертификат
+:param sha256: sha256 файла
+:return: подписанный документ</p>
+</dd></dl>
+
 </section>
 <section id="module-server.utils">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-server.utils" title="Link to this heading">¶</a></h2>
@@ -150,7 +173,7 @@
 <script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="modules.html">server</a><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">HSE_DSA</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="server.html">server package</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="server.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="server.app.html">server.app package</a></li>
@@ -171,7 +194,7 @@
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-  <li><a href="modules.html">server</a><ul>
+  <li><a href="modules.html">HSE_DSA</a><ul>
   <li><a href="server.html">server package</a><ul>
       <li>Previous: <a href="server.tests.html" title="previous chapter">server.tests package</a></li>
       <li>Next: <a href="hsecrypto.html" title="next chapter">hsecrypto package</a></li>

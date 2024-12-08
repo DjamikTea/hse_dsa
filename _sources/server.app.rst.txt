@@ -12,14 +12,6 @@ Subpackages
 Submodules
 ----------
 
-server.app.database module
---------------------------
-
-.. automodule:: server.app.database
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 server.app.main module
 ----------------------
 

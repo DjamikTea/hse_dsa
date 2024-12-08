@@ -1,4 +1,4 @@
-server
+HSE_DSA
 ======
 
 .. toctree::
