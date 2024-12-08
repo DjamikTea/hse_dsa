@@ -2,10 +2,10 @@ name: Build docs
 
 on:
     push:
-      branches:
-        - main
-      paths:
-        - crypto/**
+      # branches:
+      #   - main
+      # paths:
+      #   - crypto/**
 jobs:
     build:
         runs-on: ubuntu-latest
