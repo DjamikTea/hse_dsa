@@ -1,11 +1,8 @@
 name: Build docs
 
 on:
-    push:
-      # branches:
-      #   - main
-      # paths:
-      #   - crypto/**
+  push:
+
 jobs:
     build:
         runs-on: ubuntu-latest
