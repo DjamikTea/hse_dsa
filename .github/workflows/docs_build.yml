@@ -1,4 +1,4 @@
-name: Python lib
+name: Build docs
 
 on:
     push:
@@ -26,4 +26,10 @@ jobs:
                 cd /home/runner/work/hse_dsa/hse_dsa/docs
                 chmod +x generate.sh
                 ./generate.sh
-                
+              - name: Upload artifact
+            - uses: actions/upload-pages-artifact@v3
+              with:
+                path: '/home/runner/work/hse_dsa/hse_dsa/docs/build/'
+            - name: Deploy to GitHub Pages
+              id: deployment
+              uses: actions/deploy-pages@v4
