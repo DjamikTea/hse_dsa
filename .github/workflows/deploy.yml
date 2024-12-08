@@ -36,7 +36,11 @@ jobs:
           cd /home/runner/work/hse_dsa/hse_dsa/docs
           chmod +x generate.sh
           ./generate.sh
-      - uses: actions/upload-pages-artifact@v3
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
           path: '/home/runner/work/hse_dsa/hse_dsa/docs/build/'
       - name: Deploy to GitHub Pages
