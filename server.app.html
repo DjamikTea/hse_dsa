@@ -44,7 +44,10 @@
 <li class="toctree-l2"><a class="reference internal" href="server.app.endpoints.html#server-app-endpoints-auth-module">server.app.endpoints.auth module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="server.app.endpoints.html#server-app-endpoints-docs-module">server.app.endpoints.docs module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="server.app.endpoints.html#server-app-endpoints-revoke-module">server.app.endpoints.revoke module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="server.app.endpoints.html#server-app-endpoints-root-module">server.app.endpoints.root module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server.app.endpoints.html#module-server.app.endpoints.root">server.app.endpoints.root module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="server.app.endpoints.html#server.app.endpoints.root.read_root"><code class="docutils literal notranslate"><span class="pre">read_root()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="server.app.endpoints.html#server-app-endpoints-tests-module">server.app.endpoints.tests module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="server.app.endpoints.html#module-server.app.endpoints">Module contents</a></li>
 </ul>
@@ -61,8 +64,85 @@
 <section id="server-app-main-module">
 <h2>server.app.main module<a class="headerlink" href="#server-app-main-module" title="Link to this heading">¶</a></h2>
 </section>
-<section id="server-app-telegram-gateway-module">
-<h2>server.app.telegram_gateway module<a class="headerlink" href="#server-app-telegram-gateway-module" title="Link to this heading">¶</a></h2>
+<section id="module-server.app.telegram_gateway">
+<span id="server-app-telegram-gateway-module"></span><h2>server.app.telegram_gateway module<a class="headerlink" href="#module-server.app.telegram_gateway" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="server.app.telegram_gateway.TelegramGatewayAPI">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">server.app.telegram_gateway.</span></span><span class="sig-name descname"><span class="pre">TelegramGatewayAPI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">api_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/server/app/telegram_gateway.html#TelegramGatewayAPI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.app.telegram_gateway.TelegramGatewayAPI" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="server.app.telegram_gateway.TelegramGatewayAPI.check_send_ability">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">check_send_ability</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phone_number</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/server/app/telegram_gateway.html#TelegramGatewayAPI.check_send_ability"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.app.telegram_gateway.TelegramGatewayAPI.check_send_ability" title="Link to this definition">¶</a></dt>
+<dd><p>Проверка возможности отправки сообщения на указанный номер.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>phone_number</strong> – Номер телефона в формате E.164.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Ответ API в формате JSON.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="server.app.telegram_gateway.TelegramGatewayAPI.check_verification_status">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">check_verification_status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">code</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/server/app/telegram_gateway.html#TelegramGatewayAPI.check_verification_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.app.telegram_gateway.TelegramGatewayAPI.check_verification_status" title="Link to this definition">¶</a></dt>
+<dd><p>Асинхронная проверка статуса отправленного сообщения и валидация кода.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request_id</strong> – Уникальный идентификатор запроса.</p></li>
+<li><p><strong>code</strong> – Необязательно. Код, введенный пользователем.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Ответ API в формате JSON.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="server.app.telegram_gateway.TelegramGatewayAPI.revoke_verification_message">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">revoke_verification_message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/server/app/telegram_gateway.html#TelegramGatewayAPI.revoke_verification_message"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.app.telegram_gateway.TelegramGatewayAPI.revoke_verification_message" title="Link to this definition">¶</a></dt>
+<dd><p>Асинхронный отзыв ранее отправленного сообщения с кодом подтверждения.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>request_id</strong> – Уникальный идентификатор запроса.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Ответ API в формате JSON.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="server.app.telegram_gateway.TelegramGatewayAPI.send_verification_message">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">send_verification_message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phone_number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">code</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">code_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sender_username</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ttl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callback_url</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/server/app/telegram_gateway.html#TelegramGatewayAPI.send_verification_message"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.app.telegram_gateway.TelegramGatewayAPI.send_verification_message" title="Link to this definition">¶</a></dt>
+<dd><p>Отправка сообщения с кодом подтверждения.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phone_number</strong> – Номер телефона получателя в формате E.164.</p></li>
+<li><p><strong>code</strong> – Необязательно. Пользовательский код подтверждения (4-8 цифр).</p></li>
+<li><p><strong>code_length</strong> – Длина кода, если генерируется Telegram (4-8).</p></li>
+<li><p><strong>sender_username</strong> – Необязательно. Юзернейм канала, от имени которого отправляется сообщение.</p></li>
+<li><p><strong>ttl</strong> – Необязательно. Время жизни сообщения в секундах (60-86400).</p></li>
+<li><p><strong>callback_url</strong> – Необязательно. URL для получения отчетов о доставке.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Ответ API в формате JSON.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="server.app.telegram_gateway.mock_http">
+<span class="sig-prename descclassname"><span class="pre">server.app.telegram_gateway.</span></span><span class="sig-name descname"><span class="pre">mock_http</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mocked_aiohttp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_phone_number</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/server/app/telegram_gateway.html#mock_http"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.app.telegram_gateway.mock_http" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </section>
 <section id="module-server.app">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-server.app" title="Link to this heading">¶</a></h2>

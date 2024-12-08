@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>hsecrypto.dsa.gost_dsa &#8212; hse_dsa 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/basic.css?v=686e5160" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=27fed22d" />
+    <script src="../../../_static/documentation_options.js?v=01f34227"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for hsecrypto.dsa.gost_dsa</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">..lib.curve</span> <span class="kn">import</span> <span class="n">EllipticCurve</span><span class="p">,</span> <span class="n">Point</span>
+<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">randint</span>
+<span class="kn">from</span> <span class="nn">hashlib</span> <span class="kn">import</span> <span class="n">sha256</span>
+
+
+<div class="viewcode-block" id="GostDSA">
+<a class="viewcode-back" href="../../../hsecrypto.dsa.html#hsecrypto.GostDSA">[docs]</a>
+<span class="k">class</span> <span class="nc">GostDSA</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Создает имплементацию цифровой подписи по ГОСТ 34.10-2018</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">p</span> <span class="o">=</span> <span class="mh">0x8000000000000000000000000000000000000000000000000000000000000431</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="mh">0x07</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="mh">0x5FBFF498AA938CE739B8E022FBAFEF40563F6E6A3472FC2A514C0CE9DAE23B7E</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">curve</span> <span class="o">=</span> <span class="n">EllipticCurve</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">P</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">curve</span><span class="p">,</span>
+            <span class="n">x</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="n">y</span><span class="o">=</span><span class="mh">0x8E2A8A0E65147D4BD6316030E16D19C85C97F0A9CA267122B96ABBCEA7E8FC8</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">=</span> <span class="mh">0x8000000000000000000000000000000150FE8A1892976154C59CFC193ACCF5B3</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="mh">0x8000000000000000000000000000000150FE8A1892976154C59CFC193ACCF5B3</span>
+
+<div class="viewcode-block" id="GostDSA.generate_key_pair">
+<a class="viewcode-back" href="../../../hsecrypto.dsa.html#hsecrypto.GostDSA.generate_key_pair">[docs]</a>
+    <span class="k">def</span> <span class="nf">generate_key_pair</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Генерирует ключевую пару: закрытый и открытый ключи</span>
+
+<span class="sd">        :return (private_key, public_key): Кортеж, содержащий закрытый и открытый ключи</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">)</span>
+        <span class="n">Q</span> <span class="o">=</span> <span class="n">d</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">P</span>
+        <span class="n">public_key</span> <span class="o">=</span> <span class="n">Q</span><span class="o">.</span><span class="n">compress</span><span class="p">()</span>
+        <span class="n">private_key</span> <span class="o">=</span> <span class="nb">hex</span><span class="p">(</span><span class="n">d</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">64</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">private_key</span><span class="p">,</span> <span class="n">public_key</span></div>
+
+
+<div class="viewcode-block" id="GostDSA.sign">
+<a class="viewcode-back" href="../../../hsecrypto.dsa.html#hsecrypto.GostDSA.sign">[docs]</a>
+    <span class="k">def</span> <span class="nf">sign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">private_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Возвращает цифровую подпись в виде шестнадцетиричной строки по переданному сообщению и закрытому ключу</span>
+
+<span class="sd">        :param message: Подписываемое сообщение в байтах</span>
+<span class="sd">        :param private_key: Закрытый ключ</span>
+<span class="sd">        :return: Шестнадцетиричная строка из конкатенированных двух векторов (r|s)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">private_key</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sha256</span><span class="p">(</span><span class="n">message</span><span class="p">)</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">(),</span> <span class="mi">16</span><span class="p">)</span>
+        <span class="n">e</span> <span class="o">=</span> <span class="n">z</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span>
+        <span class="k">if</span> <span class="n">e</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">e</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">r</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_r</span><span class="p">()</span>
+        <span class="k">while</span> <span class="n">s</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">r</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_r</span><span class="p">()</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="p">(</span><span class="n">r</span> <span class="o">*</span> <span class="n">d</span> <span class="o">+</span> <span class="n">k</span> <span class="o">*</span> <span class="n">e</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span>
+
+        <span class="n">sig</span> <span class="o">=</span> <span class="nb">bytes</span><span class="o">.</span><span class="n">fromhex</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="n">r</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">64</span><span class="p">))</span> <span class="o">+</span> <span class="nb">bytes</span><span class="o">.</span><span class="n">fromhex</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="n">s</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">64</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">sig</span><span class="o">.</span><span class="n">hex</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="GostDSA.check">
+<a class="viewcode-back" href="../../../hsecrypto.dsa.html#hsecrypto.GostDSA.check">[docs]</a>
+    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signature</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">public_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Проверяет валидность цифровой подписи</span>
+
+<span class="sd">        :param signature: Цифровая подпись в виде шестнадцетиричной строки</span>
+<span class="sd">        :param message: Изначальное сообщение в байтах</span>
+<span class="sd">        :param public_key: Открытый ключ для проверки подписи</span>
+
+<span class="sd">        :return: True, если подпись валидная, False если нет</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">Q</span> <span class="o">=</span> <span class="n">Point</span><span class="o">.</span><span class="n">uncompress</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">curve</span><span class="p">,</span> <span class="n">public_key</span><span class="p">)</span>
+
+        <span class="n">r_b</span><span class="p">,</span> <span class="n">s_b</span> <span class="o">=</span> <span class="nb">bytes</span><span class="o">.</span><span class="n">fromhex</span><span class="p">(</span><span class="n">signature</span><span class="p">[:</span> <span class="nb">len</span><span class="p">(</span><span class="n">signature</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">]),</span> <span class="nb">bytes</span><span class="o">.</span><span class="n">fromhex</span><span class="p">(</span>
+            <span class="n">signature</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">signature</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span> <span class="p">:]</span>
+        <span class="p">)</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="nb">int</span><span class="o">.</span><span class="n">from_bytes</span><span class="p">(</span><span class="n">r_b</span><span class="p">)</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="nb">int</span><span class="o">.</span><span class="n">from_bytes</span><span class="p">(</span><span class="n">s_b</span><span class="p">)</span>
+
+        <span class="n">z</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sha256</span><span class="p">(</span><span class="n">message</span><span class="p">)</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">(),</span> <span class="mi">16</span><span class="p">)</span>
+        <span class="n">e</span> <span class="o">=</span> <span class="n">z</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span>
+        <span class="k">if</span> <span class="n">e</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">e</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">V</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">)</span>
+        <span class="n">z1</span> <span class="o">=</span> <span class="n">s</span> <span class="o">*</span> <span class="n">V</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span>
+        <span class="n">z2</span> <span class="o">=</span> <span class="o">-</span><span class="n">r</span> <span class="o">*</span> <span class="n">V</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span>
+
+        <span class="n">C</span> <span class="o">=</span> <span class="n">z1</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">P</span> <span class="o">+</span> <span class="n">z2</span> <span class="o">*</span> <span class="n">Q</span>
+        <span class="n">R</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">x</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span>
+
+        <span class="k">return</span> <span class="n">R</span> <span class="o">==</span> <span class="n">r</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_find_r</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="n">r</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">)</span>
+            <span class="n">C</span> <span class="o">=</span> <span class="n">k</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">P</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">x</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span>
+
+        <span class="k">return</span> <span class="n">r</span><span class="p">,</span> <span class="n">k</span></div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">hse_dsa</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">server</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2024, Morzan6.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.1.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

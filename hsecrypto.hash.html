@@ -38,11 +38,113 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
 </section>
-<section id="hsecrypto-hash-gost-hash-module">
-<h2>hsecrypto.hash.gost_hash module<a class="headerlink" href="#hsecrypto-hash-gost-hash-module" title="Link to this heading">¶</a></h2>
+<section id="module-hsecrypto.hash.gost_hash">
+<span id="hsecrypto-hash-gost-hash-module"></span><h2>hsecrypto.hash.gost_hash module<a class="headerlink" href="#module-hsecrypto.hash.gost_hash" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="hsecrypto.hash.gost_hash.GostHash">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hsecrypto.hash.gost_hash.</span></span><span class="sig-name descname"><span class="pre">GostHash</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_256</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hsecrypto/hash/gost_hash.html#GostHash"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hsecrypto.hash.gost_hash.GostHash" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="hsecrypto.hash.gost_hash.GostHash.E">
+<span class="sig-name descname"><span class="pre">E</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">K</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytes</span></span></span><a class="reference internal" href="_modules/hsecrypto/hash/gost_hash.html#GostHash.E"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hsecrypto.hash.gost_hash.GostHash.E" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hsecrypto.hash.gost_hash.GostHash.L">
+<span class="sig-name descname"><span class="pre">L</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytes</span></span></span><a class="reference internal" href="_modules/hsecrypto/hash/gost_hash.html#GostHash.L"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hsecrypto.hash.gost_hash.GostHash.L" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hsecrypto.hash.gost_hash.GostHash.MSB">
+<span class="sig-name descname"><span class="pre">MSB</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">z</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">256</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytes</span></span></span><a class="reference internal" href="_modules/hsecrypto/hash/gost_hash.html#GostHash.MSB"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hsecrypto.hash.gost_hash.GostHash.MSB" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hsecrypto.hash.gost_hash.GostHash.P">
+<span class="sig-name descname"><span class="pre">P</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytes</span></span></span><a class="reference internal" href="_modules/hsecrypto/hash/gost_hash.html#GostHash.P"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hsecrypto.hash.gost_hash.GostHash.P" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hsecrypto.hash.gost_hash.GostHash.S">
+<span class="sig-name descname"><span class="pre">S</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytes</span></span></span><a class="reference internal" href="_modules/hsecrypto/hash/gost_hash.html#GostHash.S"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hsecrypto.hash.gost_hash.GostHash.S" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hsecrypto.hash.gost_hash.GostHash.X">
+<span class="sig-name descname"><span class="pre">X</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytes</span></span></span><a class="reference internal" href="_modules/hsecrypto/hash/gost_hash.html#GostHash.X"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hsecrypto.hash.gost_hash.GostHash.X" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hsecrypto.hash.gost_hash.GostHash.g_n">
+<span class="sig-name descname"><span class="pre">g_n</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hsecrypto/hash/gost_hash.html#GostHash.g_n"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hsecrypto.hash.gost_hash.GostHash.g_n" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hsecrypto.hash.gost_hash.GostHash.hash">
+<span class="sig-name descname"><span class="pre">hash</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/hsecrypto/hash/gost_hash.html#GostHash.hash"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hsecrypto.hash.gost_hash.GostHash.hash" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hsecrypto.hash.gost_hash.GostHash.xor">
+<span class="sig-name descname"><span class="pre">xor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytes</span></span></span><a class="reference internal" href="_modules/hsecrypto/hash/gost_hash.html#GostHash.xor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hsecrypto.hash.gost_hash.GostHash.xor" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </section>
-<section id="module-contents">
-<h2>Module contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<section id="module-hsecrypto.hash">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-hsecrypto.hash" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="hsecrypto.hash.GostHash">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hsecrypto.hash.</span></span><span class="sig-name descname"><span class="pre">GostHash</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_256</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hsecrypto/hash/gost_hash.html#GostHash"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hsecrypto.hash.GostHash" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="hsecrypto.hash.GostHash.E">
+<span class="sig-name descname"><span class="pre">E</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">K</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytes</span></span></span><a class="reference internal" href="_modules/hsecrypto/hash/gost_hash.html#GostHash.E"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hsecrypto.hash.GostHash.E" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hsecrypto.hash.GostHash.L">
+<span class="sig-name descname"><span class="pre">L</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytes</span></span></span><a class="reference internal" href="_modules/hsecrypto/hash/gost_hash.html#GostHash.L"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hsecrypto.hash.GostHash.L" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hsecrypto.hash.GostHash.MSB">
+<span class="sig-name descname"><span class="pre">MSB</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">z</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">256</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytes</span></span></span><a class="reference internal" href="_modules/hsecrypto/hash/gost_hash.html#GostHash.MSB"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hsecrypto.hash.GostHash.MSB" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hsecrypto.hash.GostHash.P">
+<span class="sig-name descname"><span class="pre">P</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytes</span></span></span><a class="reference internal" href="_modules/hsecrypto/hash/gost_hash.html#GostHash.P"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hsecrypto.hash.GostHash.P" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hsecrypto.hash.GostHash.S">
+<span class="sig-name descname"><span class="pre">S</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytes</span></span></span><a class="reference internal" href="_modules/hsecrypto/hash/gost_hash.html#GostHash.S"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hsecrypto.hash.GostHash.S" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hsecrypto.hash.GostHash.X">
+<span class="sig-name descname"><span class="pre">X</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytes</span></span></span><a class="reference internal" href="_modules/hsecrypto/hash/gost_hash.html#GostHash.X"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hsecrypto.hash.GostHash.X" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hsecrypto.hash.GostHash.g_n">
+<span class="sig-name descname"><span class="pre">g_n</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hsecrypto/hash/gost_hash.html#GostHash.g_n"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hsecrypto.hash.GostHash.g_n" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hsecrypto.hash.GostHash.hash">
+<span class="sig-name descname"><span class="pre">hash</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/hsecrypto/hash/gost_hash.html#GostHash.hash"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hsecrypto.hash.GostHash.hash" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hsecrypto.hash.GostHash.xor">
+<span class="sig-name descname"><span class="pre">xor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytes</span></span></span><a class="reference internal" href="_modules/hsecrypto/hash/gost_hash.html#GostHash.xor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hsecrypto.hash.GostHash.xor" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </section>
 </section>
 
