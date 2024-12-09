@@ -10,17 +10,22 @@ dsa = GostDSA()
 private_key, public_key = dsa.generate_key_pair()
 
 
-subject = Name([
-    NameAttribute(NameOID.COUNTRY_NAME, u"RU"),
-    NameAttribute(NameOID.STATE_OR_PROVINCE_NAME, u"Moscow"),
-    NameAttribute(NameOID.LOCALITY_NAME, u"Moscow"),
-    NameAttribute(NameOID.ORGANIZATION_NAME, u"HSE"),
-    NameAttribute(NameOID.COMMON_NAME, u"www.example.ru"),
-])
+subject = Name(
+    [
+        NameAttribute(NameOID.COUNTRY_NAME, "RU"),
+        NameAttribute(NameOID.STATE_OR_PROVINCE_NAME, "Moscow"),
+        NameAttribute(NameOID.LOCALITY_NAME, "Moscow"),
+        NameAttribute(NameOID.ORGANIZATION_NAME, "HSE"),
+        NameAttribute(NameOID.COMMON_NAME, "www.example.ru"),
+    ]
+)
 
-csr = CertificateSigningRequestBuilder().subject_name(subject).add_extension(
-    SubjectAlternativeName([DNSName(u"www.example.ru")]), critical=False
-).sign( private_key, hashes.SHA256())
+csr = (
+    CertificateSigningRequestBuilder()
+    .subject_name(subject)
+    .add_extension(SubjectAlternativeName([DNSName("www.example.ru")]), critical=False)
+    .sign(private_key, hashes.SHA256())
+)
 
 csr_pem = csr.public_bytes(serialization.Encoding.PEM)
 with open("csr.pem", "wb") as f:

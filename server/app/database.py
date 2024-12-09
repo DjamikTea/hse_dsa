@@ -13,10 +13,9 @@ dbconfig = {
 
 # Создаем пул подключений
 connection_pool = pooling.MySQLConnectionPool(
-    pool_name="mypool",
-    pool_size=5,
-    **dbconfig
+    pool_name="mypool", pool_size=5, **dbconfig
 )
+
 
 def get_db():
     conn = connection_pool.get_connection()
@@ -27,6 +26,7 @@ def get_db():
     finally:
         cursor.close()
         conn.close()
+
 
 def check_token(token: str, cursor) -> dict:
     cursor.execute("SELECT * FROM users WHERE token = %s", (token,))
