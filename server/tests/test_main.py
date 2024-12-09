@@ -82,6 +82,9 @@ def test_first_launch():
                        (pubkeyroot, privkeyroot, json.dumps(root_ca)))
         db.commit()
         print("Table first_launch created")
+        # create .test_lock file
+        with open(".test_lock", "w") as f:
+            f.write("1")
         first_launch_flag = True
 
     assert first_launch_flag == True
@@ -433,3 +436,8 @@ def test_revoke(mocked_aiohttp):
 
     response = client.get("/revoke/verify", params={"phone": "79999999999", "code": code})
     assert response.json() == {"message": "Key revoked and user deleted"}
+
+    cursor.execute("DELETE FROM documents WHERE timeuuid = %s", (timeuuid_file,))
+    cursor.execute("DELETE FROM user_register WHERE phone_number = %s", (test_phone_number,))
+    db.commit()
+
