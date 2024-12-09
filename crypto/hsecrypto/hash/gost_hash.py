@@ -435,8 +435,8 @@ T = [
 
 class GostHash:
     def __init__(self, message: bytes, is_256: bool = True):
-        self.message = message
-        self.is_256 = is_256
+        self.message: bytes = message
+        self.is_256: bool = is_256
 
     def xor(self, a, b) -> bytes:
         assert len(a) == len(b)
@@ -489,35 +489,56 @@ class GostHash:
     def MSB(self, z: bytes, n: int = 256) -> bytes:
         return z[n // 8 :]
 
+    def add_bytes(self, b1, b2):
+        max_len = max(len(b1), len(b2))
+        result = bytearray(max_len)
+        carry = 0
+        
+        for i in range(max_len):
+            byte1 = b1[-(i + 1)] if i < len(b1) else 0
+            byte2 = b2[-(i + 1)] if i < len(b2) else 0
+            
+            total = byte1 + byte2 + carry
+            
+            result[-(i + 1)] = total % 256
+            carry = total // 256
+    
+        if carry:
+            result.insert(0, carry)
+        
+        return bytes(result)
+
     def hash(self) -> str:
-        h = b"\x00" * 64 if not self.is_256 else b"\x01" * 64
-        N = b"\x00" * 64
-        S = b"\x00" * 64
+            h = b"\x00" * 64 if not self.is_256 else b"\x01"*64
+            N = b"\x00" * 64
+            S = b"\x00" * 64
 
-        M = self.message
+            M = self.message
+            block_size = bytearray(64)
+            block = bytearray(64)
 
-        while len(M) >= 64:
-            block = M[-64:]
-            h = self.g_n(N, h, block)
-            Nint = int.from_bytes(N) + len(M) * 8
-            N = bytes.fromhex(hex(Nint)[2:].zfill(128))
-            Sint = int.from_bytes(S) + int.from_bytes(block)
-            S = bytes.fromhex(hex(Sint)[2:].zfill(128))
-            M = M[:-64]
-        m = b"\x00" * (63 - len(M)) + b"\x01" + M
-        h = self.g_n(N, h, m)
-        Nint = int.from_bytes(N) + len(M) * 8
-        N = bytes.fromhex(hex(Nint)[2:].zfill(128))
-        Sint = int.from_bytes(S) + int.from_bytes(m)
-        S = bytes.fromhex(hex(Sint)[2:].zfill(128))
-        h = self.g_n(b"\x00" * 64, h, N)
+            for chunk in [M[i:i+64] for i in range(0, len(M), 64)]:
+                chunk_size = len(chunk) * 8
+                block_size[-2:] = chunk_size.to_bytes(2, byteorder='big')
+                if len(chunk) != 64:
+                    block = b"\x00" * (63 - len(chunk)) + b"\x01" + chunk
+                else:
+                    block = chunk
+        
+                h = self.g_n(N, h, block)
+                print(h.hex())
+                N = self.add_bytes(N, block_size)
+                S = self.add_bytes(S, block)
+               
 
-        h = self.g_n(b"\x00" * 64, h, S)
-        if self.is_256:
-            h = self.MSB(h, 256)
-        return h.hex()
+            h = self.g_n(b"\x00" * 64, h, N)
+
+            h = self.g_n(b"\x00" * 64, h, S)
+            if self.is_256:
+                h = self.MSB(h, 256)
+            return h.hex()
 
 
-# h = GostHash(message=bytes.fromhex("323130393837363534333231303938373635343332313039383736353433323130393837363534333231303938373635343332313039383736353433323130"), is_256=True)
-# print(h.hash())
+h = GostHash(message=bytes.fromhex("323130393837363534333231303938373635343332313039383736353433323130393837363534333231303938373635343332313039383736353433323130"), is_256=True)
+print(h.hash())
 # # print(h.L(bytes.fromhex("fcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfc")).hex())
