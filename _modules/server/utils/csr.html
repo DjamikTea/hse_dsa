@@ -41,8 +41,15 @@
 
 <div class="viewcode-block" id="generate_csr">
 <a class="viewcode-back" href="../../../server.utils.html#server.utils.csr.generate_csr">[docs]</a>
-<span class="k">def</span> <span class="nf">generate_csr</span><span class="p">(</span><span class="n">private_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">public_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">country</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">organization</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">phone_number</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ip</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-                 <span class="n">fio</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">generate_csr</span><span class="p">(</span>
+    <span class="n">private_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">public_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">country</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">organization</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">phone_number</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">ip</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">fio</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Генерация запроса на сертификат (CSR).</span>
 
@@ -63,12 +70,12 @@
             <span class="s2">&quot;phone_number&quot;</span><span class="p">:</span> <span class="n">phone_number</span><span class="p">,</span>
             <span class="s2">&quot;fio&quot;</span><span class="p">:</span> <span class="n">fio</span><span class="p">,</span>
             <span class="s2">&quot;ip&quot;</span><span class="p">:</span> <span class="n">ip</span><span class="p">,</span>
-            <span class="s2">&quot;date_generation&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+            <span class="s2">&quot;date_generation&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
         <span class="p">},</span>
-        <span class="s2">&quot;client_sign_time&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+        <span class="s2">&quot;client_sign_time&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
     <span class="p">}</span>
     <span class="n">crypto</span> <span class="o">=</span> <span class="n">GostDSA</span><span class="p">()</span>
-    <span class="n">csr</span><span class="p">[</span><span class="s1">&#39;client_sign&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">crypto</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">csr</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(),</span> <span class="n">private_key</span><span class="p">)</span>
+    <span class="n">csr</span><span class="p">[</span><span class="s2">&quot;client_sign&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">crypto</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">csr</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(),</span> <span class="n">private_key</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">csr</span></div>
 
 
@@ -84,24 +91,29 @@
 <span class="sd">    :return: Результат проверки.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">crypto</span> <span class="o">=</span> <span class="n">GostDSA</span><span class="p">()</span>
-    <span class="n">csrx</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;client&quot;</span><span class="p">:</span> <span class="n">csr</span><span class="p">[</span><span class="s1">&#39;client&#39;</span><span class="p">],</span>
-        <span class="s2">&quot;client_sign_time&quot;</span><span class="p">:</span> <span class="n">csr</span><span class="p">[</span><span class="s1">&#39;client_sign_time&#39;</span><span class="p">]</span>
-    <span class="p">}</span>
+    <span class="n">csrx</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;client&quot;</span><span class="p">:</span> <span class="n">csr</span><span class="p">[</span><span class="s2">&quot;client&quot;</span><span class="p">],</span> <span class="s2">&quot;client_sign_time&quot;</span><span class="p">:</span> <span class="n">csr</span><span class="p">[</span><span class="s2">&quot;client_sign_time&quot;</span><span class="p">]}</span>
 
     <span class="k">if</span> <span class="n">phone_number</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">csr</span><span class="p">[</span><span class="s1">&#39;client&#39;</span><span class="p">][</span><span class="s1">&#39;phone_number&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">phone_number</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">csr</span><span class="p">[</span><span class="s2">&quot;client&quot;</span><span class="p">][</span><span class="s2">&quot;phone_number&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">phone_number</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
     <span class="k">if</span> <span class="n">ip</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">csr</span><span class="p">[</span><span class="s1">&#39;client&#39;</span><span class="p">][</span><span class="s1">&#39;ip&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">ip</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">csr</span><span class="p">[</span><span class="s2">&quot;client&quot;</span><span class="p">][</span><span class="s2">&quot;ip&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">ip</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
-    <span class="k">return</span> <span class="n">crypto</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="n">csr</span><span class="p">[</span><span class="s1">&#39;client_sign&#39;</span><span class="p">],</span> <span class="nb">str</span><span class="p">(</span><span class="n">csrx</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(),</span> <span class="n">csr</span><span class="p">[</span><span class="s1">&#39;client&#39;</span><span class="p">][</span><span class="s1">&#39;public_key&#39;</span><span class="p">])</span></div>
+    <span class="k">return</span> <span class="n">crypto</span><span class="o">.</span><span class="n">check</span><span class="p">(</span>
+        <span class="n">csr</span><span class="p">[</span><span class="s2">&quot;client_sign&quot;</span><span class="p">],</span> <span class="nb">str</span><span class="p">(</span><span class="n">csrx</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(),</span> <span class="n">csr</span><span class="p">[</span><span class="s2">&quot;client&quot;</span><span class="p">][</span><span class="s2">&quot;public_key&quot;</span><span class="p">]</span>
+    <span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="sign_csr">
 <a class="viewcode-back" href="../../../server.utils.html#server.utils.csr.sign_csr">[docs]</a>
-<span class="k">def</span> <span class="nf">sign_csr</span><span class="p">(</span><span class="n">csr</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">root_private_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">root_ca</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">phone_number</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">ip</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">sign_csr</span><span class="p">(</span>
+    <span class="n">csr</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">root_private_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">root_ca</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">phone_number</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">ip</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Проверка и подпись CSR.</span>
 
@@ -115,17 +127,20 @@
     <span class="n">crypto</span> <span class="o">=</span> <span class="n">GostDSA</span><span class="p">()</span>
     <span class="n">csrx</span> <span class="o">=</span> <span class="n">csr</span>
     <span class="k">if</span> <span class="n">check_csr_client</span><span class="p">(</span><span class="n">csr</span><span class="p">,</span> <span class="n">phone_number</span><span class="p">,</span> <span class="n">ip</span><span class="p">):</span>
-        <span class="n">csrx</span><span class="p">[</span><span class="s1">&#39;root&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">root_ca</span>
-        <span class="n">csrx</span><span class="p">[</span><span class="s1">&#39;root_sign_time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
-        <span class="n">csrx</span><span class="p">[</span><span class="s1">&#39;root_sign&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">crypto</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">csrx</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(),</span> <span class="n">root_private_key</span><span class="p">)</span>
+        <span class="n">csrx</span><span class="p">[</span><span class="s2">&quot;root&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">root_ca</span>
+        <span class="n">csrx</span><span class="p">[</span><span class="s2">&quot;root_sign_time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+        <span class="n">csrx</span><span class="p">[</span><span class="s2">&quot;root_sign&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">crypto</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">csrx</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(),</span> <span class="n">root_private_key</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">csrx</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;CSR client signature is invalid&quot;</span><span class="p">)</span></div>
 
 
+
 <div class="viewcode-block" id="check_csr_root">
 <a class="viewcode-back" href="../../../server.utils.html#server.utils.csr.check_csr_root">[docs]</a>
-<span class="k">def</span> <span class="nf">check_csr_root</span><span class="p">(</span><span class="n">csr</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">server_domain</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">server_pubkey</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">check_csr_root</span><span class="p">(</span>
+    <span class="n">csr</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">server_domain</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">server_pubkey</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Проверка подписи корневого центра CSR.</span>
 
@@ -136,26 +151,32 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">crypto</span> <span class="o">=</span> <span class="n">GostDSA</span><span class="p">()</span>
     <span class="n">root_ca</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;root_ca&quot;</span><span class="p">:</span> <span class="n">csr</span><span class="p">[</span><span class="s1">&#39;root&#39;</span><span class="p">][</span><span class="s1">&#39;root_ca&#39;</span><span class="p">],</span>
+        <span class="s2">&quot;root_ca&quot;</span><span class="p">:</span> <span class="n">csr</span><span class="p">[</span><span class="s2">&quot;root&quot;</span><span class="p">][</span><span class="s2">&quot;root_ca&quot;</span><span class="p">],</span>
     <span class="p">}</span>
     <span class="k">if</span> <span class="n">server_pubkey</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">csr</span><span class="p">[</span><span class="s1">&#39;root&#39;</span><span class="p">][</span><span class="s1">&#39;root_ca&#39;</span><span class="p">][</span><span class="s1">&#39;public_key&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">server_pubkey</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">csr</span><span class="p">[</span><span class="s2">&quot;root&quot;</span><span class="p">][</span><span class="s2">&quot;root_ca&quot;</span><span class="p">][</span><span class="s2">&quot;public_key&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">server_pubkey</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
-    <span class="k">if</span> <span class="n">crypto</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="n">csr</span><span class="p">[</span><span class="s1">&#39;root&#39;</span><span class="p">][</span><span class="s1">&#39;root_sign&#39;</span><span class="p">],</span> <span class="nb">str</span><span class="p">(</span><span class="n">root_ca</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(),</span> <span class="n">csr</span><span class="p">[</span><span class="s1">&#39;root&#39;</span><span class="p">][</span><span class="s1">&#39;root_ca&#39;</span><span class="p">][</span><span class="s1">&#39;public_key&#39;</span><span class="p">]):</span>
+    <span class="k">if</span> <span class="n">crypto</span><span class="o">.</span><span class="n">check</span><span class="p">(</span>
+        <span class="n">csr</span><span class="p">[</span><span class="s2">&quot;root&quot;</span><span class="p">][</span><span class="s2">&quot;root_sign&quot;</span><span class="p">],</span>
+        <span class="nb">str</span><span class="p">(</span><span class="n">root_ca</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(),</span>
+        <span class="n">csr</span><span class="p">[</span><span class="s2">&quot;root&quot;</span><span class="p">][</span><span class="s2">&quot;root_ca&quot;</span><span class="p">][</span><span class="s2">&quot;public_key&quot;</span><span class="p">],</span>
+    <span class="p">):</span>
         <span class="k">if</span> <span class="n">server_domain</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">csr</span><span class="p">[</span><span class="s1">&#39;root&#39;</span><span class="p">][</span><span class="s1">&#39;root_ca&#39;</span><span class="p">][</span><span class="s1">&#39;domain&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">server_domain</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">csr</span><span class="p">[</span><span class="s2">&quot;root&quot;</span><span class="p">][</span><span class="s2">&quot;root_ca&quot;</span><span class="p">][</span><span class="s2">&quot;domain&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">server_domain</span><span class="p">:</span>
                 <span class="k">return</span> <span class="kc">False</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">False</span>
 
     <span class="n">csrx</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;client&quot;</span><span class="p">:</span> <span class="n">csr</span><span class="p">[</span><span class="s1">&#39;client&#39;</span><span class="p">],</span>
-        <span class="s2">&quot;client_sign_time&quot;</span><span class="p">:</span> <span class="n">csr</span><span class="p">[</span><span class="s1">&#39;client_sign_time&#39;</span><span class="p">],</span>
-        <span class="s2">&quot;client_sign&quot;</span><span class="p">:</span> <span class="n">csr</span><span class="p">[</span><span class="s1">&#39;client_sign&#39;</span><span class="p">],</span>
-        <span class="s2">&quot;root&quot;</span><span class="p">:</span> <span class="n">csr</span><span class="p">[</span><span class="s1">&#39;root&#39;</span><span class="p">],</span>
-        <span class="s2">&quot;root_sign_time&quot;</span><span class="p">:</span> <span class="n">csr</span><span class="p">[</span><span class="s1">&#39;root_sign_time&#39;</span><span class="p">]</span>
+        <span class="s2">&quot;client&quot;</span><span class="p">:</span> <span class="n">csr</span><span class="p">[</span><span class="s2">&quot;client&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;client_sign_time&quot;</span><span class="p">:</span> <span class="n">csr</span><span class="p">[</span><span class="s2">&quot;client_sign_time&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;client_sign&quot;</span><span class="p">:</span> <span class="n">csr</span><span class="p">[</span><span class="s2">&quot;client_sign&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;root&quot;</span><span class="p">:</span> <span class="n">csr</span><span class="p">[</span><span class="s2">&quot;root&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;root_sign_time&quot;</span><span class="p">:</span> <span class="n">csr</span><span class="p">[</span><span class="s2">&quot;root_sign_time&quot;</span><span class="p">],</span>
     <span class="p">}</span>
-    <span class="k">return</span> <span class="n">crypto</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="n">csr</span><span class="p">[</span><span class="s1">&#39;root_sign&#39;</span><span class="p">],</span> <span class="nb">str</span><span class="p">(</span><span class="n">csrx</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(),</span> <span class="n">csr</span><span class="p">[</span><span class="s1">&#39;root&#39;</span><span class="p">][</span><span class="s1">&#39;root_ca&#39;</span><span class="p">][</span><span class="s1">&#39;public_key&#39;</span><span class="p">])</span></div>
+    <span class="k">return</span> <span class="n">crypto</span><span class="o">.</span><span class="n">check</span><span class="p">(</span>
+        <span class="n">csr</span><span class="p">[</span><span class="s2">&quot;root_sign&quot;</span><span class="p">],</span> <span class="nb">str</span><span class="p">(</span><span class="n">csrx</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(),</span> <span class="n">csr</span><span class="p">[</span><span class="s2">&quot;root&quot;</span><span class="p">][</span><span class="s2">&quot;root_ca&quot;</span><span class="p">][</span><span class="s2">&quot;public_key&quot;</span><span class="p">]</span>
+    <span class="p">)</span></div>
 
 
 
