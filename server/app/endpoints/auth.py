@@ -23,10 +23,6 @@ def generate_bearer_token():
 def generate_trs():
     return {'rand': secrets.token_urlsafe(64), 'timestamp': datetime.now(timezone.utc).timestamp()}
 
-cert = {
-
-}
-
 @router.post("/register")
 async def register(phone_number: str, fio: str, public_key: str, request: Request, db=Depends(get_db)):
     cursor, conn = db
