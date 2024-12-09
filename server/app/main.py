@@ -14,6 +14,3 @@ app.include_router(auth.router, prefix="/login")
 app.include_router(revoke.router, prefix="/revoke")
 
 app.include_router(docs.router, prefix="/docs")
-
-
-

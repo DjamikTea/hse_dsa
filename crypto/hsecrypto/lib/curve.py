@@ -3,9 +3,9 @@ class EllipticCurve:
         """
         Создает эллиптическую кривую в формк y^2 = x^3 + ax + b (mod p)
 
-        :param: a: Коэффицент a
-        :param: b: Коэффицент b
-        :param: p: Простой модуль конечного поля
+        :param a: Коэффицент a
+        :param b: Коэффицент b
+        :param p: Простой модуль конечного поля
         """
         if (4 * a**3 + 27 * b**2) % p == 0:
             raise ValueError("The curve is singular, choose different a and b.")
@@ -17,7 +17,7 @@ class EllipticCurve:
     def calculate_j_invariant(self) -> int:
         """
         Вычисляет инвариант кривой
-        
+
         :return: J-Инвариант
         """
         numerator = 1728 * 4 * self.a**3
@@ -194,7 +194,7 @@ class Point:
     def mod_sqrt(a: int, p: int):
         """
         Вычисляет квадратный корень по модулю p, используя алгоритм Тонелли-Шанкса.
-        
+
         :param: a: Число для извлечения корня
         :param: p: Простой модуль
         :return: Квадратный корень по модлю p

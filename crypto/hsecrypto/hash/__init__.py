@@ -1,5 +1,3 @@
 from .gost_hash import GostHash
 
-__all__ = [
-    "GostHash"
-]
+__all__ = ["GostHash"]

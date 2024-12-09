@@ -6,8 +6,8 @@ with open("csr.pem", "rb") as f:
 url = "https://ca.haram.ru/csr"
 
 
-files = {'csr': ('csr.pem', csr_data, 'application/x-pem-file')}
-headers = {'Authorization': 'Bearer <token>'} 
+files = {"csr": ("csr.pem", csr_data, "application/x-pem-file")}
+headers = {"Authorization": "Bearer <token>"}
 
 response = requests.post(url, files=files, headers=headers)
 if response.status_code == 200:
