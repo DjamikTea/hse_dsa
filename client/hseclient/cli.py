@@ -112,7 +112,6 @@ class MyCLI(cmd.Cmd):
         self.host_file = os.path.join(self.keys_directory, "host.json")
         os.makedirs(self.keys_directory, exist_ok=True)
 
-        # check server host in keys/host.json
         def set_host():
             host = input("Введите адрес сервера: ")
 
@@ -171,7 +170,6 @@ class MyCLI(cmd.Cmd):
             print(f"Ошибка записи ключа в файл: {e}")
             return
 
-        # country = input("Введите код страны (ISO 3166-1 alpha-2): ")
         country = "RU"
         organization = input("Введите название организации: ")
         phone_number = input("Введите номер телефона: ")
@@ -330,9 +328,9 @@ class MyCLI(cmd.Cmd):
                 print("Код верификации успешно отправлен!")
                 response_data = response.json()
                 token = response_data.get("token")
-                signed_certificate = response_data.get("signed_certificate")
+                signed_csr = response_data.get("cert")
 
-                if token and signed_certificate:
+                if token and signed_csr:
                     self.token = token
 
                     output_file = os.path.join(
@@ -340,7 +338,7 @@ class MyCLI(cmd.Cmd):
                     )
                     with open(output_file, "w") as file:
                         json.dump(
-                            {"token": token, "signed_certificate": signed_certificate},
+                            {"token": token, "cert": signed_csr},
                             file,
                             indent=4,
                         )
@@ -450,7 +448,7 @@ class MyCLI(cmd.Cmd):
                     documents[i] = {
                         key: value
                         for key, value in documents[i].items()
-                        if not key in ["timeuuid", "sha256", "path"]
+                        if not key in ["sign_verifed","user_id", "sha256", "path"]
                     }
                 headers = "keys"
                 table = tabulate(documents, headers=headers, tablefmt="pretty")
@@ -472,10 +470,10 @@ class MyCLI(cmd.Cmd):
         if (
             not phone_number.isdigit()
             or len(phone_number) != 11
-            or phone_number[0] != "8"
+            or phone_number[0] != "7"
         ):
             print(
-                "Ошибка: некорректный номер телефона. Формат: 11 цифр, начинается с 8."
+                "Ошибка: некорректный номер телефона. Формат: 11 цифр, начинается с 7."
             )
             return
 
@@ -534,23 +532,25 @@ class MyCLI(cmd.Cmd):
     def do_sign(self, arg):
         """
         Подписывает документ.
-        Использование: sign <timeuuid> <path_to_private_key> <path_to_certificate>
+        Эта команда запросит аргументы последовательно:
+        - timeuuid
+        - путь к приватному ключу
+        - путь к сертификату
         """
-        args = arg.split()
-        if len(args) != 3:
-            print(
-                "Ошибка: команда должна содержать три аргумента: <timeuuid> <path_to_private_key> <path_to_certificate>."
-            )
+
+        timeuuid = input("Введите timeuuid документа: ").strip()
+        if not timeuuid:
+            print("Ошибка: timeuuid не может быть пустым.")
             return
 
-        timeuuid, private_key_path, certificate_path = args
-
-        if not os.path.exists(private_key_path):
-            print(f"Ошибка: файл приватного ключа {private_key_path} не найден.")
+        private_key_path = input("Введите путь к приватному ключу: ").strip()
+        if not private_key_path or not os.path.exists(private_key_path):
+            print(f"Ошибка: файл приватного ключа '{private_key_path}' не найден.")
             return
 
-        if not os.path.exists(certificate_path):
-            print(f"Ошибка: файл сертификата {certificate_path} не найден.")
+        certificate_path = input("Введите путь к сертификату: ").strip()
+        if not certificate_path or not os.path.exists(certificate_path):
+            print(f"Ошибка: файл сертификата '{certificate_path}' не найден.")
             return
 
         try:
@@ -698,6 +698,47 @@ class MyCLI(cmd.Cmd):
         except requests.exceptions.RequestException as e:
             print(f"Ошибка при запросе: {e}")
 
+    def do_download(self, arg):
+        """Загружает документ с сервера по timeuuid."""
+        if not self.timeuuid:
+            print("Ошибка: timeuuid не установлен. Укажите timeuuid перед вызовом do_download.")
+            return
+        
+        self._load_token()
+        
+        if not self.token:
+            print("Ошибка: Токен отсутствует. Авторизуйтесь, чтобы получить токен.")
+            return
+        
+        url = f"{self.url}/docs/download/{self.timeuuid}"
+        headers = {"Authorization": f"Bearer {self.token}"}
+
+        try:
+            print(f"Загрузка документа с ID {self.timeuuid}...")
+            response = requests.get(url, headers=headers, stream=True)
+
+            if response.status_code == 200:
+                content_disposition = response.headers.get("Content-Disposition", "")
+                filename = (
+                    content_disposition.split("filename=")[-1].strip('"')
+                    if "filename=" in content_disposition
+                    else None
+                )
+                if not filename:
+                    filename = f"{self.timeuuid}.bin"
+
+                with open(filename, "wb") as file:
+                    for chunk in response.iter_content(chunk_size=8192):
+                        file.write(chunk)
+
+                print(f"Документ успешно загружен и сохранен как '{filename}'.")
+            else:
+                print(f"Ошибка при загрузке документа: {response.status_code}")
+                print(response.json())
+        except requests.exceptions.RequestException as e:
+            print(f"Ошибка при запросе: {e}")
+
+            
 
 def run():
     MyCLI().cmdloop()
