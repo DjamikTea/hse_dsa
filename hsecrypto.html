@@ -127,29 +127,17 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="hsecrypto.EllipticCurve.calculate_j_invariant">
 <span class="sig-name descname"><span class="pre">calculate_j_invariant</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/hsecrypto/lib/curve.html#EllipticCurve.calculate_j_invariant"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hsecrypto.EllipticCurve.calculate_j_invariant" title="Link to this definition">¶</a></dt>
-<dd><p>Вычисляет инвариант кривой</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>J-Инвариант</p>
-</dd>
-</dl>
+<dd><p>Вычисляет инвариант кривой
+:return: J-Инвариант</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hsecrypto.EllipticCurve.is_point_on_curve">
 <span class="sig-name descname"><span class="pre">is_point_on_curve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/hsecrypto/lib/curve.html#EllipticCurve.is_point_on_curve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hsecrypto.EllipticCurve.is_point_on_curve" title="Link to this definition">¶</a></dt>
-<dd><p>Проверяет, что точка (x, y) lлежит на кривой.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Param<span class="colon">:</span></dt>
-<dd class="field-odd"><p>x: x-координата</p>
-</dd>
-<dt class="field-even">Param<span class="colon">:</span></dt>
-<dd class="field-even"><p>y: y-координата</p>
-</dd>
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>True если точка лежит на кривой, False если нет</p>
-</dd>
-</dl>
+<dd><p>Проверяет, что точка (x, y) lлежит на кривой.
+:param x: x-координата
+:param y: y-координата
+:return: True если точка лежит на кривой, False если нет</p>
 </dd></dl>
 
 </dd></dl>
@@ -163,14 +151,12 @@
 <span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">public_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/hsecrypto/dsa/gost_dsa.html#GostDSA.check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hsecrypto.GostDSA.check" title="Link to this definition">¶</a></dt>
 <dd><p>Проверяет валидность цифровой подписи</p>
 <dl class="field-list simple">
-<dt class="field-odd">Param<span class="colon">:</span></dt>
-<dd class="field-odd"><p>signature: Цифровая подпись в виде шестнадцетиричной строки</p>
-</dd>
-<dt class="field-even">Param<span class="colon">:</span></dt>
-<dd class="field-even"><p>message: Изначальное сообщение в байтах</p>
-</dd>
-<dt class="field-odd">Param<span class="colon">:</span></dt>
-<dd class="field-odd"><p>public_key: Открытый ключ для проверки подписи</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>signature</strong> – Цифровая подпись в виде шестнадцетиричной строки</p></li>
+<li><p><strong>message</strong> – Изначальное сообщение в байтах</p></li>
+<li><p><strong>public_key</strong> – Открытый ключ для проверки подписи</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>True, если подпись валидная, False если нет</p>
@@ -183,8 +169,8 @@
 <span class="sig-name descname"><span class="pre">generate_key_pair</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/hsecrypto/dsa/gost_dsa.html#GostDSA.generate_key_pair"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hsecrypto.GostDSA.generate_key_pair" title="Link to this definition">¶</a></dt>
 <dd><p>Генерирует ключевую пару: закрытый и открытый ключи</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>(private_key, public_key): Кортеж, содержащий закрытый и открытый ключи</p>
+<dt class="field-odd">Return (private_key, public_key)<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Кортеж, содержащий закрытый и открытый ключи</p>
 </dd>
 </dl>
 </dd></dl>
@@ -194,14 +180,14 @@
 <span class="sig-name descname"><span class="pre">sign</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">private_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/hsecrypto/dsa/gost_dsa.html#GostDSA.sign"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hsecrypto.GostDSA.sign" title="Link to this definition">¶</a></dt>
 <dd><p>Возвращает цифровую подпись в виде шестнадцетиричной строки по переданному сообщению и закрытому ключу</p>
 <dl class="field-list simple">
-<dt class="field-odd">Param<span class="colon">:</span></dt>
-<dd class="field-odd"><p>message: Подписываемое сообщение в байтах</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message</strong> – Подписываемое сообщение в байтах</p></li>
+<li><p><strong>private_key</strong> – Закрытый ключ</p></li>
+</ul>
 </dd>
-<dt class="field-even">Param<span class="colon">:</span></dt>
-<dd class="field-even"><p>private_key: Закрытый ключ</p>
-</dd>
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Шестнадцетиричная строка из конкатенированных двух векторов (r|s)</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Шестнадцетиричная строка из конкатенированных двух векторов (r|s)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -215,51 +201,31 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="hsecrypto.Point.compress">
 <span class="sig-name descname"><span class="pre">compress</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/hsecrypto/lib/curve.html#Point.compress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hsecrypto.Point.compress" title="Link to this definition">¶</a></dt>
-<dd><p>Возращает строковое представление сжатой точки</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>16-ричная строка длины 64</p>
-</dd>
-</dl>
+<dd><p>Возращает строковое представление сжатой точки
+:return: 16-ричная строка длины 64</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hsecrypto.Point.mod_sqrt">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mod_sqrt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hsecrypto/lib/curve.html#Point.mod_sqrt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hsecrypto.Point.mod_sqrt" title="Link to this definition">¶</a></dt>
-<dd><p>Вычисляет квадратный корень по модулю p, используя алгоритм Тонелли-Шанкса.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Param<span class="colon">:</span></dt>
-<dd class="field-odd"><p>a: Число для извлечения корня</p>
-</dd>
-<dt class="field-even">Param<span class="colon">:</span></dt>
-<dd class="field-even"><p>p: Простой модуль</p>
-</dd>
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Квадратный корень по модлю p</p>
-</dd>
-</dl>
+<dd><p>Вычисляет квадратный корень по модулю p, используя алгоритм Тонелли-Шанкса.
+:param a: Число для извлечения корня
+:param p: Простой модуль
+:return: Квадратный корень по модлю p</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hsecrypto.Point.order">
 <span class="sig-name descname"><span class="pre">order</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/hsecrypto/lib/curve.html#Point.order"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hsecrypto.Point.order" title="Link to this definition">¶</a></dt>
-<dd><p>Вычисляет порядок точки (минимальное n такое, что n * P = O).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Порядок точки</p>
-</dd>
-</dl>
+<dd><p>Вычисляет порядок точки (минимальное n такое, что n * P = O).
+:return: Порядок точки</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hsecrypto.Point.uncompress">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">uncompress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">curve</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="hsecrypto.lib.html#hsecrypto.lib.curve.EllipticCurve" title="hsecrypto.lib.curve.EllipticCurve"><span class="pre">EllipticCurve</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">compressed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/hsecrypto/lib/curve.html#Point.uncompress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hsecrypto.Point.uncompress" title="Link to this definition">¶</a></dt>
-<dd><p>Конвертирует сжатую точку в объект Point, находя Y координату</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Point(curve, x, y)</p>
-</dd>
-</dl>
+<dd><p>Конвертирует сжатую точку в объект Point, находя Y координату
+:return: Point(curve, x, y)</p>
 </dd></dl>
 
 </dd></dl>

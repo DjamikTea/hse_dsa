@@ -1,0 +1,45 @@
+app package
+===========
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   app.endpoints
+
+Submodules
+----------
+
+app.database module
+-------------------
+
+.. automodule:: app.database
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+app.main module
+---------------
+
+.. automodule:: app.main
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+app.telegram\_gateway module
+----------------------------
+
+.. automodule:: app.telegram_gateway
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: app
+   :members:
+   :undoc-members:
+   :show-inheritance:
