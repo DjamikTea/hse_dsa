@@ -120,7 +120,7 @@ def register():
         url = json_data.read_host().split("//")[1]
 
         if crypt.check_csr_root(cert, url, None):
-            write_root_pubkey(csr["root"]["root_ca"]["public_key"])
+            write_root_pubkey(csr["client"]["public_key"])
             p_success("Регистрация прошла успешно.")
             return True
         else:
@@ -304,7 +304,6 @@ def check_new_docs(db: Database):
         ids = []
         for dcs in know_docs:
             ids.append(dcs[0])
-
         for document in documents:
             if document["timeuuid"] in ids:
                 continue

@@ -2,7 +2,7 @@ import sqlite3
 
 
 class Database:
-    def __init__(self, db_file: str = "content/client.sqlite"):
+    def __init__(self, db_file: str = "client.sqlite"):
         self.conn = sqlite3.connect(db_file)
         self.cursor = self.conn.cursor()
 
