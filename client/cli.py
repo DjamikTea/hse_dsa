@@ -5,6 +5,7 @@ import os
 import requests
 import json
 
+
 def generate_csr(
     private_key: str,
     public_key: str,
@@ -42,17 +43,18 @@ def generate_csr(
     csr["client_sign"] = crypto.sign(str(csr).encode(), private_key)
     return csr
 
+
 class MyCLI(cmd.Cmd):
     prompt = ">> "
-    
+
     def __init__(self):
         super().__init__()
-        self.data = {}  
-        self.keys = None  
-        self.keys_directory = "keys"  
-        os.makedirs(self.keys_directory, exist_ok=True) 
+        self.data = {}
+        self.keys = None
+        self.keys_directory = "keys"
+        os.makedirs(self.keys_directory, exist_ok=True)
         self.url = "https://hse.gopass.dev"
-    
+
     def do_generate(self, arg):
         """
         Команда для генерации пары ключей и создания CSR.
@@ -82,11 +84,13 @@ class MyCLI(cmd.Cmd):
             external_ip = ""
 
         ip = input(f"Введите IP-адрес [ваш ip: {external_ip}]: ") or external_ip
-
         fio = input("Введите ФИО: ")
 
         try:
-            csr = generate_csr(private_key, public_key, country, organization, phone_number, ip, fio)
+            csr = generate_csr(
+                private_key, public_key, country, organization,
+                phone_number, ip, fio
+            )
             print("CSR успешно сгенерирован")
         except Exception as e:
             print(f"Не получилось сгенерировать CSR: {e}")
@@ -173,9 +177,9 @@ class MyCLI(cmd.Cmd):
             self.data["full_name"],
             self.keys
         )
-    
-    
+
     def _send_registration_data(self, phone_number, fio, public_key):
+        """Отправка регистрационных данных на сервер."""
         url = f"{self.url}/login/register"
         params = {
             "phone_number": phone_number,
@@ -211,50 +215,53 @@ class MyCLI(cmd.Cmd):
         )
 
     def _send_verification_code(self, phone_number, code):
-            """
-            Функция отправки кода для верификации на второй URL.
-            """
-            url = f"{self.url}  /login/verify"
-            params = {
-                "phone_number": phone_number,
-                "code": code
-            }
-            csr_file = os.path.join(self.keys_directory, "csr.json")
-            try:
-                with open(csr_file, "r") as file:
-                    csr = json.load(file)
-                params["csr"] = json.dumps(csr)
-            except FileNotFoundError:
-                print(f"Ошибка: файл {csr_file} не найден.")
-                return
-            except json.JSONDecodeError:
-                print(f"Ошибка: не удалось декодировать JSON из {csr_file}.")
-                return
+        """Функция отправки кода для верификации на сервер."""
+        url = f"{self.url}/login/verify"
+        params = {
+            "phone_number": phone_number,
+            "code": code
+        }
+        csr_file = os.path.join(self.keys_directory, "csr.json")
+        try:
+            with open(csr_file, "r") as file:
+                csr = json.load(file)
+            params["csr"] = json.dumps(csr)
+        except FileNotFoundError:
+            print(f"Ошибка: файл {csr_file} не найден.")
+            return
+        except json.JSONDecodeError:
+            print(f"Ошибка: не удалось декодировать JSON из {csr_file}.")
+            return
 
-            try:
-                response = requests.get(url, params=params)
-                
-                if response.status_code == 200:
-                    print("Код верификации успешно отправлен!")
-                    response_data = response.json()
-                    token = response_data.get("token")
-                    signed_certificate = response_data.get("signed_certificate")
-                    
-                    if token and signed_certificate:
-                        output_file = os.path.join(self.keys_directory, "registration_data.json")
-                        with open(output_file, "w") as file:
-                            json.dump({"token": token, "signed_certificate": signed_certificate}, file, indent=4)
-                        
-                        print(f"Токен и сертификат успешно сохранены в файл: {output_file}")
-                    else:
-                        print("Ответ не содержит необходимых данных (токен или сертификат).")
-                    
-                    self._complete_registration()
+        try:
+            response = requests.get(url, params=params)
+            if response.status_code == 200:
+                print("Код верификации успешно отправлен!")
+                response_data = response.json()
+                token = response_data.get("token")
+                signed_certificate = response_data.get("signed_certificate")
+
+                if token and signed_certificate:
+                    output_file = os.path.join(
+                        self.keys_directory, "registration_data.json"
+                    )
+                    with open(output_file, "w") as file:
+                        json.dump(
+                            {"token": token, "signed_certificate": signed_certificate},
+                            file,
+                            indent=4
+                        )
+
+                    print(f"Токен и сертификат успешно сохранены в файл: {output_file}")
                 else:
-                    print(f"Ошибка при отправке кода: {response.status_code}")
-                    print(response.json())
-            except requests.exceptions.RequestException as e:
-                print(f"Ошибка при запросе: {e}")
+                    print("Ответ не содержит необходимых данных (токен или сертификат).")
+
+                self._complete_registration()
+            else:
+                print(f"Ошибка при отправке кода: {response.status_code}")
+                print(response.json())
+        except requests.exceptions.RequestException as e:
+            print(f"Ошибка при запросе: {e}")
 
     def _complete_registration(self):
         """Вывод результатов регистрации."""
@@ -265,12 +272,11 @@ class MyCLI(cmd.Cmd):
         print(f"Файл ключей: {self.data['file_path']}")
         print(f"Ключи: {self.keys}")
 
-        self._send_registration_data(self.data['phone_number'], self.data['full_name'], self.keys)
-
     def do_exit(self, arg):
         """Выход из программы."""
         print("До свидания!")
         return True
+
 
 if __name__ == "__main__":
     MyCLI().cmdloop()
