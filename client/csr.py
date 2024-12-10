@@ -37,11 +37,14 @@ def generate_csr(
         "client_sign_time": datetime.now(timezone.utc).isoformat(),
     }
     crypto = GostDSA()
-    csr["client_sign"] = crypto.sign(str(csr).encode(), private_key)
+    csr.get("client_sign") = crypto.sign(str(csr).encode(), private_key)
     return csr
 
 
-def check_csr_client(csr: dict, phone_number: str = None, ip: str = None) -> bool:
+def check_csr_client(
+        csr: dict, 
+        phone_number: str | None = None, 
+        ip: str | None = None) -> bool:
     """
     Проверка подписи клиента CSR.
     :param csr: CSR в формате json.
@@ -50,16 +53,16 @@ def check_csr_client(csr: dict, phone_number: str = None, ip: str = None) -> boo
     :return: Результат проверки.
     """
     crypto = GostDSA()
-    csrx = {"client": csr["client"], "client_sign_time": csr["client_sign_time"]}
+    csrx = {"client": csr.get("client"), "client_sign_time": csr.get("client_sign_time")}
 
     if phone_number:
-        if csr["client"]["phone_number"] != phone_number:
+        if csr.get("client")("phone_number") != phone_number:
             return False
     if ip:
-        if csr["client"]["ip"] != ip:
+        if csr.get("client")("ip") != ip:
             return False
     return crypto.check(
-        csr["client_sign"], str(csrx).encode(), csr["client"]["public_key"]
+        csr.get("client_sign"), str(csrx).encode(), csr.get("client")("public_key")
     )
 
 
@@ -67,8 +70,8 @@ def sign_csr(
     csr: dict,
     root_private_key: str,
     root_ca: dict,
-    phone_number: str = None,
-    ip: str = None,
+    phone_number: str | None = None,
+    ip: str | None = None,
 ) -> dict:
     """
     Проверка и подпись CSR.
@@ -92,7 +95,9 @@ def sign_csr(
 
 
 def check_csr_root(
-    csr: dict, server_domain: str = None, server_pubkey: str = None
+    csr: dict, 
+    server_domain: str | None = None, 
+    server_pubkey: str | None = None
 ) -> bool:
     """
     Проверка подписи корневого центра CSR.
@@ -104,29 +109,29 @@ def check_csr_root(
     """
     crypto = GostDSA()
     root_ca = {
-        "root_ca": csr["root"]["root_ca"],
+        "root_ca": csr.get("root")("root_ca"),
     }
     if server_pubkey:
-        if csr["root"]["root_ca"]["public_key"] != server_pubkey:
+        if csr.get("root")("root_ca")("public_key") != server_pubkey:
             return False
     if crypto.check(
-        csr["root"]["root_sign"],
+        csr.get("root")("root_sign"),
         str(root_ca).encode(),
-        csr["root"]["root_ca"]["public_key"],
+        csr.get("root")("root_ca")("public_key"),
     ):
         if server_domain:
-            if csr["root"]["root_ca"]["domain"] != server_domain:
+            if csr.get("root")("root_ca")("domain") != server_domain:
                 return False
     else:
         return False
 
     csrx = {
-        "client": csr["client"],
-        "client_sign_time": csr["client_sign_time"],
-        "client_sign": csr["client_sign"],
-        "root": csr["root"],
-        "root_sign_time": csr["root_sign_time"],
+        "client": csr.get("client"),
+        "client_sign_time": csr.get("client_sign_time"),
+        "client_sign": csr.get("client_sign"),
+        "root": csr.get("root"),
+        "root_sign_time": csr.get("root_sign_time"),
     }
     return crypto.check(
-        csr["root_sign"], str(csrx).encode(), csr["root"]["root_ca"]["public_key"]
+        csr.get("root_sign"), str(csrx).encode(), csr.get("root")("root_ca")("public_key")
     )

@@ -1,12 +1,19 @@
+from hsecrypto import GostDSA
+from datetime import datetime, timezone
 import cmd
 import os
 import requests
 import json
-import time
-from hsecrypto import GostDSA
-from datetime import datetime, timezone
 
-def generate_csr(private_key: str, public_key: str, country: str, organization: str, phone_number: str, ip: str, fio: str) -> dict:
+def generate_csr(
+    private_key: str,
+    public_key: str,
+    country: str,
+    organization: str,
+    phone_number: str,
+    ip: str,
+    fio: str,
+) -> dict:
     """
     Генерация запроса на сертификат (CSR).
 
@@ -44,6 +51,7 @@ class MyCLI(cmd.Cmd):
         self.keys = None  
         self.keys_directory = "keys"  
         os.makedirs(self.keys_directory, exist_ok=True) 
+        self.url = "https://hse.gopass.dev"
     
     def do_generate(self, arg):
         """
@@ -67,8 +75,12 @@ class MyCLI(cmd.Cmd):
         ip = input("Введите IP-адрес: ")
         fio = input("Введите ФИО: ")
 
-        csr = generate_csr(private_key, public_key, country, organization, phone_number, ip, fio)
-        
+        try:
+            csr = generate_csr(private_key, public_key, country, organization, phone_number, ip, fio)
+            print("CSR успешно сгенерирован")
+        except Exception as e:
+            print(f"Не получилось сгенерировать CSR{e}")
+
         csr_file = os.path.join(self.keys_directory, "csr.json")
         try:
             with open(csr_file, "w") as file:
@@ -154,7 +166,7 @@ class MyCLI(cmd.Cmd):
     
     
     def _send_registration_data(self, phone_number, fio, public_key):
-        url = "https://hse.gopass.dev/login/register"
+        url = f"{self.url}/login/register"
         params = {
             "phone_number": phone_number,
             "fio": fio,
@@ -168,7 +180,7 @@ class MyCLI(cmd.Cmd):
                 print(response.json())
                 self._get_sms_code()
             elif response.status_code == 400:
-                print("У вас уже есть код")
+                print(response.json())
                 self._get_sms_code()
             else:
                 print(f"Ошибка при регистрации: {response.status_code}")
@@ -192,7 +204,7 @@ class MyCLI(cmd.Cmd):
             """
             Функция отправки кода для верификации на второй URL.
             """
-            url = "https://hse.gopass.dev/login/verify"
+            url = f"{self.url}  /login/verify"
             params = {
                 "phone_number": phone_number,
                 "code": code
@@ -214,7 +226,19 @@ class MyCLI(cmd.Cmd):
                 
                 if response.status_code == 200:
                     print("Код верификации успешно отправлен!")
-                    print(response.json())
+                    response_data = response.json()
+                    token = response_data.get("token")
+                    signed_certificate = response_data.get("signed_certificate")
+                    
+                    if token and signed_certificate:
+                        output_file = os.path.join(self.keys_directory, "registration_data.json")
+                        with open(output_file, "w") as file:
+                            json.dump({"token": token, "signed_certificate": signed_certificate}, file, indent=4)
+                        
+                        print(f"Токен и сертификат успешно сохранены в файл: {output_file}")
+                    else:
+                        print("Ответ не содержит необходимых данных (токен или сертификат).")
+                    
                     self._complete_registration()
                 else:
                     print(f"Ошибка при отправке кода: {response.status_code}")
@@ -231,7 +255,6 @@ class MyCLI(cmd.Cmd):
         print(f"Файл ключей: {self.data['file_path']}")
         print(f"Ключи: {self.keys}")
 
-        # Отправка данных на API
         self._send_registration_data(self.data['phone_number'], self.data['full_name'], self.keys)
 
     def do_exit(self, arg):
