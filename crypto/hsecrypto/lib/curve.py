@@ -49,7 +49,7 @@ class EllipticCurve:
             return 0  # n не квадратичный вычет
         if n == 0:
             return 1  # n = 0, тогда y = 0 единственное решение
-        return 2  # TДва различных решения для y
+        return 2  # Два различных решения для y
 
     def __str__(self) -> str:
         return f"EllipticCurve(a={self.a}, b={self.b}, p={self.p})"
