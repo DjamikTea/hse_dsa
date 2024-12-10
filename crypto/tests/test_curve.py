@@ -18,27 +18,28 @@ def test_elliptic_curve_initialization(curve: EllipticCurve):
 
 
 def test_is_point_on_curve(curve: EllipticCurve):
-
     assert curve.is_point_on_curve(3, 10)
 
-def test_is_point_on_curve_negative(curve: EllipticCurve):
 
+def test_is_point_on_curve_negative(curve: EllipticCurve):
     assert not curve.is_point_on_curve(1, 2)
     assert not curve.is_point_on_curve(0, 0)
-    assert not curve.is_point_on_curve(23, 23)  
+    assert not curve.is_point_on_curve(23, 23)
+
 
 def test_point_order(curve: EllipticCurve):
     point = Point(curve, 3, 10)
 
     assert point.order() == 28
 
+
 def test_point_order_negative(curve: EllipticCurve):
     point = Point(curve, 3, -10)
 
     point.order() != 30
 
-def test_point_addition(curve: EllipticCurve):
 
+def test_point_addition(curve: EllipticCurve):
     point1 = Point(curve, 3, -10)
     point2 = Point(curve, 3, 10)
 
@@ -47,24 +48,26 @@ def test_point_addition(curve: EllipticCurve):
 
 
 def test_point_negation(curve: EllipticCurve):
-
     point = Point(curve, 3, 10)
 
     neg_point = -point
     assert curve.is_point_on_curve(neg_point.x, neg_point.y)
     assert neg_point.y == (-point.y) % curve.p
 
+
 def test_point_negation_negative(curve: EllipticCurve):
     point1 = Point(curve, 3, 10)
     point2 = Point(curve, 3, -10)
-    
+
     assert -point1 != point2
+
 
 def test_point_multiplication(curve: EllipticCurve):
     point = Point(curve, 3, 10)
 
     result_point = 28 * point
     assert result_point.x is None and result_point.y is None
+
 
 def test_point_multiplication_negative(curve: EllipticCurve):
     point = Point(curve, 3, 10)
@@ -88,11 +91,13 @@ def test_mod_sqrt(curve: EllipticCurve):
 
     assert (sqrt**2) % curve.p == a
 
+
 def test_mod_sqrt_negative(curve: EllipticCurve):
     a = 4
     sqrt = Point.mod_sqrt(a, curve.p)
 
-    assert (sqrt**2) % curve.p != a+1
+    assert (sqrt**2) % curve.p != a + 1
+
 
 def test_point_on_infinity(curve: EllipticCurve):
     point_infinity = Point(curve, None, None)

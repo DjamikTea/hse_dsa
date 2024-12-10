@@ -219,7 +219,6 @@ class Point:
         while t != 0 and t != 1:
             t2 = t
             for i in range(1, m):
-
                 t2 = pow(t2, 2, p)
                 if t2 == 1:
                     break
