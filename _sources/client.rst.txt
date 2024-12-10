@@ -1,0 +1,29 @@
+client package
+==============
+
+Submodules
+----------
+
+client.cli module
+-----------------
+
+.. automodule:: client.cli
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+client.csr module
+-----------------
+
+.. automodule:: client.csr
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: client
+   :members:
+   :undoc-members:
+   :show-inheritance:

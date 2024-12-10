@@ -6,3 +6,4 @@ HSE_DSA
 
    server
    hsecrypto
+   client
