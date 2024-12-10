@@ -2,6 +2,8 @@ name: Crypto tests
 
 on:
   push:
+    paths:
+        - crypto/**
 
 jobs:
   build:
