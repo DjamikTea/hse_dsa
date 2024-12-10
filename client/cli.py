@@ -88,8 +88,7 @@ class MyCLI(cmd.Cmd):
 
         try:
             csr = generate_csr(
-                private_key, public_key, country, organization,
-                phone_number, ip, fio
+                private_key, public_key, country, organization, phone_number, ip, fio
             )
             print("CSR успешно сгенерирован")
         except Exception as e:
@@ -168,24 +167,24 @@ class MyCLI(cmd.Cmd):
     def _get_phone_number(self):
         """Запрос номера телефона."""
         phone_number = input("Введите номер телефона: ")
-        if not phone_number.isdigit() or len(phone_number) != 11 or phone_number[0] != "8":
-            print("Ошибка: некорректный номер телефона. Формат: 11 цифр, без +, начинается с 8.")
+        if (
+            not phone_number.isdigit()
+            or len(phone_number) != 11
+            or phone_number[0] != "8"
+        ):
+            print(
+                "Ошибка: некорректный номер телефона. Формат: 11 цифр, без +, начинается с 8."
+            )
             return self._get_phone_number()
         self.data["phone_number"] = phone_number
         self._send_registration_data(
-            self.data["phone_number"],
-            self.data["full_name"],
-            self.keys
+            self.data["phone_number"], self.data["full_name"], self.keys
         )
 
     def _send_registration_data(self, phone_number, fio, public_key):
         """Отправка регистрационных данных на сервер."""
         url = f"{self.url}/login/register"
-        params = {
-            "phone_number": phone_number,
-            "fio": fio,
-            "public_key": public_key
-        }
+        params = {"phone_number": phone_number, "fio": fio, "public_key": public_key}
 
         try:
             response = requests.post(url, params=params)
@@ -209,18 +208,12 @@ class MyCLI(cmd.Cmd):
             print("Ошибка: код должен состоять из 6 цифр.")
             return self._get_sms_code()
         self.data["sms_code"] = sms_code
-        self._send_verification_code(
-            self.data["phone_number"],
-            self.data["sms_code"]
-        )
+        self._send_verification_code(self.data["phone_number"], self.data["sms_code"])
 
     def _send_verification_code(self, phone_number, code):
         """Функция отправки кода для верификации на сервер."""
         url = f"{self.url}/login/verify"
-        params = {
-            "phone_number": phone_number,
-            "code": code
-        }
+        params = {"phone_number": phone_number, "code": code}
         csr_file = os.path.join(self.keys_directory, "csr.json")
         try:
             with open(csr_file, "r") as file:
@@ -249,12 +242,14 @@ class MyCLI(cmd.Cmd):
                         json.dump(
                             {"token": token, "signed_certificate": signed_certificate},
                             file,
-                            indent=4
+                            indent=4,
                         )
 
                     print(f"Токен и сертификат успешно сохранены в файл: {output_file}")
                 else:
-                    print("Ответ не содержит необходимых данных (токен или сертификат).")
+                    print(
+                        "Ответ не содержит необходимых данных (токен или сертификат)."
+                    )
 
                 self._complete_registration()
             else:

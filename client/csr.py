@@ -42,9 +42,8 @@ def generate_csr(
 
 
 def check_csr_client(
-        csr: dict, 
-        phone_number: str | None = None, 
-        ip: str | None = None) -> bool:
+    csr: dict, phone_number: str | None = None, ip: str | None = None
+) -> bool:
     """
     Проверка подписи клиента CSR.
     :param csr: CSR в формате json.
@@ -53,7 +52,10 @@ def check_csr_client(
     :return: Результат проверки.
     """
     crypto = GostDSA()
-    csrx = {"client": csr.get("client"), "client_sign_time": csr.get("client_sign_time")}
+    csrx = {
+        "client": csr.get("client"),
+        "client_sign_time": csr.get("client_sign_time"),
+    }
 
     if phone_number:
         if csr.get("client")("phone_number") != phone_number:
@@ -95,9 +97,7 @@ def sign_csr(
 
 
 def check_csr_root(
-    csr: dict, 
-    server_domain: str | None = None, 
-    server_pubkey: str | None = None
+    csr: dict, server_domain: str | None = None, server_pubkey: str | None = None
 ) -> bool:
     """
     Проверка подписи корневого центра CSR.
@@ -133,5 +133,7 @@ def check_csr_root(
         "root_sign_time": csr.get("root_sign_time"),
     }
     return crypto.check(
-        csr.get("root_sign"), str(csrx).encode(), csr.get("root")("root_ca")("public_key")
+        csr.get("root_sign"),
+        str(csrx).encode(),
+        csr.get("root")("root_ca")("public_key"),
     )
