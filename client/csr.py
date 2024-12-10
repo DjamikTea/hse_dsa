@@ -37,7 +37,7 @@ def generate_csr(
         "client_sign_time": datetime.now(timezone.utc).isoformat(),
     }
     crypto = GostDSA()
-    csr.get("client_sign") = crypto.sign(str(csr).encode(), private_key)
+    csr.get["client_sign"] = crypto.sign(str(csr).encode(), private_key)
     return csr
 
 

@@ -72,14 +72,24 @@ class MyCLI(cmd.Cmd):
         country = input("Введите код страны (ISO 3166-1 alpha-2): ")
         organization = input("Введите название организации: ")
         phone_number = input("Введите номер телефона: ")
-        ip = input("Введите IP-адрес: ")
+
+        try:
+            response = requests.get("https://api64.ipify.org?format=json")
+            response.raise_for_status()
+            external_ip = response.json().get("ip", "")
+        except Exception as e:
+            print(f"Ошибка при получении внешнего IP: {e}")
+            external_ip = ""
+
+        ip = input(f"Введите IP-адрес [ваш ip: {external_ip}]: ") or external_ip
+
         fio = input("Введите ФИО: ")
 
         try:
             csr = generate_csr(private_key, public_key, country, organization, phone_number, ip, fio)
             print("CSR успешно сгенерирован")
         except Exception as e:
-            print(f"Не получилось сгенерировать CSR{e}")
+            print(f"Не получилось сгенерировать CSR: {e}")
 
         csr_file = os.path.join(self.keys_directory, "csr.json")
         try:
