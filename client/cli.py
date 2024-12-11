@@ -342,11 +342,6 @@ class MyCLI(cmd.Cmd):
                     text = await resp.text()
                     print("Upload failed:", resp.status, text)
 
-        def do_exit(self, arg):
-            """Выход из программы."""
-            print("До свидания!")
-            return True
-
     def do_revoke(self, arg):
         """
         Удаляет пользователя.
@@ -484,6 +479,11 @@ class MyCLI(cmd.Cmd):
                     print(response.json())
             except requests.exceptions.RequestException as e:
                 print(f"Ошибка при запросе: {e}")
+
+    def do_exit(self, arg):
+        """Выход из программы."""
+        print("До свидания!")
+        return True
 
 
 if __name__ == "__main__":
