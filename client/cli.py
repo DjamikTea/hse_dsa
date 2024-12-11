@@ -44,6 +44,28 @@ def generate_csr(
     return csr
 
 
+def sign_document(
+    timeuuid: str, sha256: str, private_key: str, certificate: str
+) -> dict:
+    """
+    Подписывает документ
+    :param timeuuid: timeuuid документа
+    :param private_key: приватный ключ
+    :param certificate: сертификат
+    :param sha256: sha256 файла
+    :return: подписанный документ
+    """
+    signature = {
+        "timeuuid": timeuuid,
+        "sha256": sha256,
+        "cert": certificate,
+        "sign_time": datetime.now(timezone.utc).isoformat(),
+    }
+    crypto = GostDSA()
+    signature["sign"] = crypto.sign(str(signature).encode(), private_key)
+    return signature
+
+
 class MyCLI(cmd.Cmd):
     prompt = ">> "
 
@@ -235,6 +257,8 @@ class MyCLI(cmd.Cmd):
                 signed_certificate = response_data.get("signed_certificate")
 
                 if token and signed_certificate:
+                    self.token = token
+
                     output_file = os.path.join(
                         self.keys_directory, "registration_data.json"
                     )
@@ -267,10 +291,199 @@ class MyCLI(cmd.Cmd):
         print(f"Файл ключей: {self.data['file_path']}")
         print(f"Ключи: {self.keys}")
 
-    def do_exit(self, arg):
-        """Выход из программы."""
-        print("До свидания!")
-        return True
+    def do_upload(self, arg):
+        """
+        Загружает файл на сервер.
+        Использование: upload <путь к файлу>
+        """
+        import asyncio
+
+        if not self.token:
+            print("Ошибка: токен не найден. Пожалуйста, авторизуйтесь.")
+            return
+
+        if not arg:
+            print("Ошибка: путь к файлу не указан.")
+            return
+
+        filepath = arg.strip()
+
+        if not os.path.isfile(filepath):
+            print(f"Ошибка: файл '{filepath}' не найден.")
+            return
+
+        try:
+            asyncio.run(self.upload_file(filepath))
+        except Exception as e:
+            print(f"Ошибка при загрузке файла: {e}")
+
+    async def upload_file(self, filepath):
+        """
+        Асинхронная функция загрузки файла.
+        """
+        import aiohttp
+        import hashlib
+
+        sha256_file = hashlib.sha256(open(filepath, "rb").read()).hexdigest()
+        url = f"{self.url}/docs/upload"
+        headers = {"Authorization": self.token, "sha256": sha256_file}
+        form = aiohttp.FormData()
+        form.add_field(
+            "file", open(filepath, "rb"), filename=os.path.basename(filepath)
+        )
+
+        async with aiohttp.ClientSession() as session:
+            async with session.put(url, headers=headers, data=form) as resp:
+                if resp.status == 200:
+                    json_response = await resp.json()
+                    print("Upload success:", json_response)
+                    self.data["timeuuid_file"] = json_response["timeuuid"]
+                else:
+                    text = await resp.text()
+                    print("Upload failed:", resp.status, text)
+
+        def do_exit(self, arg):
+            """Выход из программы."""
+            print("До свидания!")
+            return True
+
+    def do_revoke(self, arg):
+        """
+        Удаляет пользователя.
+        Использование: revoke
+        """
+        phone_number = input("Введите номер телефона для удаления: ").strip()
+
+        if (
+            not phone_number.isdigit()
+            or len(phone_number) != 11
+            or phone_number[0] != "8"
+        ):
+            print(
+                "Ошибка: некорректный номер телефона. Формат: 11 цифр, начинается с 8."
+            )
+            return
+
+        confirmation = (
+            input(
+                f"Вы уверены, что хотите удалить пользователя {phone_number}? (yes/no): "
+            )
+            .strip()
+            .lower()
+        )
+        if confirmation != "yes":
+            print("Отмена удаления.")
+            return
+
+        self._send_revoke_request(phone_number)
+
+    def _send_revoke_request(self, phone_number):
+        """
+        Отправляет запрос на удаление пользователя.
+        """
+        url = f"{self.url}/revoke"
+        params = {"phone": phone_number}
+
+        try:
+            response = requests.post(url, params=params)
+            if response.status_code == 200:
+                print("Код для подтверждения удаления отправлен на указанный номер.")
+                self._confirm_revoke(phone_number)
+            else:
+                print(
+                    f"Ошибка при запросе на удаление пользователя: {response.status_code}"
+                )
+                print(response.json())
+        except requests.exceptions.RequestException as e:
+            print(f"Ошибка при запросе: {e}")
+
+    def _confirm_revoke(self, phone_number):
+        """
+        Подтверждает удаление пользователя.
+        """
+        code = input("Введите код подтверждения удаления: ").strip()
+
+        url = f"{self.url}/revoke/verify"
+        params = {"phone": phone_number, "code": code}
+
+        try:
+            response = requests.get(url, params=params)
+            if response.status_code == 200:
+                print("Пользователь успешно удалён.")
+            else:
+                print(f"Ошибка при подтверждении удаления: {response.status_code}")
+                print(response.json())
+        except requests.exceptions.RequestException as e:
+            print(f"Ошибка при запросе: {e}")
+
+    def do_sign(self, arg):
+        """
+        Подписывает документ.
+        Использование: sign <timeuuid> <path_to_private_key> <path_to_certificate>
+        """
+        args = arg.split()
+        if len(args) != 3:
+            print(
+                "Ошибка: команда должна содержать три аргумента: <timeuuid> <path_to_private_key> <path_to_certificate>."
+            )
+            return
+
+        timeuuid, private_key_path, certificate_path = args
+
+        if not os.path.exists(private_key_path):
+            print(f"Ошибка: файл приватного ключа {private_key_path} не найден.")
+            return
+
+        if not os.path.exists(certificate_path):
+            print(f"Ошибка: файл сертификата {certificate_path} не найден.")
+            return
+
+        try:
+            sha256 = input("Введите SHA256 хеш файла: ").strip()
+            if not sha256:
+                print("Ошибка: SHA256 хеш не может быть пустым.")
+                return
+        except Exception as e:
+            print(f"Ошибка при вводе SHA256: {e}")
+            return
+
+        self._send_sign_request(timeuuid, sha256, private_key_path, certificate_path)
+
+        def _send_sign_request(
+            self, timeuuid, sha256, private_key_path, certificate_path
+        ):
+            """
+            Отправляет запрос на подпись документа.
+            """
+            try:
+                with open(private_key_path, "r") as key_file:
+                    private_key = key_file.read()
+                with open(certificate_path, "r") as cert_file:
+                    certificate = cert_file.read()
+            except Exception as e:
+                print(f"Ошибка при чтении ключа или сертификата: {e}")
+                return
+
+            try:
+                signature_data = sign_document(
+                    timeuuid, sha256, private_key, certificate
+                )
+            except Exception as e:
+                print(f"Ошибка при создании подписи: {e}")
+                return
+
+            url = f"{self.url}/docs/sign/{timeuuid}"
+            headers = {"Authorization": self.token}
+            try:
+                response = requests.post(url, json=signature_data, headers=headers)
+                if response.status_code == 200:
+                    print("Документ успешно подписан.")
+                    print(response.json())
+                else:
+                    print(f"Ошибка при подписании документа: {response.status_code}")
+                    print(response.json())
+            except requests.exceptions.RequestException as e:
+                print(f"Ошибка при запросе: {e}")
 
 
 if __name__ == "__main__":
