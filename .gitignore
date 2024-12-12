@@ -7,4 +7,5 @@ __pycache__/
 .benchmarks
 csr.json
 public_key.pem
+auth_token.json
 dist
