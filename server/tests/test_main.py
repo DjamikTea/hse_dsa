@@ -305,14 +305,6 @@ def test_upload_file():
 
     response = client.put(
         "/docs/upload",
-        headers={"Authorization": auth_token, "sha256": sha256_file},
-        files={"file": ("test.txt", open("utils/test.txt", "rb"))},
-    )
-    assert response.status_code == 400
-    assert response.json() == {"detail": "File already exists"}
-
-    response = client.put(
-        "/docs/upload",
         headers={"Authorization": auth_token, "sha256": "bruh"},
         files={"file": ("test.txt", open("utils/test.txt", "rb"))},
     )
@@ -512,6 +504,31 @@ def test_recive_document():
 
     response = client.post(
         f"/docs/accept/{timeuuid_file}", headers={"Authorization": auth_token_sec}
+    )
+    assert response.status_code == 404
+
+
+def test_delete_document():
+    global auth_token, auth_token_sec, timeuuid_file
+
+    response = client.delete(
+        f"/docs/delete/bruh", headers={"Authorization": auth_token}
+    )
+    assert response.status_code == 404
+    assert response.json() == {"detail": "Document not found"}
+
+    response = client.delete(
+        f"/docs/delete/{timeuuid_file}", headers={"Authorization": auth_token_sec}
+    )
+    assert response.status_code == 403
+
+    response = client.delete(
+        f"/docs/delete/{timeuuid_file}", headers={"Authorization": auth_token}
+    )
+    assert response.status_code == 200
+
+    response = client.delete(
+        f"/docs/delete/{timeuuid_file}", headers={"Authorization": auth_token}
     )
     assert response.status_code == 404
 

@@ -25,6 +25,9 @@ services:
         condition: service_healthy
     command: sh -c '[ -f .test_lock ] && { echo "Lock file exists"; } || { poetry run pytest tests; } && poetry run uvicorn app.main:app --host 0.0.0.0 --port 8000'
     restart: unless-stopped
+    volumes:
+      - ./files:/app/uploaded_files
+
     expose:
       - "8000"
 
