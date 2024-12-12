@@ -4,6 +4,8 @@ import cmd
 import os
 import requests
 import json
+import hashlib
+from tabulate import tabulate
 
 
 def generate_csr(
@@ -17,7 +19,6 @@ def generate_csr(
 ) -> dict:
     """
     Генерация запроса на сертификат (CSR).
-
     :param private_key: Приватный ключ.
     :param public_key: Публичный ключ.
     :param country: Двухбуквенный код страны (ISO 3166-1 alpha-2).
@@ -65,6 +66,20 @@ def sign_document(
     signature["sign"] = crypto.sign(str(signature).encode(), private_key)
     return signature
 
+def read_private_key(file_path):
+        """
+        Считывает приватный ключ из файла и возвращает его в виде строки.
+        """
+        try:
+            with open(file_path, "r") as key_file:
+                private_key = key_file.read().strip()
+            return private_key
+        except FileNotFoundError:
+            print(f"Файл приватного ключа не найден: {file_path}")
+            return None
+        except Exception as e:
+            print(f"Ошибка при чтении приватного ключа: {e}")
+            return None
 
 class MyCLI(cmd.Cmd):
     prompt = ">> "
@@ -76,6 +91,7 @@ class MyCLI(cmd.Cmd):
         self.keys_directory = "keys"
         os.makedirs(self.keys_directory, exist_ok=True)
         self.url = "https://hse.gopass.dev"
+        self.timeuuid = ""
 
     def do_generate(self, arg):
         """
@@ -93,19 +109,28 @@ class MyCLI(cmd.Cmd):
             print(f"Ошибка записи ключа в файл: {e}")
             return
 
+        private_key_file = os.path.join(self.keys_directory, "private_key.pem")
+        try:
+            with open(private_key_file, "w") as file:
+                file.write(private_key)
+            print(f"Публичный ключ успешно сохранен в файл: {private_key_file}")
+        except Exception as e:
+            print(f"Ошибка записи ключа в файл: {e}")
+            return
+
         country = input("Введите код страны (ISO 3166-1 alpha-2): ")
         organization = input("Введите название организации: ")
         phone_number = input("Введите номер телефона: ")
 
-        try:
+        '''try:
             response = requests.get("https://api64.ipify.org?format=json")
             response.raise_for_status()
             external_ip = response.json().get("ip", "")
         except Exception as e:
             print(f"Ошибка при получении внешнего IP: {e}")
-            external_ip = ""
+            external_ip = ""'''
 
-        ip = input(f"Введите IP-адрес [ваш ip: {external_ip}]: ") or external_ip
+        ip = input(f"Введите IP-адрес]: ") or external_ip
         fio = input("Введите ФИО: ")
 
         try:
@@ -146,7 +171,7 @@ class MyCLI(cmd.Cmd):
             print(f"Директория с ключами '{self.keys_directory}' не найдена.")
             return False
 
-        files = [f for f in os.listdir(self.keys_directory) if f.endswith(".pem")]
+        files = [f for f in os.listdir(self.keys_directory) if f.endswith("public_key.pem")]
         if not files:
             print(f"В директории '{self.keys_directory}' нет файлов ключей.")
             return False
@@ -291,56 +316,94 @@ class MyCLI(cmd.Cmd):
         print(f"Файл ключей: {self.data['file_path']}")
         print(f"Ключи: {self.keys}")
 
+    def _load_token(self):
+        """Загрузка токена из файла."""
+        token_file = "keys/auth_token.json"
+        try:
+            with open(token_file, "r") as file:
+                data = json.load(file)
+                self.token = data.get("token")
+                if self.token:
+                    print("Токен успешно загружен.")
+                else:
+                    print("Токен отсутствует в файле.")
+        except FileNotFoundError:
+            print(f"Файл токена '{token_file}' не найден.")
+            self.token = None
+        except json.JSONDecodeError:
+            print(f"Ошибка: не удалось декодировать JSON из файла '{token_file}'.")
+            self.token = None
+        except Exception as e:
+            print(f"Ошибка при загрузке токена: {e}")
+            self.token = None
+
     def do_upload(self, arg):
         """
-        Загружает файл на сервер.
-        Использование: upload <путь к файлу>
+        Загружает файл на сервер с использованием токена.
         """
-        import asyncio
+        self._load_token()
 
         if not self.token:
-            print("Ошибка: токен не найден. Пожалуйста, авторизуйтесь.")
-            return
-
-        if not arg:
-            print("Ошибка: путь к файлу не указан.")
-            return
-
-        filepath = arg.strip()
-
-        if not os.path.isfile(filepath):
-            print(f"Ошибка: файл '{filepath}' не найден.")
+            print("Ошибка: Токен отсутствует. Авторизуйтесь, чтобы получить токен.")
             return
 
         try:
-            asyncio.run(self.upload_file(filepath))
-        except Exception as e:
-            print(f"Ошибка при загрузке файла: {e}")
+            file_path = input("Введите путь к файлу для загрузки: ")
+            with open(file_path, "rb") as file:
+                sha256_file = hashlib.sha256(file.read()).hexdigest()
 
-    async def upload_file(self, filepath):
-        """
-        Асинхронная функция загрузки файла.
-        """
-        import aiohttp
-        import hashlib
+                url = f"{self.url}/docs/upload"
+                files = {"file": (file_path, file.read())}
+                headers = {
+                    "Authorization": f"{self.token}",
+                    "sha256": sha256_file
+                }
 
-        sha256_file = hashlib.sha256(open(filepath, "rb").read()).hexdigest()
-        url = f"{self.url}/docs/upload"
-        headers = {"Authorization": self.token, "sha256": sha256_file}
-        form = aiohttp.FormData()
-        form.add_field(
-            "file", open(filepath, "rb"), filename=os.path.basename(filepath)
-        )
+                response = requests.put(url, headers=headers, files=files)
 
-        async with aiohttp.ClientSession() as session:
-            async with session.put(url, headers=headers, data=form) as resp:
-                if resp.status == 200:
-                    json_response = await resp.json()
-                    print("Upload success:", json_response)
-                    self.data["timeuuid_file"] = json_response["timeuuid"]
+                if response.status_code == 200:
+                    print("Файл успешно загружен!")
+                    print(response.json())
+                    self.timeuuid = response.json().get("timeuuid")
+
                 else:
-                    text = await resp.text()
-                    print("Upload failed:", resp.status, text)
+                    print(f"Ошибка при загрузке файла: {response.status_code}")
+                    print(response.json())
+        except FileNotFoundError:
+            print("Ошибка: Файл не найден. Проверьте путь и попробуйте снова.")
+        except requests.exceptions.RequestException as e:
+            print(f"Ошибка при запросе: {e}")
+
+    def do_list(self,arg):
+        """
+        Показывает список файлов на сервере.
+        """
+        self._load_token()
+
+        if not self.token:
+            print("Ошибка: Токен отсутствует. Авторизуйтесь, чтобы получить токен.")
+            return
+            
+        try:
+            url = f"{self.url}/docs/list"
+            headers = {"Authorization": f"{self.token}"}
+            response = requests.get(url,headers=headers)
+
+            if response.status_code == 200:
+                print("Список файлов:")
+                data = response.json()
+                documents = data["documents"]
+                for i in range(len(documents)):
+                    documents[i]={key: value for key, value in documents[i].items() if not key in ["timeuuid","sha256","path"]}
+                headers = "keys"
+                table = tabulate(documents, headers=headers, tablefmt='pretty')
+                print(table)
+            else:
+                print(f"Ошибка при выдаче списка файлов: {response.status_code}")
+                print(response.json())
+
+        except requests.exceptions.RequestException as e:
+            print(f"Ошибка при запросе: {e}")
 
     def do_revoke(self, arg):
         """
@@ -480,10 +543,100 @@ class MyCLI(cmd.Cmd):
             except requests.exceptions.RequestException as e:
                 print(f"Ошибка при запросе: {e}")
 
-    def do_exit(self, arg):
-        """Выход из программы."""
-        print("До свидания!")
-        return True
+    def do_login(self, arg):
+        """
+        Авторизация пользователя.
+        Запускает пошаговый процесс ввода данных.
+        """
+        print("Проверка наличия ключей...")
+        if self._load_keys():
+            print("Ключи успешно загружены.")
+            self._get_phone_number_for_login()
+        else:
+            print("Ключи не найдены. Проверьте корректность настроек или зарегистрируйтесь.")
+            return
+
+    def _get_phone_number_for_login(self):
+        """Запрос номера телефона для авторизации."""
+        phone_number = input("Введите номер телефона: ")
+        if (
+            not phone_number.isdigit()
+            or len(phone_number) != 11
+            or phone_number[0] != "8"
+        ):
+            print("Ошибка: некорректный номер телефона. Формат: 11 цифр, без +, начинается с 8.")
+            return self._get_phone_number_for_login()
+        self.data["phone_number"] = phone_number
+        self._get_transaction_data(phone_number)
+
+    def _get_transaction_data(self, phone_number):
+        """Получение данных для подписи транзакции."""
+        url = f"{self.url}/login/get_auth"
+        params = {"phone": phone_number}
+
+        try:
+            print("Отправка запроса для получения данных для авторизации...")
+            response = requests.get(url, params=params)
+            if response.status_code == 200:
+                response_data = response.json()
+                trs = response_data.get("trs")
+                if trs:
+                    print("Данные для авторизации получены.")
+                    self._sign_transaction(trs)
+                else:
+                    print("Ошибка: данные для авторизации отсутствуют в ответе.")
+                    print(response)
+            else:
+                print(f"Ошибка при получении данных: {response.status_code}")
+                print(response.json())
+        except requests.exceptions.RequestException as e:
+            print(f"Ошибка при запросе: {e}")
+
+    def _sign_transaction(self, trs):
+        """Подписание транзакции приватным ключом."""
+        print("Подписание транзакции...")
+        try:
+            private_key_path = "./keys/private_key.pem"
+
+            private_key = read_private_key(private_key_path)
+            if not private_key:
+                print("Приватный ключ не загружен.")
+                return
+
+            crypto = GostDSA()
+            signed_trs = crypto.sign(str(trs).encode(), private_key=private_key)
+
+            self._send_signed_transaction(self.data["phone_number"], signed_trs)
+        except Exception as e:
+            print(f"Ошибка при подписании транзакции: {e}")
+
+    def _send_signed_transaction(self, phone_number, signed_trs):
+        """Отправка подписанной транзакции на сервер."""
+        url = f"{self.url}/login/auth"
+        params = {"phone": phone_number, "signed_trs": signed_trs}
+
+        try:
+            print("Отправка подписанной транзакции на сервер...")
+            response = requests.get(url, params=params)
+            if response.status_code == 200:
+                print("Авторизация прошла успешно!")
+                response_data = response.json()
+                token = response_data.get("token")
+                if token:
+                    self.token = token 
+
+                    token_file = "keys/auth_token.json"
+                    with open(token_file, "w") as file:
+                        json.dump({"token": token}, file, indent=4)
+                    print(f"Токен успешно сохранён в файл: {token_file}")
+                else:
+                    print("Ответ не содержит токена.")
+            else:
+                print(f"Ошибка при авторизации: {response.status_code}")
+                print(response.json())
+        except requests.exceptions.RequestException as e:
+            print(f"Ошибка при запросе: {e}")
+
 
 
 if __name__ == "__main__":
