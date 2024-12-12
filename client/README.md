@@ -1,12 +1,20 @@
 # Commad Line Interface for docshub
 ---
-## how to usage:
-
+## Instalation
 ```
-python cli.py
+poetry install
 ```
 ---
-## command:
+## How to usage:
+
+```
+python hseclient/cli.py
+```
+```
+poetry run client
+```
+---
+## Command:
 
 ```
 >>help

@@ -646,6 +646,8 @@ class MyCLI(cmd.Cmd):
         except requests.exceptions.RequestException as e:
             print(f"Ошибка при запросе: {e}")
 
+def run():
+    MyCLI().cmdloop()
 
 if __name__ == "__main__":
     MyCLI().cmdloop()
