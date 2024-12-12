@@ -144,6 +144,7 @@ async def download_document(
 
     return FileResponse(document["path"])
 
+
 @router.delete("/delete/{timeuuid}")
 async def delete_document(
     timeuuid: str, authorization: Optional[str] = Header(None), db=Depends(get_db)
@@ -170,6 +171,7 @@ async def delete_document(
     conn.commit()
     os.remove(document["path"])
     return {"message": "Document deleted"}
+
 
 @router.get("/list")
 async def list_documents(

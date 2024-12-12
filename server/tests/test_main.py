@@ -507,6 +507,7 @@ def test_recive_document():
     )
     assert response.status_code == 404
 
+
 def test_delete_document():
     global auth_token, auth_token_sec, timeuuid_file
 
