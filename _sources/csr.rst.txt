@@ -1,7 +1,0 @@
-csr module
-==========
-
-.. automodule:: csr
-   :members:
-   :undoc-members:
-   :show-inheritance:
