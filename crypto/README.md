@@ -12,10 +12,14 @@ g.check(signature, b'test', public_key) # True
 
 ## Install
 
+Download lib from [releases](https://github.com/DjamikTea/hse_dsa/releases/tag/0.2.1) and install
+
 ```bash
-poetry add dist/hsecrypto-0.1.0-py3-none-any.whl
+poetry add https://github.com/DjamikTea/hse_dsa/releases/download/0.1.1/hsecrypto-0.2.1-py3-none-any.whl
 ```
+
 or
+
 ```bash
-pip install dist/hsecrypto-0.1.0-py3-none-any.whl
+pip install https://github.com/DjamikTea/hse_dsa/releases/download/0.1.1/hsecrypto-0.2.1-py3-none-any.whl
 ```
