@@ -132,7 +132,7 @@ class MyCLI(cmd.Cmd):
             print(f"Ошибка при получении внешнего IP: {e}")
             external_ip = ""'''
 
-        ip = input(f"Введите IP-адрес]: ") or external_ip
+        ip = input(f"Введите IP-адрес: ") or external_ip
         fio = input("Введите ФИО: ")
 
         try:
