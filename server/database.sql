@@ -100,7 +100,6 @@ create table documents
     can_access   varchar(255),
     PRIMARY KEY (timeuuid),
     UNIQUE (path),
-    UNIQUE (sha256),
     INDEX (user_id)
 );
 

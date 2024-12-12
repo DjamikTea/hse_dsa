@@ -144,6 +144,32 @@ async def download_document(
 
     return FileResponse(document["path"])
 
+@router.delete("/delete/{timeuuid}")
+async def delete_document(
+    timeuuid: str, authorization: Optional[str] = Header(None), db=Depends(get_db)
+):
+    """
+    Удаляет документ
+    :param timeuuid:
+    :param authorization:
+    :param db:
+    :return: None
+    """
+    cursor, conn = db
+    user = check_token(authorization, cursor)
+
+    cursor.execute("SELECT * FROM documents WHERE timeuuid = %s", (timeuuid,))
+    document = cursor.fetchone()
+    if not document:
+        raise HTTPException(status_code=404, detail="Document not found")
+
+    if document["user_id"] != user["id"]:
+        raise HTTPException(status_code=403, detail="Forbidden")
+
+    cursor.execute("DELETE FROM documents WHERE timeuuid = %s", (timeuuid,))
+    conn.commit()
+    os.remove(document["path"])
+    return {"message": "Document deleted"}
 
 @router.get("/list")
 async def list_documents(

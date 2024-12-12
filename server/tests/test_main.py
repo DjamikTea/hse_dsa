@@ -515,6 +515,30 @@ def test_recive_document():
     )
     assert response.status_code == 404
 
+def test_delete_document():
+    global auth_token, auth_token_sec, timeuuid_file
+
+    response = client.delete(
+        f"/docs/delete/bruh", headers={"Authorization": auth_token}
+    )
+    assert response.status_code == 404
+    assert response.json() == {"detail": "Document not found"}
+
+    response = client.delete(
+        f"/docs/delete/{timeuuid_file}", headers={"Authorization": auth_token_sec}
+    )
+    assert response.status_code == 403
+
+    response = client.delete(
+        f"/docs/delete/{timeuuid_file}", headers={"Authorization": auth_token}
+    )
+    assert response.status_code == 200
+
+    response = client.delete(
+        f"/docs/delete/{timeuuid_file}", headers={"Authorization": auth_token}
+    )
+    assert response.status_code == 404
+
 
 def test_revoke(mocked_aiohttp):
     test_phone_number = os.getenv("TELEGRAM_TEST_PHONE")
