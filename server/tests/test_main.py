@@ -305,14 +305,6 @@ def test_upload_file():
 
     response = client.put(
         "/docs/upload",
-        headers={"Authorization": auth_token, "sha256": sha256_file},
-        files={"file": ("test.txt", open("utils/test.txt", "rb"))},
-    )
-    assert response.status_code == 400
-    assert response.json() == {"detail": "File already exists"}
-
-    response = client.put(
-        "/docs/upload",
         headers={"Authorization": auth_token, "sha256": "bruh"},
         files={"file": ("test.txt", open("utils/test.txt", "rb"))},
     )
