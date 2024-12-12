@@ -58,7 +58,7 @@ def check_csr_client(
     }
 
     if phone_number:
-        if csr.get("client")("phone_number") != phone_number:
+        if csr["client"]["phone_number"] != phone_number:
             return False
     if ip:
         if csr.get("client")("ip") != ip:

@@ -27,6 +27,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./files:/app/uploaded_files
+
     expose:
       - "8000"
 
