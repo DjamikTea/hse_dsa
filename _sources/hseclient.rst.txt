@@ -1,21 +1,21 @@
-client package
-==============
+hseclient package
+=================
 
 Submodules
 ----------
 
-client.cli module
------------------
+hseclient.cli module
+--------------------
 
-.. automodule:: client.cli
+.. automodule:: hseclient.cli
    :members:
    :undoc-members:
    :show-inheritance:
 
-client.csr module
------------------
+hseclient.csr module
+--------------------
 
-.. automodule:: client.csr
+.. automodule:: hseclient.csr
    :members:
    :undoc-members:
    :show-inheritance:
@@ -23,7 +23,7 @@ client.csr module
 Module contents
 ---------------
 
-.. automodule:: client
+.. automodule:: hseclient
    :members:
    :undoc-members:
    :show-inheritance:
