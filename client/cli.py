@@ -66,20 +66,22 @@ def sign_document(
     signature["sign"] = crypto.sign(str(signature).encode(), private_key)
     return signature
 
+
 def read_private_key(file_path):
-        """
-        Считывает приватный ключ из файла и возвращает его в виде строки.
-        """
-        try:
-            with open(file_path, "r") as key_file:
-                private_key = key_file.read().strip()
-            return private_key
-        except FileNotFoundError:
-            print(f"Файл приватного ключа не найден: {file_path}")
-            return None
-        except Exception as e:
-            print(f"Ошибка при чтении приватного ключа: {e}")
-            return None
+    """
+    Считывает приватный ключ из файла и возвращает его в виде строки.
+    """
+    try:
+        with open(file_path, "r") as key_file:
+            private_key = key_file.read().strip()
+        return private_key
+    except FileNotFoundError:
+        print(f"Файл приватного ключа не найден: {file_path}")
+        return None
+    except Exception as e:
+        print(f"Ошибка при чтении приватного ключа: {e}")
+        return None
+
 
 class MyCLI(cmd.Cmd):
     prompt = ">> "
@@ -171,7 +173,9 @@ class MyCLI(cmd.Cmd):
             print(f"Директория с ключами '{self.keys_directory}' не найдена.")
             return False
 
-        files = [f for f in os.listdir(self.keys_directory) if f.endswith("public_key.pem")]
+        files = [
+            f for f in os.listdir(self.keys_directory) if f.endswith("public_key.pem")
+        ]
         if not files:
             print(f"В директории '{self.keys_directory}' нет файлов ключей.")
             return False
@@ -354,10 +358,7 @@ class MyCLI(cmd.Cmd):
 
                 url = f"{self.url}/docs/upload"
                 files = {"file": (file_path, file.read())}
-                headers = {
-                    "Authorization": f"{self.token}",
-                    "sha256": sha256_file
-                }
+                headers = {"Authorization": f"{self.token}", "sha256": sha256_file}
 
                 response = requests.put(url, headers=headers, files=files)
 
@@ -374,7 +375,7 @@ class MyCLI(cmd.Cmd):
         except requests.exceptions.RequestException as e:
             print(f"Ошибка при запросе: {e}")
 
-    def do_list(self,arg):
+    def do_list(self, arg):
         """
         Показывает список файлов на сервере.
         """
@@ -383,20 +384,24 @@ class MyCLI(cmd.Cmd):
         if not self.token:
             print("Ошибка: Токен отсутствует. Авторизуйтесь, чтобы получить токен.")
             return
-            
+
         try:
             url = f"{self.url}/docs/list"
             headers = {"Authorization": f"{self.token}"}
-            response = requests.get(url,headers=headers)
+            response = requests.get(url, headers=headers)
 
             if response.status_code == 200:
                 print("Список файлов:")
                 data = response.json()
                 documents = data["documents"]
                 for i in range(len(documents)):
-                    documents[i]={key: value for key, value in documents[i].items() if not key in ["timeuuid","sha256","path"]}
+                    documents[i] = {
+                        key: value
+                        for key, value in documents[i].items()
+                        if not key in ["timeuuid", "sha256", "path"]
+                    }
                 headers = "keys"
-                table = tabulate(documents, headers=headers, tablefmt='pretty')
+                table = tabulate(documents, headers=headers, tablefmt="pretty")
                 print(table)
             else:
                 print(f"Ошибка при выдаче списка файлов: {response.status_code}")
@@ -553,7 +558,9 @@ class MyCLI(cmd.Cmd):
             print("Ключи успешно загружены.")
             self._get_phone_number_for_login()
         else:
-            print("Ключи не найдены. Проверьте корректность настроек или зарегистрируйтесь.")
+            print(
+                "Ключи не найдены. Проверьте корректность настроек или зарегистрируйтесь."
+            )
             return
 
     def _get_phone_number_for_login(self):
@@ -564,7 +571,9 @@ class MyCLI(cmd.Cmd):
             or len(phone_number) != 11
             or phone_number[0] != "8"
         ):
-            print("Ошибка: некорректный номер телефона. Формат: 11 цифр, без +, начинается с 8.")
+            print(
+                "Ошибка: некорректный номер телефона. Формат: 11 цифр, без +, начинается с 8."
+            )
             return self._get_phone_number_for_login()
         self.data["phone_number"] = phone_number
         self._get_transaction_data(phone_number)
@@ -623,7 +632,7 @@ class MyCLI(cmd.Cmd):
                 response_data = response.json()
                 token = response_data.get("token")
                 if token:
-                    self.token = token 
+                    self.token = token
 
                     token_file = "keys/auth_token.json"
                     with open(token_file, "w") as file:
@@ -636,7 +645,6 @@ class MyCLI(cmd.Cmd):
                 print(response.json())
         except requests.exceptions.RequestException as e:
             print(f"Ошибка при запросе: {e}")
-
 
 
 if __name__ == "__main__":
