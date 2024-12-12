@@ -1,3 +1,6 @@
+import asyncio
+
+import aiohttp
 from hsecrypto import GostDSA
 from datetime import datetime, timezone
 import cmd
@@ -6,6 +9,21 @@ import requests
 import json
 import hashlib
 from tabulate import tabulate
+
+
+def get_external_ip():
+    try:
+        response = requests.get("https://api.ipify.org")
+        if response.status_code == 200:
+            return response.text
+        else:
+            print(
+                f"Error: Unable to fetch IP address. Status code: {response.status_code}"
+            )
+            return None
+    except Exception as e:
+        print(f"Error: {e}")
+        return None
 
 
 def generate_csr(
@@ -91,8 +109,41 @@ class MyCLI(cmd.Cmd):
         self.data = {}
         self.keys = None
         self.keys_directory = "keys"
+        self.host_file = os.path.join(self.keys_directory, "host.json")
         os.makedirs(self.keys_directory, exist_ok=True)
-        self.url = "https://hse.gopass.dev"
+
+        # check server host in keys/host.json
+        def set_host():
+            host = input("Введите адрес сервера: ")
+
+            if host.startswith("http://"):
+                host = host.replace("http://", "")
+
+            if not host.startswith("https://"):
+                host = "https://" + host
+
+            if len(host.split(".")) == 1:
+                print("Ошибка: некорректный адрес сервера.")
+                return False
+
+            if requests.get(host).status_code != 200:
+                print("Ошибка: сервер не доступен.")
+                return False
+
+            with open(self.host_file, "w") as file:
+                json.dump({"host": host}, file, indent=4)
+
+            self.url = host
+            print(f"Адрес сервера успешно сохранен")
+            return True
+
+        if os.path.exists(self.host_file):
+            with open(self.host_file, "r") as file:
+                self.url = json.load(file).get("host")
+        else:
+            if not set_host():
+                set_host()
+
         self.timeuuid = ""
 
     def do_generate(self, arg):
@@ -120,19 +171,15 @@ class MyCLI(cmd.Cmd):
             print(f"Ошибка записи ключа в файл: {e}")
             return
 
-        country = input("Введите код страны (ISO 3166-1 alpha-2): ")
+        # country = input("Введите код страны (ISO 3166-1 alpha-2): ")
+        country = "RU"
         organization = input("Введите название организации: ")
         phone_number = input("Введите номер телефона: ")
 
-        '''try:
-            response = requests.get("https://api64.ipify.org?format=json")
-            response.raise_for_status()
-            external_ip = response.json().get("ip", "")
-        except Exception as e:
-            print(f"Ошибка при получении внешнего IP: {e}")
-            external_ip = ""'''
+        ip = get_external_ip()
+        if not ip:
+            ip = input(f"Введите IP-адрес: ")
 
-        ip = input(f"Введите IP-адрес: ") or external_ip
         fio = input("Введите ФИО: ")
 
         try:
@@ -221,10 +268,10 @@ class MyCLI(cmd.Cmd):
         if (
             not phone_number.isdigit()
             or len(phone_number) != 11
-            or phone_number[0] != "8"
+            or phone_number[0] != "7"
         ):
             print(
-                "Ошибка: некорректный номер телефона. Формат: 11 цифр, без +, начинается с 8."
+                "Ошибка: некорректный номер телефона. Формат: 11 цифр, без +, начинается с 7."
             )
             return self._get_phone_number()
         self.data["phone_number"] = phone_number
@@ -353,27 +400,32 @@ class MyCLI(cmd.Cmd):
 
         try:
             file_path = input("Введите путь к файлу для загрузки: ")
-            with open(file_path, "rb") as file:
-                sha256_file = hashlib.sha256(file.read()).hexdigest()
+            url = f"{self.url}/docs/upload"
 
-                url = f"{self.url}/docs/upload"
-                files = {"file": (file_path, file.read())}
-                headers = {"Authorization": f"{self.token}", "sha256": sha256_file}
+            sha256_file = hashlib.sha256(open(file_path, "rb").read()).hexdigest()
+            headers = {"Authorization": self.token, "sha256": sha256_file}
+            form = aiohttp.FormData()
+            form.add_field(
+                "file", open(file_path, "rb"), filename=file_path.split("/")[-1]
+            )
 
-                response = requests.put(url, headers=headers, files=files)
+            async def upload_file():
+                async with aiohttp.ClientSession() as session:
+                    async with session.put(url, headers=headers, data=form) as resp:
+                        if resp.status == 200:
+                            json_response = await resp.json()
+                            self.timeuuid = json_response.get("timeuuid")
+                        else:
+                            text = await resp.text()
+                            raise Exception("Upload failed:", resp.status, text)
 
-                if response.status_code == 200:
-                    print("Файл успешно загружен!")
-                    print(response.json())
-                    self.timeuuid = response.json().get("timeuuid")
-
-                else:
-                    print(f"Ошибка при загрузке файла: {response.status_code}")
-                    print(response.json())
+            asyncio.run(upload_file())
         except FileNotFoundError:
             print("Ошибка: Файл не найден. Проверьте путь и попробуйте снова.")
         except requests.exceptions.RequestException as e:
             print(f"Ошибка при запросе: {e}")
+        finally:
+            print(f"Файл успешно загружен. timeuuid: {self.timeuuid}")
 
     def do_list(self, arg):
         """
@@ -569,10 +621,10 @@ class MyCLI(cmd.Cmd):
         if (
             not phone_number.isdigit()
             or len(phone_number) != 11
-            or phone_number[0] != "8"
+            or phone_number[0] != "7"
         ):
             print(
-                "Ошибка: некорректный номер телефона. Формат: 11 цифр, без +, начинается с 8."
+                "Ошибка: некорректный номер телефона. Формат: 11 цифр, без +, начинается с 7."
             )
             return self._get_phone_number_for_login()
         self.data["phone_number"] = phone_number
