@@ -44,7 +44,9 @@ def generate_csr(
     return csr
 
 
-def check_csr_client(csr: dict, phone_number: str | None = None, ip: str | None = None) -> bool:
+def check_csr_client(
+    csr: dict, phone_number: str | None = None, ip: str | None = None
+) -> bool:
     """
     Проверка подписи клиента CSR.
     :param csr: CSR в формате json.

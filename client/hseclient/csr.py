@@ -38,7 +38,7 @@ def generate_csr(
     }
     crypto = GostDSA()
     sig = crypto.sign(str(csr).encode(), private_key)
-    csr.get["client_sign"] = sig # type: ignore
+    csr.get["client_sign"] = sig  # type: ignore
     return csr
 
 
@@ -65,7 +65,9 @@ def check_csr_client(
         if csr.get("client")["ip"] != ip:
             return False
     return crypto.check(
-        csr.get("client_sign", ""), str(csrx).encode(), csr.get("client", {"public_key":""})["public_key"]
+        csr.get("client_sign", ""),
+        str(csrx).encode(),
+        csr.get("client", {"public_key": ""})["public_key"],
     )
 
 
