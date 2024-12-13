@@ -37,6 +37,9 @@ async def register(
     verif_code = randint(100000, 999999)
     ip = request.headers.get("X-Real-IP")
 
+    if ip is None:
+        ip = request.client.host
+
     cursor.execute(
         "SELECT * FROM user_register WHERE phone_number = %s", (phone_number,)
     )
@@ -92,6 +95,10 @@ async def verify(
     ) - timedelta(minutes=5):
         raise HTTPException(status_code=400, detail="Verification code expired")
     ip = request.headers.get("X-Real-IP")
+
+    if ip is None:
+        ip = request.client.host
+
     if user["ip"] != ip:
         raise HTTPException(status_code=400, detail="IP address mismatch")
     if user["tries"] >= 3:

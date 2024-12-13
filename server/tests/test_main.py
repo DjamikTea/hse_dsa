@@ -30,6 +30,8 @@ cert = {}
 auth_token_sec = ""
 cert_sec = {}
 
+first_launch_patch = False
+
 crypto = GostDSA()
 private_key, public_key = crypto.generate_key_pair()
 private_key_sec, public_key_sec = crypto.generate_key_pair()
@@ -49,12 +51,14 @@ def check_first_launch():
         pytest.skip(f"Skipping all tests because test_first_launch failed: {e}")
 
 
-def test_first_launch(check_first_launch):
+def test_first_launch():
+    global first_launch_patch
     db = connection_pool.get_connection()
     cursor = db.cursor()
     first_launch_flag: bool = False
     try:
         cursor.execute("SELECT * FROM first_launch")
+        cursor.fetchall()
         first_launch_flag = True
     except ProgrammingError as e:
         print(e)
@@ -97,9 +101,12 @@ def test_first_launch(check_first_launch):
             f.write("1")
         first_launch_flag = True
     else:
-        raise Exception("First launch flag found. skip...")
+        if not first_launch_patch:
+            raise Exception("First launch flag found. skip...")
 
+    first_launch_patch = first_launch_flag
     assert first_launch_flag == True
+    db.close()
 
 
 def test_read_main(check_first_launch):
@@ -261,7 +268,7 @@ def test_verify(check_first_launch):
     )
     assert response.status_code == 400
     assert response.json() == {"detail": "Register not found"}
-
+    db.close()
 
 def test_auth(check_first_launch):
     global auth_token
