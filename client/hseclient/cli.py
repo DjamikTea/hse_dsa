@@ -22,51 +22,17 @@ class MyCLI(cmd.Cmd):
         if not os.path.exists(cglobal.keys_file):
             print("Ключи не найдены. Генерация ключей...")
             fn.generate_keys()
-            cprint.p_success("Ключи успешно сгенерированы")
 
         if not os.path.exists(cglobal.cert_file):
             print("Регистрация пользователя...")
             fn.register()
 
-
-
-
-
     def do_generate(self, arg):
         """
-        Команда для генерации пары ключей и создания CSR.
+        Команда для генерации пары ключей.
         """
         print("Генерация ключей:")
         fn.generate_keys()
-        #
-        # country = "RU"
-        # organization = input("Введите название организации: ")
-        # phone_number = input("Введите номер телефона: ")
-        #
-        # ip = fn.get_external_ip()
-        # if not ip:
-        #     ip = input(f"Введите IP-адрес: ")
-        #
-        # fio = input("Введите ФИО: ")
-        #
-        # try:
-        #     csr = generate_csr(
-        #         private_key, public_key, country, organization, phone_number, ip, fio
-        #     )
-        #     print("CSR успешно сгенерирован")
-        # except Exception as e:
-        #     print(f"Не получилось сгенерировать CSR: {e}")
-        #
-        # csr_file = os.path.join(self.keys_directory, "csr.json")
-        # try:
-        #     with open(csr_file, "w") as file:
-        #         json.dump(csr, file, indent=4)
-        #     print(f"CSR успешно сохранен в файл: {csr_file}")
-        # except Exception as e:
-        #     print(f"Ошибка записи CSR в файл: {e}")
-        #
-        # print("\nСгенерированный CSR:")
-        # print(json.dumps(csr, indent=4))
 
     def do_register(self, arg):
         """
@@ -75,6 +41,38 @@ class MyCLI(cmd.Cmd):
         """
         print("Регистрация пользователя:")
         fn.register()
+
+    def do_upload(self, arg):
+        """
+        Загрузка файла на сервер.
+        """
+        file_path = input("Введите путь к файлу для загрузки: ")
+        timeuuid = fn.upload_file(file_path)
+        if timeuuid:
+            fn.sign_document(timeuuid, file_path)
+
+    def do_sign(self, arg):
+        """
+        Подпись документа.
+        """
+        timeuuid = input("Введите timeuuid документа: ")
+        file_path = input("Введите путь к файлу: ")
+        fn.sign_document(timeuuid, file_path)
+
+    def do_send(self, arg):
+        """
+        Отправка документа.
+        """
+        timeuuid = input("Введите timeuuid документа: ")
+        phone_number = input("Введите номер телефона получателя: ")
+        fn.send_document(timeuuid, phone_number)
+
+    def do_files(self, arg):
+        """
+        Получение списка файлов.
+        """
+        fn.list_files()
+
 
     # def do_upload(self, arg):
     #     """

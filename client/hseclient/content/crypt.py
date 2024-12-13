@@ -100,3 +100,44 @@ def sign_document(
     crypto = GostDSA()
     signature["sign"] = crypto.sign(str(signature).encode(), private_key)
     return signature
+
+def check_document(
+    signature: dict,
+    sha256: str,
+    pubkey: str,
+    server_domain: str,
+    timeuuid: str = None,
+    server_pubkey: str = None,
+    client_phone_number: str = None,
+) -> bool:
+    """
+    Проверяет подпись документа
+    :param signature: подпись документа
+    :param sha256: sha256 файла
+    :param pubkey: публичный ключ
+    :param server_domain: домен сервера
+    :param timeuuid: timeuuid документа
+    :param server_pubkey: публичный ключ сервера
+    :param client_phone_number: номер телефона клиента
+    :return: результат проверки
+    """
+    crypto = GostDSA()
+    sigx = {
+        "timeuuid": signature["timeuuid"],
+        "sha256": signature["sha256"],
+        "cert": signature["cert"],
+        "sign_time": signature["sign_time"],
+    }
+    if sha256 != signature["sha256"]:
+        return "sha256 not equal"
+    if pubkey != signature["cert"]["client"]["public_key"]:
+        return "pubkey not equal"
+    if timeuuid:
+        if timeuuid != signature["timeuuid"]:
+            return "timeuuid not equal"
+    if not check_csr_root(signature["cert"], server_domain, server_pubkey):
+        return "check_csr_root failed"
+    if not client_phone_number:
+        if client_phone_number != signature["cert"]["client"]["phone_number"]:
+            return "phone number not equal"
+    return crypto.check(signature["sign"], str(sigx).encode(), pubkey)
