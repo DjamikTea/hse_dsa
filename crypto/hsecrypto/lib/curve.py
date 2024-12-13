@@ -1,5 +1,6 @@
 from typing import Self
 
+
 class EllipticCurve:
     def __init__(self, a: int, b: int, p: int):
         """
