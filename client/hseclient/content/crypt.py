@@ -1,4 +1,5 @@
 from hsecrypto import GostDSA
+from hseclient.content.json_data import write_root_pubkey
 from datetime import datetime, timezone
 
 
@@ -74,9 +75,13 @@ def check_csr_root(
         "root": csr["root"],
         "root_sign_time": csr["root_sign_time"],
     }
-    return crypto.check(
+    result = crypto.check(
         csr["root_sign"], str(csrx).encode(), csr["root"]["root_ca"]["public_key"]
     )
+    if result:
+        write_root_pubkey(csr["root"]["root_ca"]["public_key"])
+    return result
+
 
 
 
@@ -129,15 +134,15 @@ def check_document(
         "sign_time": signature["sign_time"],
     }
     if sha256 != signature["sha256"]:
-        return "sha256 not equal"
+        raise "sha256 not equal"
     if pubkey != signature["cert"]["client"]["public_key"]:
-        return "pubkey not equal"
+        raise "pubkey not equal"
     if timeuuid:
         if timeuuid != signature["timeuuid"]:
-            return "timeuuid not equal"
+            raise "timeuuid not equal"
     if not check_csr_root(signature["cert"], server_domain, server_pubkey):
-        return "check_csr_root failed"
+        raise "check_csr_root failed"
     if not client_phone_number:
         if client_phone_number != signature["cert"]["client"]["phone_number"]:
-            return "phone number not equal"
+            raise "phone number not equal"
     return crypto.check(signature["sign"], str(sigx).encode(), pubkey)

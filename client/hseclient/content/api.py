@@ -151,7 +151,7 @@ async def get_file(timeuuid: str):
     """
     Получение файла.
     :param timeuuid: timeuuid файла.
-    :return: JSON, status
+    :return: file_path, status
     """
     async with aiohttp.ClientSession() as session:
         token = read_token()
@@ -160,9 +160,76 @@ async def get_file(timeuuid: str):
             headers={"Authorization": f"{token}"},
         ) as response:
             if response.status == 200:
-                with open(f"{download_dir}{response.headers.get('filename')}", "wb") as f:
+                file_path = f"{download_dir}{response.headers.get('filename')}"
+                with open(file_path, "wb") as f:
                     f.write(await response.read())
                 print("Download success")
-                return None, response.status
+                return file_path, response.status
             else:
                 return await response.json(), response.status
+
+async def revoke(phone_number: str):
+    """
+    Отзыв ключа и удаление аккаунта.
+    :param phone_number: Номер телеф
+    :return: JSON, status
+    """
+    async with aiohttp.ClientSession() as session:
+        async with session.post(
+            f"{read_host()}/revoke",
+            headers={"phone": phone_number},
+        ) as response:
+            return await response.json(), response.status
+
+async def revoke_verify(phone_number: str, code: str):
+    """
+    Подтверждение отзыва ключа.
+    :param code: Код из СМС.
+    :return: JSON, status
+    """
+    async with aiohttp.ClientSession() as session:
+        async with session.get(
+            f"{read_host()}/revoke/verify",
+            headers={"phone": phone_number, "code": code},
+        ) as response:
+            return await response.json(), response.status
+
+async def revoke_check(pubkey: str):
+    """
+    Проверка отзыва ключа.
+    :param pubkey: Публичный ключ.
+    :return: JSON, status
+    """
+    async with aiohttp.ClientSession() as session:
+        async with session.get(
+            f"{read_host()}/revoke/check",
+            headers={"pubkey": pubkey},
+        ) as response:
+            return await response.json(), response.status
+
+async def get_auth(phone_number: str):
+    """
+    Авторизация.
+    :param phone_number: Номер телефона.
+    :return: JSON, status
+    """
+    async with aiohttp.ClientSession() as session:
+        async with session.get(
+            f"{read_host()}/login/get_auth",
+            params={"phone": phone_number},
+        ) as response:
+            return await response.json(), response.status
+
+async def auth(phone: str, signed_trs: str):
+    """
+    Проверка подписи.
+    :param phone: Номер телефона.
+    :param signed_trs: Подписаная транзакция.
+    :return: JSON, status
+    """
+    async with aiohttp.ClientSession() as session:
+        async with session.get(
+            f"{read_host()}/login/auth",
+            params={"phone": phone, "signed_trs": signed_trs},
+        ) as response:
+            return await response.json(), response.status
