@@ -82,10 +82,10 @@ def test_first_launch():
         root_ca = {
             "root_ca": {
                 "country": "RU",
-                "organization": "DjamikTea",
-                "email": "abakarovda@edu.hse.ru",
+                "organization": os.getenv("ORGANIZATION", "DjamikTea"),
+                "email": os.getenv("EMAIL", "daabakarov@edu.hse.ru"),
                 "public_key": pubkeyroot,
-                "domain": "secr.gopass.dev",
+                "domain": os.getenv("DOMAIN", "hse.gopass.dev"),
                 "date_generation": datetime.now(timezone.utc).isoformat(),
             }
         }
@@ -262,7 +262,7 @@ def test_verify(check_first_launch):
 
     csr = json.loads(response.json()["cert"])
     cert = csr
-    assert check_csr_root(csr, "secr.gopass.dev")
+    assert check_csr_root(csr, os.getenv("DOMAIN", "hse.gopass.dev"))
 
     response = client.get(
         "/login/verify",
@@ -310,19 +310,19 @@ def test_auth(check_first_launch):
 def test_upload_file(check_first_launch):
     global auth_token, timeuuid_file
 
-    sha256_file = hashlib.sha256(open("utils/test.txt", "rb").read()).hexdigest()
+    sha256_file = hashlib.sha256(open("hseserver/utils/test.txt", "rb").read()).hexdigest()
 
     response = client.put(
         "/docs/upload",
         headers={"Authorization": "bruh", "sha256": sha256_file},
-        files={"file": ("test.txt", open("utils/test.txt", "rb"))},
+        files={"file": ("test.txt", open("hseserver/utils/test.txt", "rb"))},
     )
     assert response.status_code == 401
 
     response = client.put(
         "/docs/upload",
         headers={"Authorization": auth_token, "sha256": sha256_file},
-        files={"file": ("test.txt", open("utils/test.txt", "rb"))},
+        files={"file": ("test.txt", open("hseserver/utils/test.txt", "rb"))},
     )
     assert response.status_code == 200
     timeuuid_file = response.json()["timeuuid"]
@@ -330,7 +330,7 @@ def test_upload_file(check_first_launch):
     response = client.put(
         "/docs/upload",
         headers={"Authorization": auth_token, "sha256": "bruh"},
-        files={"file": ("test.txt", open("utils/test.txt", "rb"))},
+        files={"file": ("test.txt", open("hseserver/utils/test.txt", "rb"))},
     )
     assert response.status_code == 400
     assert response.json() == {"detail": f"Hashes do not match: {sha256_file}"}
@@ -345,7 +345,7 @@ def test_sign_file(check_first_launch):
 
     sign = sign_document(
         timeuuid_file,
-        hashlib.sha256(open("utils/test.txt", "rb").read()).hexdigest(),
+        hashlib.sha256(open("hseserver/utils/test.txt", "rb").read()).hexdigest(),
         private_key,
         cert,
     )
@@ -357,7 +357,7 @@ def test_sign_file(check_first_launch):
 
     sign = sign_document(
         timeuuid_file,
-        hashlib.sha256(open("utils/test.txt", "rb").read()).hexdigest(),
+        hashlib.sha256(open("hseserver/utils/test.txt", "rb").read()).hexdigest(),
         "7233096205a1014b9c14a334e0b608e6a1fd47abc126568ec862151c43fbd161",
         cert,
     )
@@ -379,7 +379,7 @@ def test_download_file(check_first_launch):
         f"/docs/download/{timeuuid_file}", headers={"Authorization": auth_token}
     )
     assert response.status_code == 200
-    assert response.content == open("utils/test.txt", "rb").read()
+    assert response.content == open("hseserver/utils/test.txt", "rb").read()
 
 
 def test_get_list(check_first_launch):
@@ -464,7 +464,7 @@ def test_verify_second(check_first_launch):
 
     csr = json.loads(response.json()["cert"])
     cert_sec = csr
-    assert check_csr_root(csr, "secr.gopass.dev")
+    assert check_csr_root(csr, os.getenv("DOMAIN", "hse.gopass.dev"))
 
 
 def test_send_document(check_first_launch):

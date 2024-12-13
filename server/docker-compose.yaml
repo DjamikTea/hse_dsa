@@ -25,7 +25,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    command: sh -c '[ -f .test_lock ] && { echo "Lock file exists"; } || { poetry run pytest; } && poetry run uvicorn hseserver.app.main:app --host 0.0.0.0 --port 8000'
+    command: sh -c '[ -f .test_lock ] && { echo "Lock file exists"; } || { poetry run pytest -v; } && poetry run uvicorn hseserver.app.main:app --host 0.0.0.0 --port 8000'
     restart: unless-stopped
     volumes:
       - ./files:/app/uploaded_files

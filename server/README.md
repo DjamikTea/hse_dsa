@@ -22,6 +22,7 @@
 	•	TELEGRAM_GATEWAY_TOKEN: Токен для Telegram Gateway.
 	•	TELEGRAM_TEST_PHONE: Номер телефона для тестовых уведомлений. (Телефон на котором зарегестрирован Gateway)
 	•	DB_PASSWORD: Пароль пользователя базы данных.
+    •	ORGANIZATION: Название вашей организации.
 	•	DOMAIN: Ваш домен.
 	•	EMAIL: Ваш email для рекламы от Let’s Encrypt.
 
@@ -48,14 +49,18 @@ sudo docker run hello-world
 
 cd server
 
+# Вместо example.com укажите ваш домен !!!!!!
+
 mkdir -p certbot/www certbot/certs
-mkdir -p certbot/certs/live/example.com    # Вместо example.com укажите ваш домен !!!!!!
+mkdir -p certbot/certs/live/example.com   
 
 # Создаем самоподписанный сертификат чтоб запустился nginx, его потом заменит на сертификат от Let’s Encrypt
-openssl req -x509 -nodes -days 1 -newkey rsa:2048 \ 
--keyout certbot/certs/live/example.com/privkey.pem \ # Вместо example.com укажите ваш домен !!!!!!
--out certbot/certs/live/example.com/fullchain.pem \  # Вместо example.com укажите ваш домен !!!!!!
--subj "/CN=example.com"         # Вместо example.com укажите ваш домен !!!!!!
+# Вместо example.com укажите ваш домен !!!!!!
 
-sudo docker compose up -d
+openssl req -x509 -nodes -days 1 -newkey rsa:2048 \
+-keyout certbot/certs/live/example.com/privkey.pem \
+-out certbot/certs/live/example.com/fullchain.pem \
+-subj "/CN=example.com"
+
+sudo docker compose up -d --build
 ```
