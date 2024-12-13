@@ -52,7 +52,7 @@ jobs:
     - name: Test with coverage
       run: |
         cd /home/runner/work/hse_dsa/hse_dsa/server/
-        poetry run coverage run -m pytest tests/test_main.py
+        poetry run coverage run -m pytest hseserver/tests/test_main.py
         poetry run coverage report -m
         echo '## Отчет покрытия' >> $GITHUB_STEP_SUMMARY
         echo '```' >> $GITHUB_STEP_SUMMARY
