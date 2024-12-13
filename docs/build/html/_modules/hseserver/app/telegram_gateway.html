@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>hseserver.app.telegram_gateway &#8212; hse_dsa 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/basic.css?v=c058f7c8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=27fed22d" />
+    <script src="../../../_static/documentation_options.js?v=01f34227"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for hseserver.app.telegram_gateway</h1><div class="highlight"><pre>
+<span></span><span class="c1">#  Copyright (c) 2024 DjamikTea.</span>
+<span class="c1">#  Created by Dzhamal on 2024-12-1.</span>
+<span class="c1">#  All rights reserved.</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">import</span> <span class="nn">aiohttp</span>
+<span class="kn">import</span> <span class="nn">asyncio</span>
+
+
+<div class="viewcode-block" id="TelegramGatewayAPI">
+<a class="viewcode-back" href="../../../hseserver.app.html#hseserver.app.telegram_gateway.TelegramGatewayAPI">[docs]</a>
+<span class="k">class</span> <span class="nc">TelegramGatewayAPI</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api_token</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Инициализация класса с токеном API.</span>
+
+<span class="sd">        :param api_token: Токен доступа к Telegram Gateway API.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">api_token</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">api_token</span> <span class="o">=</span> <span class="n">api_token</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">api_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;TELEGRAM_GATEWAY_API_TOKEN&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">api_url</span> <span class="o">=</span> <span class="s2">&quot;https://gatewayapi.telegram.org/&quot;</span>
+
+<div class="viewcode-block" id="TelegramGatewayAPI.send_verification_message">
+<a class="viewcode-back" href="../../../hseserver.app.html#hseserver.app.telegram_gateway.TelegramGatewayAPI.send_verification_message">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">send_verification_message</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">phone_number</span><span class="p">,</span>
+        <span class="n">code</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">code_length</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+        <span class="n">sender_username</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">ttl</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">callback_url</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Отправка сообщения с кодом подтверждения.</span>
+
+<span class="sd">        :param phone_number: Номер телефона получателя в формате E.164.</span>
+<span class="sd">        :param code: Необязательно. Пользовательский код подтверждения (4-8 цифр).</span>
+<span class="sd">        :param code_length: Длина кода, если генерируется Telegram (4-8).</span>
+<span class="sd">        :param sender_username: Необязательно. Юзернейм канала, от имени которого отправляется сообщение.</span>
+<span class="sd">        :param ttl: Необязательно. Время жизни сообщения в секундах (60-86400).</span>
+<span class="sd">        :param callback_url: Необязательно. URL для получения отчетов о доставке.</span>
+<span class="sd">        :return: Ответ API в формате JSON.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="s2">&quot;sendVerificationMessage&quot;</span>
+        <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">api_token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;phone_number&quot;</span><span class="p">:</span> <span class="n">phone_number</span><span class="p">,</span>
+            <span class="s2">&quot;code&quot;</span><span class="p">:</span> <span class="n">code</span><span class="p">,</span>
+            <span class="s2">&quot;code_length&quot;</span><span class="p">:</span> <span class="n">code_length</span><span class="p">,</span>
+            <span class="s2">&quot;sender_username&quot;</span><span class="p">:</span> <span class="n">sender_username</span><span class="p">,</span>
+            <span class="s2">&quot;ttl&quot;</span><span class="p">:</span> <span class="n">ttl</span><span class="p">,</span>
+            <span class="s2">&quot;callback_url&quot;</span><span class="p">:</span> <span class="n">callback_url</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="c1"># Удаление ключей с None значениями</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">payload</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">}</span>
+
+        <span class="k">async</span> <span class="k">with</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientSession</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+            <span class="k">async</span> <span class="k">with</span> <span class="n">session</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">api_url</span><span class="si">}{</span><span class="n">endpoint</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span>
+            <span class="p">)</span> <span class="k">as</span> <span class="n">response</span><span class="p">:</span>
+                <span class="k">return</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="TelegramGatewayAPI.check_send_ability">
+<a class="viewcode-back" href="../../../hseserver.app.html#hseserver.app.telegram_gateway.TelegramGatewayAPI.check_send_ability">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">check_send_ability</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phone_number</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Проверка возможности отправки сообщения на указанный номер.</span>
+
+<span class="sd">        :param phone_number: Номер телефона в формате E.164.</span>
+<span class="sd">        :return: Ответ API в формате JSON.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="s2">&quot;checkSendAbility&quot;</span>
+        <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">api_token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;phone_number&quot;</span><span class="p">:</span> <span class="n">phone_number</span><span class="p">}</span>
+
+        <span class="k">async</span> <span class="k">with</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientSession</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+            <span class="k">async</span> <span class="k">with</span> <span class="n">session</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">api_url</span><span class="si">}{</span><span class="n">endpoint</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span>
+            <span class="p">)</span> <span class="k">as</span> <span class="n">response</span><span class="p">:</span>
+                <span class="k">return</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="TelegramGatewayAPI.check_verification_status">
+<a class="viewcode-back" href="../../../hseserver.app.html#hseserver.app.telegram_gateway.TelegramGatewayAPI.check_verification_status">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">check_verification_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request_id</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Асинхронная проверка статуса отправленного сообщения и валидация кода.</span>
+
+<span class="sd">        :param request_id: Уникальный идентификатор запроса.</span>
+<span class="sd">        :param code: Необязательно. Код, введенный пользователем.</span>
+<span class="sd">        :return: Ответ API в формате JSON.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="s2">&quot;checkVerificationStatus&quot;</span>
+        <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">api_token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;request_id&quot;</span><span class="p">:</span> <span class="n">request_id</span><span class="p">,</span> <span class="s2">&quot;code&quot;</span><span class="p">:</span> <span class="n">code</span><span class="p">}</span>
+        <span class="c1"># Удаление ключей с None значениями</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">payload</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">}</span>
+
+        <span class="k">async</span> <span class="k">with</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientSession</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+            <span class="k">async</span> <span class="k">with</span> <span class="n">session</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">api_url</span><span class="si">}{</span><span class="n">endpoint</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span>
+            <span class="p">)</span> <span class="k">as</span> <span class="n">response</span><span class="p">:</span>
+                <span class="k">return</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="TelegramGatewayAPI.revoke_verification_message">
+<a class="viewcode-back" href="../../../hseserver.app.html#hseserver.app.telegram_gateway.TelegramGatewayAPI.revoke_verification_message">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">revoke_verification_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request_id</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Асинхронный отзыв ранее отправленного сообщения с кодом подтверждения.</span>
+
+<span class="sd">        :param request_id: Уникальный идентификатор запроса.</span>
+<span class="sd">        :return: Ответ API в формате JSON.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="s2">&quot;revokeVerificationMessage&quot;</span>
+        <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">api_token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;request_id&quot;</span><span class="p">:</span> <span class="n">request_id</span><span class="p">}</span>
+
+        <span class="k">async</span> <span class="k">with</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientSession</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+            <span class="k">async</span> <span class="k">with</span> <span class="n">session</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">api_url</span><span class="si">}{</span><span class="n">endpoint</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span>
+            <span class="p">)</span> <span class="k">as</span> <span class="n">response</span><span class="p">:</span>
+                <span class="k">return</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="mock_http">
+<a class="viewcode-back" href="../../../hseserver.app.html#hseserver.app.telegram_gateway.mock_http">[docs]</a>
+<span class="k">def</span> <span class="nf">mock_http</span><span class="p">(</span><span class="n">mocked_aiohttp</span><span class="p">,</span> <span class="n">test_phone_number</span><span class="p">):</span>
+    <span class="n">mocked_aiohttp</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+        <span class="s2">&quot;https://gatewayapi.telegram.org/sendVerificationMessage&quot;</span><span class="p">,</span>
+        <span class="n">payload</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;ok&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;result&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;request_id&quot;</span><span class="p">:</span> <span class="s2">&quot;345452344&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;phone_number&quot;</span><span class="p">:</span> <span class="n">test_phone_number</span><span class="p">,</span>
+                <span class="s2">&quot;request_cost&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;remaining_balance&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;delivery_status&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;sent&quot;</span><span class="p">,</span> <span class="s2">&quot;updated_at&quot;</span><span class="p">:</span> <span class="mi">1733119413</span><span class="p">},</span>
+            <span class="p">},</span>
+        <span class="p">},</span>  <span class="c1"># Ответ, который вернет мок</span>
+    <span class="p">)</span>
+
+    <span class="n">mocked_aiohttp</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+        <span class="s2">&quot;https://gatewayapi.telegram.org/checkSendAbility&quot;</span><span class="p">,</span>
+        <span class="n">payload</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;ok&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;result&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;request_id&quot;</span><span class="p">:</span> <span class="s2">&quot;345452344&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;phone_number&quot;</span><span class="p">:</span> <span class="n">test_phone_number</span><span class="p">,</span>
+                <span class="s2">&quot;request_cost&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;remaining_balance&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">},</span>  <span class="c1"># Ответ, который вернет мок</span>
+    <span class="p">)</span>
+
+    <span class="n">mocked_aiohttp</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+        <span class="s2">&quot;https://gatewayapi.telegram.org/checkVerificationStatus&quot;</span><span class="p">,</span>
+        <span class="n">payload</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;ok&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;result&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;request_id&quot;</span><span class="p">:</span> <span class="s2">&quot;345452344&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;phone_number&quot;</span><span class="p">:</span> <span class="n">test_phone_number</span><span class="p">,</span>
+                <span class="s2">&quot;request_cost&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;delivery_status&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;sent&quot;</span><span class="p">,</span> <span class="s2">&quot;updated_at&quot;</span><span class="p">:</span> <span class="mi">1733119413</span><span class="p">},</span>
+            <span class="p">},</span>
+        <span class="p">},</span>
+    <span class="p">)</span>
+
+    <span class="n">mocked_aiohttp</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+        <span class="s2">&quot;https://gatewayapi.telegram.org/revokeVerificationMessage&quot;</span><span class="p">,</span>
+        <span class="n">payload</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;ok&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;result&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+    <span class="p">)</span></div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">hse_dsa</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">hse_dsa</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2024, Morzan6.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.0.2</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -28,9 +28,11 @@ exclude_patterns = [""]
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = "alabaster"
-html_static_path = ["_static"]
 
 import os
 import sys
 
 sys.path.insert(0, os.path.abspath("../.."))
+sys.path.append(os.path.abspath("../../client"))
+sys.path.append(os.path.abspath("../../crypto"))
+sys.path.append(os.path.abspath("../../server"))

@@ -1,0 +1,29 @@
+hseclient.app package
+=====================
+
+Submodules
+----------
+
+hseclient.app.cli module
+------------------------
+
+.. automodule:: hseclient.app.cli
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+hseclient.app.csr module
+------------------------
+
+.. automodule:: hseclient.app.csr
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: hseclient.app
+   :members:
+   :undoc-members:
+   :show-inheritance:

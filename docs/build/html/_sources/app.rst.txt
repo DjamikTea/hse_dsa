@@ -1,0 +1,29 @@
+app package
+===========
+
+Submodules
+----------
+
+app.cli module
+--------------
+
+.. automodule:: app.cli
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+app.csr module
+--------------
+
+.. automodule:: app.csr
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: app
+   :members:
+   :undoc-members:
+   :show-inheritance:
