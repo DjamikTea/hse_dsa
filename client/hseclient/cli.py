@@ -131,8 +131,8 @@ class MyCLI(cmd.Cmd):
         except Exception as e:
             print(f"Ошибка при получении внешнего IP: {e}")
             external_ip = ""'''
-
-        ip = input(f"Введите IP-адрес: ") or external_ip
+        external_ip = ""
+        ip = input("Введите IP-адрес: ") or external_ip
         fio = input("Введите ФИО: ")
 
         try:
@@ -398,7 +398,7 @@ class MyCLI(cmd.Cmd):
                     documents[i] = {
                         key: value
                         for key, value in documents[i].items()
-                        if not key in ["timeuuid", "sha256", "path"]
+                        if key not in ["timeuuid", "sha256", "path"]
                     }
                 headers = "keys"
                 table = tabulate(documents, headers=headers, tablefmt="pretty")

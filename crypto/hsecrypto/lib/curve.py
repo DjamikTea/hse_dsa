@@ -103,7 +103,7 @@ class Point:
         return out.hex()
 
     @classmethod
-    def uncompress(self, curve: EllipticCurve, compressed: str) -> str:
+    def uncompress(self, curve: EllipticCurve, compressed: str) -> Point:
         """
         Конвертирует сжатую точку в объект Point, находя Y координату
 

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>hseserver.utils.file &#8212; hse_dsa 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/basic.css?v=c058f7c8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=27fed22d" />
+    <script src="../../../_static/documentation_options.js?v=01f34227"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for hseserver.utils.file</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">hashlib</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="kn">from</span> <span class="nn">hseserver.utils.sign</span> <span class="kn">import</span> <span class="n">sign_document</span>
+
+<span class="kn">import</span> <span class="nn">aiohttp</span>
+<span class="kn">import</span> <span class="nn">asyncio</span>
+
+
+<span class="n">SERVER_URL</span> <span class="o">=</span> <span class="s2">&quot;http://127.0.0.1:8000&quot;</span>
+<span class="n">TOKEN</span> <span class="o">=</span> <span class="s2">&quot;vE29ulftbYSopANCflTiVzpOXSA3miUjnwkj2_WgmAua-c5LnDj7t2tcoV-G_P3Eqo2Y0vrGdl6erbOb7JscZA&quot;</span>
+<span class="n">priv_key</span> <span class="o">=</span> <span class="s2">&quot;7233096205a1014b9c14a334e0b608e6a1fd47abc126568ec862151c43fbd161&quot;</span>
+<span class="n">pub_key</span> <span class="o">=</span> <span class="s2">&quot;022439d6800c32a3e1522248c933e517b5c7a88d09f30600473fabbf2438302bc2&quot;</span>
+<span class="n">cert</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;client&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;public_key&quot;</span><span class="p">:</span> <span class="s2">&quot;022439d6800c32a3e1522248c933e517b5c7a88d09f30600473fabbf2438302bc2&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;country&quot;</span><span class="p">:</span> <span class="s2">&quot;RU&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;organization&quot;</span><span class="p">:</span> <span class="s2">&quot;DjamikTea&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;phone_number&quot;</span><span class="p">:</span> <span class="s2">&quot;79637108400&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;fio&quot;</span><span class="p">:</span> <span class="s2">&quot;Dzhamal Dzhamalovich&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ip&quot;</span><span class="p">:</span> <span class="s2">&quot;testclient&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;date_generation&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-12-06T21:08:31.696347+00:00&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;client_sign_time&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-12-06T21:08:31.696360+00:00&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;client_sign&quot;</span><span class="p">:</span> <span class="s2">&quot;6344ea3e20bfe32d973271133076c52cdd60e100843155dc861f495dc39c056b54058c04af8327def00d51ae366fc91805846877eadbf164a751b42bb283c0c2&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;root&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;root_ca&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;country&quot;</span><span class="p">:</span> <span class="s2">&quot;RU&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;organization&quot;</span><span class="p">:</span> <span class="s2">&quot;DjamikTea&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;email&quot;</span><span class="p">:</span> <span class="s2">&quot;abakarovda@edu.hse.ru&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;public_key&quot;</span><span class="p">:</span> <span class="s2">&quot;0352e5969fb40c331c0bb85482baa99506a53dff1d693b8587004f4f68bade8869&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;domain&quot;</span><span class="p">:</span> <span class="s2">&quot;secr.gopass.dev&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;date_generation&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-12-06T21:08:29.896747+00:00&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;root_sign&quot;</span><span class="p">:</span> <span class="s2">&quot;7fd4750c8cdc2dc3b9c66b594820091e2b575ec86fbb9fab0b7714c5c4a8c847330f154f58348899a9c022fbf511fe07e88b2b17f645ac874b1670713fdaf66f&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;root_sign_time&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-12-06T21:08:33.040696+00:00&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;root_sign&quot;</span><span class="p">:</span> <span class="s2">&quot;5a2ae83a58b6d8855a0ec31b3d6fa2c5efd8aa05371b59311d17f9a31a8b106e5141de280815a24cbe06f2bd96db1c2ff36287785360f42f5a284573883ad051&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">timeuuid_file</span> <span class="o">=</span> <span class="s2">&quot;45979f34-b418-11ef-a9bb-422d3b16eee0&quot;</span>
+<span class="n">sha256_file</span> <span class="o">=</span> <span class="s2">&quot;fe92e88c98c98488673caabe5bc3a89609437628a6d69e8494f027d56e5ae7b7&quot;</span>
+
+
+<div class="viewcode-block" id="upload_file">
+<a class="viewcode-back" href="../../../hseserver.utils.html#hseserver.utils.file.upload_file">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">upload_file</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">timeuuid_file</span><span class="p">,</span> <span class="n">sha256_file</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">SERVER_URL</span><span class="si">}</span><span class="s2">/docs/upload&quot;</span>
+    <span class="n">sha256_file</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+    <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="n">TOKEN</span><span class="p">,</span> <span class="s2">&quot;sha256&quot;</span><span class="p">:</span> <span class="n">sha256_file</span><span class="p">}</span>
+    <span class="n">form</span> <span class="o">=</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">FormData</span><span class="p">()</span>
+    <span class="n">form</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;file&quot;</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">),</span> <span class="n">filename</span><span class="o">=</span><span class="n">filepath</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">with</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientSession</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+        <span class="k">async</span> <span class="k">with</span> <span class="n">session</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">form</span><span class="p">)</span> <span class="k">as</span> <span class="n">resp</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">resp</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+                <span class="n">json_response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Upload success:&quot;</span><span class="p">,</span> <span class="n">json_response</span><span class="p">)</span>
+                <span class="n">timeuuid_file</span> <span class="o">=</span> <span class="n">json_response</span><span class="p">[</span><span class="s2">&quot;timeuuid&quot;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">text</span> <span class="o">=</span> <span class="k">await</span> <span class="n">resp</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Upload failed:&quot;</span><span class="p">,</span> <span class="n">resp</span><span class="o">.</span><span class="n">status</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="sign_file">
+<a class="viewcode-back" href="../../../hseserver.utils.html#hseserver.utils.file.sign_file">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">sign_file</span><span class="p">(</span><span class="n">timeuuid</span><span class="p">):</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">SERVER_URL</span><span class="si">}</span><span class="s2">/docs/sign/</span><span class="si">{</span><span class="n">timeuuid</span><span class="si">}</span><span class="s2">&quot;</span>
+
+    <span class="n">sign</span> <span class="o">=</span> <span class="n">sign_document</span><span class="p">(</span><span class="n">timeuuid_file</span><span class="p">,</span> <span class="n">sha256_file</span><span class="p">,</span> <span class="n">priv_key</span><span class="p">,</span> <span class="n">cert</span><span class="p">)</span>
+
+    <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="n">TOKEN</span><span class="p">,</span>
+        <span class="s2">&quot;timeuuid&quot;</span><span class="p">:</span> <span class="n">timeuuid</span><span class="p">,</span>
+        <span class="s2">&quot;signature&quot;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">sign</span><span class="p">),</span>
+    <span class="p">}</span>
+
+    <span class="k">async</span> <span class="k">with</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientSession</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+        <span class="k">async</span> <span class="k">with</span> <span class="n">session</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span> <span class="k">as</span> <span class="n">resp</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">resp</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Sign success&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">text</span> <span class="o">=</span> <span class="k">await</span> <span class="n">resp</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Sign failed:&quot;</span><span class="p">,</span> <span class="n">resp</span><span class="o">.</span><span class="n">status</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="download_file">
+<a class="viewcode-back" href="../../../hseserver.utils.html#hseserver.utils.file.download_file">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">download_file</span><span class="p">(</span><span class="n">timeuuid</span><span class="p">):</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">SERVER_URL</span><span class="si">}</span><span class="s2">/docs/download/</span><span class="si">{</span><span class="n">timeuuid</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="n">TOKEN</span><span class="p">}</span>
+
+    <span class="k">async</span> <span class="k">with</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientSession</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+        <span class="k">async</span> <span class="k">with</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span> <span class="k">as</span> <span class="n">resp</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">resp</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">timeuuid</span><span class="si">}</span><span class="s2">.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="k">await</span> <span class="n">resp</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Download success&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">text</span> <span class="o">=</span> <span class="k">await</span> <span class="n">resp</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Download failed:&quot;</span><span class="p">,</span> <span class="n">resp</span><span class="o">.</span><span class="n">status</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span></div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># asyncio.run(upload_file(&quot;test.txt&quot;))</span>
+    <span class="c1"># asyncio.run(sign_file(timeuuid_file))</span>
+    <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">download_file</span><span class="p">(</span><span class="n">timeuuid_file</span><span class="p">))</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">hse_dsa</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">hse_dsa</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2024, Morzan6.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.0.2</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
