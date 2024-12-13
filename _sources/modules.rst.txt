@@ -1,9 +1,9 @@
-HSE_DSA
-======
+hse_dsa
+=========
 
 .. toctree::
    :maxdepth: 4
 
-   server
    hsecrypto
-   client
+   hseclient
+   hseserver

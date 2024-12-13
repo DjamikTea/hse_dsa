@@ -1,5 +1,5 @@
-server package
-==============
+hseserver package
+=================
 
 Subpackages
 -----------
@@ -7,15 +7,14 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
-   server.app
-   server.hsedsa-backend
-   server.tests
-   server.utils
+   hseserver.app
+   hseserver.tests
+   hseserver.utils
 
 Module contents
 ---------------
 
-.. automodule:: server
+.. automodule:: hseserver
    :members:
    :undoc-members:
    :show-inheritance:

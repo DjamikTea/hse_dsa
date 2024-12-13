@@ -1,37 +1,21 @@
 app package
 ===========
 
-Subpackages
------------
-
-.. toctree::
-   :maxdepth: 4
-
-   app.endpoints
-
 Submodules
 ----------
 
-app.database module
--------------------
+app.cli module
+--------------
 
-.. automodule:: app.database
+.. automodule:: app.cli
    :members:
    :undoc-members:
    :show-inheritance:
 
-app.main module
----------------
+app.csr module
+--------------
 
-.. automodule:: app.main
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-app.telegram\_gateway module
-----------------------------
-
-.. automodule:: app.telegram_gateway
+.. automodule:: app.csr
    :members:
    :undoc-members:
    :show-inheritance:

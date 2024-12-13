@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>server.utils.csr &#8212; hse_dsa 0.1.0 documentation</title>
+    <title>hseserver.utils.csr &#8212; hse_dsa 0.1.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d1102ebc" />
     <link rel="stylesheet" type="text/css" href="../../../_static/basic.css?v=686e5160" />
     <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=27fed22d" />
@@ -30,17 +30,16 @@
 
           <div class="body" role="main">
             
-  <h1>Source code for server.utils.csr</h1><div class="highlight"><pre>
+  <h1>Source code for hseserver.utils.csr</h1><div class="highlight"><pre>
 <span></span><span class="c1">#  Copyright (c) 2024 DjamikTea.</span>
 <span class="c1">#  Created by Dzhamal on 2024-12-5.</span>
 <span class="c1">#  All rights reserved.</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timezone</span>
 <span class="kn">from</span> <span class="nn">hsecrypto</span> <span class="kn">import</span> <span class="n">GostDSA</span>
-<span class="kn">import</span> <span class="nn">json</span>
 
 
 <div class="viewcode-block" id="generate_csr">
-<a class="viewcode-back" href="../../../server.utils.html#server.utils.csr.generate_csr">[docs]</a>
+<a class="viewcode-back" href="../../../hseserver.utils.html#hseserver.utils.csr.generate_csr">[docs]</a>
 <span class="k">def</span> <span class="nf">generate_csr</span><span class="p">(</span>
     <span class="n">private_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">public_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -81,8 +80,10 @@
 
 
 <div class="viewcode-block" id="check_csr_client">
-<a class="viewcode-back" href="../../../server.utils.html#server.utils.csr.check_csr_client">[docs]</a>
-<span class="k">def</span> <span class="nf">check_csr_client</span><span class="p">(</span><span class="n">csr</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">phone_number</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">ip</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<a class="viewcode-back" href="../../../hseserver.utils.html#hseserver.utils.csr.check_csr_client">[docs]</a>
+<span class="k">def</span> <span class="nf">check_csr_client</span><span class="p">(</span>
+    <span class="n">csr</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">phone_number</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">ip</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Проверка подписи клиента CSR.</span>
 <span class="sd">    :param csr: CSR в формате json.</span>
@@ -106,13 +107,13 @@
 
 
 <div class="viewcode-block" id="sign_csr">
-<a class="viewcode-back" href="../../../server.utils.html#server.utils.csr.sign_csr">[docs]</a>
+<a class="viewcode-back" href="../../../hseserver.utils.html#hseserver.utils.csr.sign_csr">[docs]</a>
 <span class="k">def</span> <span class="nf">sign_csr</span><span class="p">(</span>
     <span class="n">csr</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
     <span class="n">root_private_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">root_ca</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
-    <span class="n">phone_number</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">ip</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">phone_number</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">ip</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Проверка и подпись CSR.</span>
@@ -137,9 +138,9 @@
 
 
 <div class="viewcode-block" id="check_csr_root">
-<a class="viewcode-back" href="../../../server.utils.html#server.utils.csr.check_csr_root">[docs]</a>
+<a class="viewcode-back" href="../../../hseserver.utils.html#hseserver.utils.csr.check_csr_root">[docs]</a>
 <span class="k">def</span> <span class="nf">check_csr_root</span><span class="p">(</span>
-    <span class="n">csr</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">server_domain</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">server_pubkey</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">csr</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">server_domain</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">server_pubkey</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Проверка подписи корневого центра CSR.</span>
@@ -245,7 +246,7 @@
 <script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">HSE_DSA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">hse_dsa</a></li>
 </ul>
 
 <div class="relations">

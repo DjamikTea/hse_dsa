@@ -14,6 +14,8 @@
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="hseserver package" href="hseserver.html" />
+    <link rel="prev" title="hsecrypto.lib package" href="hsecrypto.lib.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -39,11 +41,81 @@
 <section id="hseclient-cli-module">
 <h2>hseclient.cli module<a class="headerlink" href="#hseclient-cli-module" title="Link to this heading">¶</a></h2>
 </section>
-<section id="hseclient-csr-module">
-<h2>hseclient.csr module<a class="headerlink" href="#hseclient-csr-module" title="Link to this heading">¶</a></h2>
+<section id="module-hseclient.csr">
+<span id="hseclient-csr-module"></span><h2>hseclient.csr module<a class="headerlink" href="#module-hseclient.csr" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.csr.check_csr_client">
+<span class="sig-prename descclassname"><span class="pre">hseclient.csr.</span></span><span class="sig-name descname"><span class="pre">check_csr_client</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phone_number</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ip</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/hseclient/csr.html#check_csr_client"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.csr.check_csr_client" title="Link to this definition">¶</a></dt>
+<dd><p>Проверка подписи клиента CSR.
+:param csr: CSR в формате json.
+:param phone_number: Номер телефона.
+:param ip: IP-адрес.
+:return: Результат проверки.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.csr.check_csr_root">
+<span class="sig-prename descclassname"><span class="pre">hseclient.csr.</span></span><span class="sig-name descname"><span class="pre">check_csr_root</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">server_domain</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">server_pubkey</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/hseclient/csr.html#check_csr_root"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.csr.check_csr_root" title="Link to this definition">¶</a></dt>
+<dd><p>Проверка подписи корневого центра CSR.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>csr</strong> – CSR в формате json.</p></li>
+<li><p><strong>server_domain</strong> – Домен сервера.</p></li>
+<li><p><strong>server_pubkey</strong> – Публичный ключ сервера.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Результат проверки.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.csr.generate_csr">
+<span class="sig-prename descclassname"><span class="pre">hseclient.csr.</span></span><span class="sig-name descname"><span class="pre">generate_csr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">private_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">public_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">country</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">organization</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phone_number</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ip</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/hseclient/csr.html#generate_csr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.csr.generate_csr" title="Link to this definition">¶</a></dt>
+<dd><p>Генерация запроса на сертификат (CSR).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>private_key</strong> – Приватный ключ.</p></li>
+<li><p><strong>public_key</strong> – Публичный ключ.</p></li>
+<li><p><strong>country</strong> – Двухбуквенный код страны (ISO 3166-1 alpha-2).</p></li>
+<li><p><strong>organization</strong> – Название организации.</p></li>
+<li><p><strong>phone_number</strong> – Номер телефона.</p></li>
+<li><p><strong>ip</strong> – IP-адрес.</p></li>
+<li><p><strong>fio</strong> – ФИО.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>CSR в формате json.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.csr.sign_csr">
+<span class="sig-prename descclassname"><span class="pre">hseclient.csr.</span></span><span class="sig-name descname"><span class="pre">sign_csr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root_private_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root_ca</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phone_number</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ip</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/hseclient/csr.html#sign_csr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.csr.sign_csr" title="Link to this definition">¶</a></dt>
+<dd><p>Проверка и подпись CSR.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>csr</strong> – CSR в формате json.</p></li>
+<li><p><strong>root_private_key</strong> – Приватный ключ.</p></li>
+<li><p><strong>root_ca</strong> – Сертификат корневого центра.</p></li>
+<li><p><strong>phone_number</strong> – Номер телефона.</p></li>
+<li><p><strong>ip</strong> – IP-адрес.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Подписанный CSR.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
-<section id="module-contents">
-<h2>Module contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<section id="module-hseclient">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-hseclient" title="Link to this heading">¶</a></h2>
 </section>
 </section>
 
@@ -74,14 +146,23 @@
 </search>
 <script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="modules.html">HSE_DSA</a></li>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">hse_dsa</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="hsecrypto.html">hsecrypto package</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">hseclient package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hseserver.html">hseserver package</a></li>
+</ul>
+</li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">hse_dsa</a><ul>
+      <li>Previous: <a href="hsecrypto.lib.html" title="previous chapter">hsecrypto.lib package</a></li>
+      <li>Next: <a href="hseserver.html" title="next chapter">hseserver package</a></li>
+  </ul></li>
   </ul></li>
 </ul>
 </div>
