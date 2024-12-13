@@ -1,0 +1,5 @@
+data_dir = "data"
+host_file = f"{data_dir}/host.json"
+keys_file = f"{data_dir}/keys.json"
+cert_file = f"{data_dir}/cert.json"
+token_file = f"{data_dir}/token.json"
