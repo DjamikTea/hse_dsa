@@ -270,6 +270,7 @@ def test_verify(check_first_launch):
     assert response.json() == {"detail": "Register not found"}
     db.close()
 
+
 def test_auth(check_first_launch):
     global auth_token
     response = client.get(
