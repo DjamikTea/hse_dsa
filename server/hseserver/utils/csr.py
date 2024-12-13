@@ -3,7 +3,6 @@
 #  All rights reserved.
 from datetime import datetime, timezone
 from hsecrypto import GostDSA
-import json
 
 
 def generate_csr(

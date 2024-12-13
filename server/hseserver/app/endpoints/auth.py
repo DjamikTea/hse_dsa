@@ -49,7 +49,7 @@ async def register(
             timezone.utc
         ) - timedelta(minutes=5):
             raise HTTPException(
-                status_code=400, detail=f"Too many requests, try again later"
+                status_code=400, detail="Too many requests, try again later"
             )
         else:
             cursor.execute(
@@ -59,7 +59,7 @@ async def register(
     cursor.execute("SELECT * FROM users WHERE phone_number = %s", (phone_number,))
     user = cursor.fetchone()
     if user is not None:
-        raise HTTPException(status_code=400, detail=f"User already exists")
+        raise HTTPException(status_code=400, detail="User already exists")
     cursor.execute("SELECT * FROM revoked_keys WHERE pubkey = %s", (public_key,))
     user = cursor.fetchone()
     if user is not None:

@@ -1,5 +1,3 @@
-from sys import prefix
-
 from fastapi import FastAPI
 from hseserver.app.endpoints import tests, root, auth, revoke, docs
 import logging

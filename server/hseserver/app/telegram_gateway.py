@@ -5,7 +5,6 @@
 import os
 
 import aiohttp
-import asyncio
 
 
 class TelegramGatewayAPI:

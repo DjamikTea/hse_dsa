@@ -1,7 +1,6 @@
 #  Copyright (c) 2024 DjamikTea.
 #  Created by Dzhamal on 2024-12-1.
 #  All rights reserved.
-import asyncio
 import hashlib
 import os
 from datetime import datetime, timezone
@@ -209,6 +208,9 @@ def test_verify(check_first_launch):
     assert response.status_code == 400
     assert response.json() == {"detail": "Invalid verification code"}
 
+    connection_pool = pooling.MySQLConnectionPool(
+        pool_name="mypool", pool_size=5, **dbconfig
+    )
     db = connection_pool.get_connection()
     cursor = db.cursor(dictionary=True)
 
@@ -337,7 +339,7 @@ def test_upload_file(check_first_launch):
 def test_sign_file(check_first_launch):
     global auth_token, timeuuid_file
 
-    response = client.post(f"/docs/sign/bruh", headers={"Authorization": auth_token})
+    response = client.post("/docs/sign/bruh", headers={"Authorization": auth_token})
     assert response.status_code == 404
     assert response.json() == {"detail": "Document not found"}
 
@@ -369,7 +371,7 @@ def test_sign_file(check_first_launch):
 def test_download_file(check_first_launch):
     global auth_token, timeuuid_file
 
-    response = client.get(f"/docs/download/bruh", headers={"Authorization": auth_token})
+    response = client.get("/docs/download/bruh", headers={"Authorization": auth_token})
     assert response.status_code == 404
     assert response.json() == {"detail": "Document not found"}
 
@@ -435,7 +437,9 @@ def test_verify_second(check_first_launch):
         ip,
         fio,
     )
-
+    connection_pool = pooling.MySQLConnectionPool(
+        pool_name="mypool", pool_size=5, **dbconfig
+    )
     db = connection_pool.get_connection()
     cursor = db.cursor(dictionary=True)
 
@@ -497,7 +501,7 @@ def test_send_document(check_first_launch):
     assert response.json() == {"detail": "Forbidden"}
 
     response = client.post(
-        f"/docs/send/bruh",
+        "/docs/send/bruh",
         headers={"Authorization": auth_token, "phone_number": "79999999999"},
     )
     assert response.status_code == 404
@@ -533,9 +537,7 @@ def test_recive_document(check_first_launch):
 def test_delete_document(check_first_launch):
     global auth_token, auth_token_sec, timeuuid_file
 
-    response = client.delete(
-        f"/docs/delete/bruh", headers={"Authorization": auth_token}
-    )
+    response = client.delete("/docs/delete/bruh", headers={"Authorization": auth_token})
     assert response.status_code == 404
     assert response.json() == {"detail": "Document not found"}
 
@@ -573,6 +575,9 @@ def test_revoke(check_first_launch, mocked_aiohttp):
     )
     assert response.json() == {"detail": "Invalid verification code"}
 
+    connection_pool = pooling.MySQLConnectionPool(
+        pool_name="mypool", pool_size=5, **dbconfig
+    )
     db = connection_pool.get_connection()
     cursor = db.cursor(dictionary=True)
     cursor.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")

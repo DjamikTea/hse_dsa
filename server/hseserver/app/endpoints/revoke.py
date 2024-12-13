@@ -8,11 +8,8 @@ from datetime import datetime, timedelta, timezone
 from fastapi import APIRouter, Depends, HTTPException, Request
 from random import randint
 
-from hsecrypto import GostDSA
-
 from hseserver.app.database import get_db
 from hseserver.app.telegram_gateway import TelegramGatewayAPI
-import secrets
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
