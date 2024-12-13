@@ -238,14 +238,15 @@ async def send_document(
         ),
     )
     cursor.execute(
-        "INSERT INTO new_docs_available (user_id, timeuuid, filename, created, sign, sha256) "
-        "VALUES (%s, %s, %s, NOW(), %s, %s)",
+        "INSERT INTO new_docs_available (user_id, timeuuid, filename, created, sign, sha256, sender_phone) "
+        "VALUES (%s, %s, %s, NOW(), %s, %s, %s)",
         (
             reciver["id"],
             timeuuid,
             document["filename"],
             document["sign"],
             document["sha256"],
+            user["phone_number"],
         ),
     )
     conn.commit()

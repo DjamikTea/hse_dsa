@@ -18,6 +18,12 @@ tg = TelegramGatewayAPI()
 
 @router.post("")
 async def revoke(phone: str, request: Request, db=Depends(get_db)):
+    """
+    Отправляет код подтверждения на телефон для отзыва ключа и удаления пользователя
+    :param phone:
+    :param request:
+    :return: {"message": "Verification code sent"}
+    """
     cursor, conn = db
 
     cursor.execute("SELECT * FROM users WHERE phone_number = %s", (phone,))
@@ -58,6 +64,13 @@ async def revoke(phone: str, request: Request, db=Depends(get_db)):
 
 @router.get("/verify")
 async def revoke_verify(phone: str, code: str, request: Request, db=Depends(get_db)):
+    """
+    Подтверждает отзыв ключа и удаление пользователя
+    :param phone:
+    :param code:
+    :param request:
+    :return: {"message": "Key revoked and user deleted"}
+    """
     cursor, conn = db
 
     cursor.execute("SELECT * FROM revoke_requests WHERE phone_number = %s", (phone,))
@@ -91,8 +104,13 @@ async def revoke_verify(phone: str, code: str, request: Request, db=Depends(get_
     return {"message": "Key revoked and user deleted"}
 
 
-@router.get("/check")
+@router.get("/check", response_model=dict, )
 async def check(public_key: str, db=Depends(get_db)):
+    """
+    Проверяет, отозван ли ключ
+    :param public_key:
+    :return: {"revoked": False, "message": "Key not revoked"} or {"revoked": True, "message": "Key revoked"}
+    """
     cursor, conn = db
 
     cursor.execute("SELECT * FROM revoked_keys WHERE pubkey = %s", (public_key,))
