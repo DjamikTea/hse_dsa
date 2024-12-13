@@ -25,3 +25,11 @@ API: [https://hse.gopass.dev/docs]
 Сервер, обрабатывающий и хранящий файлы
 
 [README](/server/README.md)
+
+## Installation
+
+Прежде всего нужно установить poetry, с помощью него работает большая часть проекта. Хотя можно и запускать мануально через python, но так удобнее.
+
+```bash
+pip install poetry
+```
