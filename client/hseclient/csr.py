@@ -37,13 +37,23 @@ def generate_csr(
         "client_sign_time": datetime.now(timezone.utc).isoformat(),
     }
     crypto = GostDSA()
+<<<<<<< HEAD:client/hseclient/csr.py
     csr.get["client_sign"] = crypto.sign(str(csr).encode(), private_key)
+=======
+    csr.get("client_sign") = crypto.sign(str(csr).encode(), private_key)
+>>>>>>> 4de22ca (cli for generate pair key , csr and registration):client/csr.py
     return csr
 
 
 def check_csr_client(
+<<<<<<< HEAD:client/hseclient/csr.py
     csr: dict, phone_number: str | None = None, ip: str | None = None
 ) -> bool:
+=======
+        csr: dict, 
+        phone_number: str | None = None, 
+        ip: str | None = None) -> bool:
+>>>>>>> 4de22ca (cli for generate pair key , csr and registration):client/csr.py
     """
     Проверка подписи клиента CSR.
     :param csr: CSR в формате json.
@@ -52,13 +62,17 @@ def check_csr_client(
     :return: Результат проверки.
     """
     crypto = GostDSA()
+<<<<<<< HEAD:client/hseclient/csr.py
     csrx = {
         "client": csr.get("client"),
         "client_sign_time": csr.get("client_sign_time"),
     }
+=======
+    csrx = {"client": csr.get("client"), "client_sign_time": csr.get("client_sign_time")}
+>>>>>>> 4de22ca (cli for generate pair key , csr and registration):client/csr.py
 
     if phone_number:
-        if csr["client"]["phone_number"] != phone_number:
+        if csr.get("client")("phone_number") != phone_number:
             return False
     if ip:
         if csr.get("client")("ip") != ip:
@@ -97,7 +111,13 @@ def sign_csr(
 
 
 def check_csr_root(
+<<<<<<< HEAD:client/hseclient/csr.py
     csr: dict, server_domain: str | None = None, server_pubkey: str | None = None
+=======
+    csr: dict, 
+    server_domain: str | None = None, 
+    server_pubkey: str | None = None
+>>>>>>> 4de22ca (cli for generate pair key , csr and registration):client/csr.py
 ) -> bool:
     """
     Проверка подписи корневого центра CSR.
@@ -133,7 +153,12 @@ def check_csr_root(
         "root_sign_time": csr.get("root_sign_time"),
     }
     return crypto.check(
+<<<<<<< HEAD:client/hseclient/csr.py
         csr.get("root_sign"),
         str(csrx).encode(),
         csr.get("root")("root_ca")("public_key"),
     )
+=======
+        csr.get("root_sign"), str(csrx).encode(), csr.get("root")("root_ca")("public_key")
+    )
+>>>>>>> 4de22ca (cli for generate pair key , csr and registration):client/csr.py

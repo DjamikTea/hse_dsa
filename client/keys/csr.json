@@ -1,0 +1,13 @@
+{
+    "client": {
+        "public_key": "031c22b1120872cc479c6530f8e1d83e9c3b5e71179041341b66bf1243e88d49db",
+        "country": "RU",
+        "organization": "HSE",
+        "phone_number": "89637108400",
+        "fio": "\u0441\u0432\u043e \u0441\u0432\u043e \u0441\u0432\u043e",
+        "ip": "62.60.149.239",
+        "date_generation": "2024-12-10T11:15:22.192524+00:00"
+    },
+    "client_sign_time": "2024-12-10T11:15:22.192524+00:00",
+    "client_sign": "2b9af68a91177bbcc31d236f16aa73a51c2e5261088c3464aae450a392f6008a3e825dd885bae69af34004d47072fd5c99bba8f996d083605baa6d0bdf26671b"
+}

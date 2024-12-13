@@ -448,7 +448,7 @@ class MyCLI(cmd.Cmd):
                     documents[i] = {
                         key: value
                         for key, value in documents[i].items()
-                        if not key in ["sign_verifed","user_id", "sha256", "path"]
+                        if not key in ["sign_verifed", "user_id", "sha256", "path"]
                     }
                 headers = "keys"
                 table = tabulate(documents, headers=headers, tablefmt="pretty")
@@ -701,15 +701,17 @@ class MyCLI(cmd.Cmd):
     def do_download(self, arg):
         """Загружает документ с сервера по timeuuid."""
         if not self.timeuuid:
-            print("Ошибка: timeuuid не установлен. Укажите timeuuid перед вызовом do_download.")
+            print(
+                "Ошибка: timeuuid не установлен. Укажите timeuuid перед вызовом do_download."
+            )
             return
-        
+
         self._load_token()
-        
+
         if not self.token:
             print("Ошибка: Токен отсутствует. Авторизуйтесь, чтобы получить токен.")
             return
-        
+
         url = f"{self.url}/docs/download/{self.timeuuid}"
         headers = {"Authorization": f"Bearer {self.token}"}
 
@@ -738,7 +740,6 @@ class MyCLI(cmd.Cmd):
         except requests.exceptions.RequestException as e:
             print(f"Ошибка при запросе: {e}")
 
-            
 
 def run():
     MyCLI().cmdloop()
