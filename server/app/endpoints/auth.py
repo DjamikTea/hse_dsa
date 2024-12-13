@@ -35,7 +35,7 @@ async def register(
 ):
     cursor, conn = db
     verif_code = randint(100000, 999999)
-    ip = request.client.host
+    ip = request.headers.get("X-Real-IP")
 
     cursor.execute(
         "SELECT * FROM user_register WHERE phone_number = %s", (phone_number,)
@@ -91,7 +91,7 @@ async def verify(
         timezone.utc
     ) - timedelta(minutes=5):
         raise HTTPException(status_code=400, detail="Verification code expired")
-    ip = request.client.host
+    ip = request.headers.get("X-Real-IP")
     if user["ip"] != ip:
         raise HTTPException(status_code=400, detail="IP address mismatch")
     if user["tries"] >= 3:
@@ -116,7 +116,7 @@ async def verify(
     csr = json.loads(csr)
 
     try:
-        signed_csr = sign_csr(csr, root["private_key"], root_ca, phone_number, ip)
+        signed_csr = sign_csr(csr, root["private_key"], root_ca, phone_number)
     except ValueError:
         raise HTTPException(status_code=400, detail="CSR client signature is invalid")
     token = generate_bearer_token()

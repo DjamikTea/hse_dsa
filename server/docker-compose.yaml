@@ -14,6 +14,8 @@ services:
       timeout: 5s
       retries: 5
     restart: unless-stopped
+    volumes:
+      - ./mysql:/var/lib/mysql
 
   server:
     build: .
@@ -27,7 +29,6 @@ services:
     restart: unless-stopped
     volumes:
       - ./files:/app/uploaded_files
-
     expose:
       - "8000"
 
