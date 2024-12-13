@@ -10,11 +10,16 @@ dbconfig = {
     "port": int(os.getenv("DB_PORT", 3306)),
 }
 
+print("runner: ")
+print(__name__)
+
+connection_pool = pooling.MySQLConnectionPool(
+    pool_name="mypool", pool_size=5, **dbconfig
+)
+
 
 def get_db():
-    connection_pool = pooling.MySQLConnectionPool(
-        pool_name="mypool", pool_size=5, **dbconfig
-    )
+
     conn = connection_pool.get_connection()
     cursor = conn.cursor(dictionary=True)
     try:
