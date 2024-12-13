@@ -9,7 +9,7 @@ import asyncio
 
 
 class TelegramGatewayAPI:
-    def __init__(self, api_token: str = None):
+    def __init__(self, api_token: str = ""):
         """
         Инициализация класса с токеном API.
 
@@ -18,7 +18,7 @@ class TelegramGatewayAPI:
         if api_token:
             self.api_token = api_token
         else:
-            self.api_token = os.getenv("TELEGRAM_GATEWAY_API_TOKEN")
+            self.api_token = os.getenv("TELEGRAM_GATEWAY_API_TOKEN", "")
         self.api_url = "https://gatewayapi.telegram.org/"
 
     async def send_verification_message(

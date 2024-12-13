@@ -533,7 +533,9 @@ def test_recive_document(check_first_launch):
 def test_delete_document(check_first_launch):
     global auth_token, auth_token_sec, timeuuid_file
 
-    response = client.delete(f"/docs/delete/bruh", headers={"Authorization": auth_token})
+    response = client.delete(
+        f"/docs/delete/bruh", headers={"Authorization": auth_token}
+    )
     assert response.status_code == 404
     assert response.json() == {"detail": "Document not found"}
 
@@ -612,7 +614,9 @@ def test_revoke(check_first_launch, mocked_aiohttp):
 
     code = request["verif_code"]
 
-    response = client.get("/revoke/verify", params={"phone": "79999999999", "code": code})
+    response = client.get(
+        "/revoke/verify", params={"phone": "79999999999", "code": code}
+    )
     assert response.json() == {"message": "Key revoked and user deleted"}
 
     cursor.execute("DELETE FROM documents WHERE timeuuid = %s", (timeuuid_file,))

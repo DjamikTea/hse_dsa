@@ -25,7 +25,7 @@ def get_db():
         conn.close()
 
 
-def check_token(token: str, cursor) -> dict:
+def check_token(token: str | None, cursor) -> dict:
     cursor.execute("SELECT * FROM users WHERE token = %s", (token,))
     user = cursor.fetchone()
     if user:

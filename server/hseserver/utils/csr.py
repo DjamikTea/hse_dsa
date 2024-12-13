@@ -44,7 +44,7 @@ def generate_csr(
     return csr
 
 
-def check_csr_client(csr: dict, phone_number: str = None, ip: str = None) -> bool:
+def check_csr_client(csr: dict, phone_number: str | None = None, ip: str | None = None) -> bool:
     """
     Проверка подписи клиента CSR.
     :param csr: CSR в формате json.
@@ -70,8 +70,8 @@ def sign_csr(
     csr: dict,
     root_private_key: str,
     root_ca: dict,
-    phone_number: str = None,
-    ip: str = None,
+    phone_number: str | None = None,
+    ip: str | None = None,
 ) -> dict:
     """
     Проверка и подпись CSR.
@@ -95,7 +95,7 @@ def sign_csr(
 
 
 def check_csr_root(
-    csr: dict, server_domain: str = None, server_pubkey: str = None
+    csr: dict, server_domain: str | None = None, server_pubkey: str | None = None
 ) -> bool:
     """
     Проверка подписи корневого центра CSR.

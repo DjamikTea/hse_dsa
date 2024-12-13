@@ -37,7 +37,8 @@ def generate_csr(
         "client_sign_time": datetime.now(timezone.utc).isoformat(),
     }
     crypto = GostDSA()
-    csr.get["client_sign"] = crypto.sign(str(csr).encode(), private_key)
+    sig = crypto.sign(str(csr).encode(), private_key)
+    csr.get["client_sign"] = sig # type: ignore
     return csr
 
 
@@ -61,10 +62,10 @@ def check_csr_client(
         if csr["client"]["phone_number"] != phone_number:
             return False
     if ip:
-        if csr.get("client")("ip") != ip:
+        if csr.get("client")["ip"] != ip:
             return False
     return crypto.check(
-        csr.get("client_sign"), str(csrx).encode(), csr.get("client")("public_key")
+        csr.get("client_sign", ""), str(csrx).encode(), csr.get("client", {"public_key":""})["public_key"]
     )
 
 
@@ -109,18 +110,18 @@ def check_csr_root(
     """
     crypto = GostDSA()
     root_ca = {
-        "root_ca": csr.get("root")("root_ca"),
+        "root_ca": csr.get("root", {"root_ca": ""})["root_ca"],
     }
     if server_pubkey:
-        if csr.get("root")("root_ca")("public_key") != server_pubkey:
+        if csr.get("root", {"root_ca": ""})["root_ca"]["public_key"] != server_pubkey:
             return False
     if crypto.check(
-        csr.get("root")("root_sign"),
+        csr.get("root", {"root_ca": ""})["root_sign"],
         str(root_ca).encode(),
-        csr.get("root")("root_ca")("public_key"),
+        csr.get("root", {"root_ca": ""})["root_ca"]["public_key"],
     ):
         if server_domain:
-            if csr.get("root")("root_ca")("domain") != server_domain:
+            if csr.get("root", {"root_ca": ""})["root_ca"]["domain"] != server_domain:
                 return False
     else:
         return False
@@ -133,7 +134,7 @@ def check_csr_root(
         "root_sign_time": csr.get("root_sign_time"),
     }
     return crypto.check(
-        csr.get("root_sign"),
+        csr.get("root_sign", ""),
         str(csrx).encode(),
-        csr.get("root")("root_ca")("public_key"),
+        csr.get("root", {"root_ca": {}})["root_ca"]["public_key"],
     )

@@ -40,7 +40,9 @@ async def register(
     if ip is None:
         ip = request.client.host
 
-    cursor.execute("SELECT * FROM user_register WHERE phone_number = %s", (phone_number,))
+    cursor.execute(
+        "SELECT * FROM user_register WHERE phone_number = %s", (phone_number,)
+    )
     user = cursor.fetchone()
     if user is not None:
         if user["time"].replace(tzinfo=timezone.utc) > datetime.now(
@@ -64,7 +66,9 @@ async def register(
         raise HTTPException(status_code=400, detail="Public key revoked")
     resp = await tg.send_verification_message(phone_number, code=str(verif_code))
     if not resp["ok"]:
-        raise HTTPException(status_code=400, detail="Failed to send verification message")
+        raise HTTPException(
+            status_code=400, detail="Failed to send verification message"
+        )
     cursor.execute(
         "INSERT INTO user_register (fio, phone_number, pubkey, ip, time, verif_code, request_id) "
         "VALUES (%s, %s, %s, %s, NOW(), %s, %s)",
@@ -79,14 +83,16 @@ async def verify(
     phone_number: str, code: str, csr: str, request: Request, db=Depends(get_db)
 ):
     cursor, conn = db
-    cursor.execute("SELECT * FROM user_register WHERE phone_number = %s", (phone_number,))
+    cursor.execute(
+        "SELECT * FROM user_register WHERE phone_number = %s", (phone_number,)
+    )
     user = cursor.fetchone()
     if user is None:
         raise HTTPException(status_code=400, detail="Register not found")
 
-    if user["time"].replace(tzinfo=timezone.utc) < datetime.now(timezone.utc) - timedelta(
-        minutes=5
-    ):
+    if user["time"].replace(tzinfo=timezone.utc) < datetime.now(
+        timezone.utc
+    ) - timedelta(minutes=5):
         raise HTTPException(status_code=400, detail="Verification code expired")
     ip = request.headers.get("X-Real-IP")
 
@@ -114,10 +120,10 @@ async def verify(
     if root is None:
         raise HTTPException(status_code=500, detail="Server error K01")
     root_ca = json.loads(root["cert"])
-    csr = json.loads(csr)
+    csr_loaded = json.loads(csr)
 
     try:
-        signed_csr = sign_csr(csr, root["private_key"], root_ca, phone_number)
+        signed_csr = sign_csr(csr_loaded, root["private_key"], root_ca, phone_number)
     except ValueError:
         raise HTTPException(status_code=400, detail="CSR client signature is invalid")
     token = generate_bearer_token()

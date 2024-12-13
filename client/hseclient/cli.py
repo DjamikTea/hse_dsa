@@ -45,7 +45,9 @@ def generate_csr(
     return csr
 
 
-def sign_document(timeuuid: str, sha256: str, private_key: str, certificate: str) -> dict:
+def sign_document(
+    timeuuid: str, sha256: str, private_key: str, certificate: str
+) -> dict:
     """
     Подписывает документ
     :param timeuuid: timeuuid документа
@@ -298,7 +300,9 @@ class MyCLI(cmd.Cmd):
 
                     print(f"Токен и сертификат успешно сохранены в файл: {output_file}")
                 else:
-                    print("Ответ не содержит необходимых данных (токен или сертификат).")
+                    print(
+                        "Ответ не содержит необходимых данных (токен или сертификат)."
+                    )
 
                 self._complete_registration()
             else:
@@ -418,7 +422,9 @@ class MyCLI(cmd.Cmd):
             or len(phone_number) != 11
             or phone_number[0] != "8"
         ):
-            print("Ошибка: некорректный номер телефона. Формат: 11 цифр, начинается с 8.")
+            print(
+                "Ошибка: некорректный номер телефона. Формат: 11 цифр, начинается с 8."
+            )
             return
 
         confirmation = (
@@ -522,7 +528,9 @@ class MyCLI(cmd.Cmd):
                 return
 
             try:
-                signature_data = sign_document(timeuuid, sha256, private_key, certificate)
+                signature_data = sign_document(
+                    timeuuid, sha256, private_key, certificate
+                )
             except Exception as e:
                 print(f"Ошибка при создании подписи: {e}")
                 return

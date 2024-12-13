@@ -47,7 +47,9 @@ async def revoke(phone: str, request: Request, db=Depends(get_db)):
 
     resp = await tg.send_verification_message(phone, code=str(verif_code))
     if not resp["ok"]:
-        raise HTTPException(status_code=400, detail="Failed to send verification message")
+        raise HTTPException(
+            status_code=400, detail="Failed to send verification message"
+        )
     cursor.execute(
         "INSERT INTO revoke_requests (phone_number, pubkey, ip, time, tries, verif_code, request_id)"
         "VALUES (%s, %s, %s, NOW(), 0, %s, %s)",

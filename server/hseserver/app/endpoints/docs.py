@@ -47,7 +47,9 @@ async def new_document(
     content = await file.read()
     sha256_file = hashlib.sha256(content).hexdigest()
     if sha256_file != sha256:
-        raise HTTPException(status_code=400, detail=f"Hashes do not match: {sha256_file}")
+        raise HTTPException(
+            status_code=400, detail=f"Hashes do not match: {sha256_file}"
+        )
 
     with open(file_location, "wb") as f:
         f.write(content)
@@ -172,7 +174,9 @@ async def delete_document(
 
 
 @router.get("/list")
-async def list_documents(authorization: Optional[str] = Header(None), db=Depends(get_db)):
+async def list_documents(
+    authorization: Optional[str] = Header(None), db=Depends(get_db)
+):
     """
     Возвращает список документов
     :param authorization:
@@ -268,7 +272,7 @@ async def available_documents(
 
 @router.post("/accept/{timeuuid}")
 async def accept_document(
-    timeuuid: str, authorization: Optional[str] = Header(None), db=Depends(get_db)
+    timeuuid: str, authorization: str = Header(None), db=Depends(get_db)
 ):
     """
     Принимает документ и отмечает его полученным
