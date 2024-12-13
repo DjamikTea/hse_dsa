@@ -29,7 +29,7 @@
 В файле nginx.conf необходимо указать ваш реальный домен вместо example.com
 
 # Шаги для запуска
-```
+```bash
 # Установка Docker
 for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
 sudo apt-get update
@@ -49,18 +49,18 @@ sudo docker run hello-world
 
 cd server
 
-# Вместо example.com укажите ваш домен !!!!!!
-
 mkdir -p certbot/www certbot/certs
-mkdir -p certbot/certs/live/example.com   
-
-# Создаем самоподписанный сертификат чтоб запустился nginx, его потом заменит на сертификат от Let’s Encrypt
-# Вместо example.com укажите ваш домен !!!!!!
-
-openssl req -x509 -nodes -days 1 -newkey rsa:2048 \
--keyout certbot/certs/live/example.com/privkey.pem \
--out certbot/certs/live/example.com/fullchain.pem \
--subj "/CN=example.com"
-
 sudo docker compose up -d --build
+```
+
+# Проверьте чтоб certbot получил сертификаты!
+
+```bash
+sudo docker logs hse-certbot
+```
+
+Если все хорошо, то раскомментируйте последние строки в nginx.conf и перезапустите nginx контейнер.
+
+```bash
+sudo docker restart hse-nginx
 ```
