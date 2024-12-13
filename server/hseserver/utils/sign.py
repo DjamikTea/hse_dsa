@@ -56,7 +56,9 @@ def check_document(
     if timeuuid:
         if timeuuid != signature["timeuuid"]:
             return False
-    if not check_csr_root(signature["cert"], os.getenv("DOMAIN", "hse.gopass.dev"), server_pubkey):
+    if not check_csr_root(
+        signature["cert"], os.getenv("DOMAIN", "hse.gopass.dev"), server_pubkey
+    ):
         return False
     return crypto.check(signature["sign"], str(sigx).encode(), pubkey)
 

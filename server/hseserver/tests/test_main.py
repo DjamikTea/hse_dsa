@@ -310,7 +310,9 @@ def test_auth(check_first_launch):
 def test_upload_file(check_first_launch):
     global auth_token, timeuuid_file
 
-    sha256_file = hashlib.sha256(open("hseserver/utils/test.txt", "rb").read()).hexdigest()
+    sha256_file = hashlib.sha256(
+        open("hseserver/utils/test.txt", "rb").read()
+    ).hexdigest()
 
     response = client.put(
         "/docs/upload",
