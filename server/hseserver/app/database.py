@@ -11,10 +11,11 @@ dbconfig = {
 }
 
 if __name__ != "__main__":
-    #f#cking docs
+    # f#cking docs
     connection_pool = pooling.MySQLConnectionPool(
         pool_name="mypool", pool_size=5, **dbconfig
     )
+
 
 def get_db():
     conn = connection_pool.get_connection()

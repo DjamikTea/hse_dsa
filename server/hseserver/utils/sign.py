@@ -3,7 +3,9 @@ from hsecrypto import GostDSA
 from .csr import check_csr_root
 
 
-def sign_document(timeuuid: str, sha256: str, private_key: str, certificate: str) -> dict:
+def sign_document(
+    timeuuid: str, sha256: str, private_key: str, certificate: str
+) -> dict:
     """
     Подписывает документ
     :param timeuuid: timeuuid документа
