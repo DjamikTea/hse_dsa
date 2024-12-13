@@ -1,3 +1,5 @@
+from typing import Self
+
 class EllipticCurve:
     def __init__(self, a: int, b: int, p: int):
         """
@@ -103,7 +105,7 @@ class Point:
         return out.hex()
 
     @classmethod
-    def uncompress(self, curve: EllipticCurve, compressed: str) -> Point:
+    def uncompress(self, curve: EllipticCurve, compressed: str) -> Self:
         """
         Конвертирует сжатую точку в объект Point, находя Y координату
 
