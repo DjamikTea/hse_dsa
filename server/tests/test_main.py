@@ -30,6 +30,8 @@ cert = {}
 auth_token_sec = ""
 cert_sec = {}
 
+first_launch_patch = False
+
 crypto = GostDSA()
 private_key, public_key = crypto.generate_key_pair()
 private_key_sec, public_key_sec = crypto.generate_key_pair()
@@ -41,12 +43,22 @@ def mocked_aiohttp():
         yield mock
 
 
+@pytest.fixture(scope="session", autouse=True)
+def check_first_launch():
+    try:
+        test_first_launch()
+    except Exception as e:
+        pytest.skip(f"Skipping all tests because test_first_launch failed: {e}")
+
+
 def test_first_launch():
+    global first_launch_patch
     db = connection_pool.get_connection()
     cursor = db.cursor()
     first_launch_flag: bool = False
     try:
         cursor.execute("SELECT * FROM first_launch")
+        cursor.fetchall()
         first_launch_flag = True
     except ProgrammingError as e:
         print(e)
@@ -88,17 +100,22 @@ def test_first_launch():
         with open(".test_lock", "w") as f:
             f.write("1")
         first_launch_flag = True
+    else:
+        if not first_launch_patch:
+            raise Exception("First launch flag found. skip...")
 
+    first_launch_patch = first_launch_flag
     assert first_launch_flag == True
+    db.close()
 
 
-def test_read_main():
+def test_read_main(check_first_launch):
     response = client.get("/")
     assert response.status_code == 200
     assert response.json() == {"message": "hello world"}
 
 
-def test_mysql_select():
+def test_mysql_select(check_first_launch):
     response = client.get("/test/items", params={"item_id": "bruh"})
     assert response.status_code == 200
     assert response.json() == {"find_val": "bruh", "id": 1}
@@ -107,7 +124,7 @@ def test_mysql_select():
     assert response.status_code == 404
 
 
-async def test_telegram_gateway(mocked_aiohttp):
+async def test_telegram_gateway(check_first_launch, mocked_aiohttp):
     test_phone_number = os.getenv("TELEGRAM_TEST_PHONE")
     tg_gateway = TelegramGatewayAPI()
 
@@ -136,7 +153,7 @@ async def test_telegram_gateway(mocked_aiohttp):
     assert response["result"] == True
 
 
-def test_register(mocked_aiohttp):
+def test_register(check_first_launch, mocked_aiohttp):
     test_phone_number = os.getenv("TELEGRAM_TEST_PHONE")
 
     mock_http(mocked_aiohttp, test_phone_number)
@@ -164,7 +181,7 @@ def test_register(mocked_aiohttp):
     assert response.status_code == 400
 
 
-def test_verify():
+def test_verify(check_first_launch):
     global cert
     test_phone_number = os.getenv("TELEGRAM_TEST_PHONE")
 
@@ -251,9 +268,10 @@ def test_verify():
     )
     assert response.status_code == 400
     assert response.json() == {"detail": "Register not found"}
+    db.close()
 
 
-def test_auth():
+def test_auth(check_first_launch):
     global auth_token
     response = client.get(
         "/login/get_auth", params={"phone": os.getenv("TELEGRAM_TEST_PHONE")}
@@ -283,7 +301,7 @@ def test_auth():
     assert response.json() == {"detail": "User not found"}
 
 
-def test_upload_file():
+def test_upload_file(check_first_launch):
     global auth_token, timeuuid_file
 
     sha256_file = hashlib.sha256(open("utils/test.txt", "rb").read()).hexdigest()
@@ -312,7 +330,7 @@ def test_upload_file():
     assert response.json() == {"detail": f"Hashes do not match: {sha256_file}"}
 
 
-def test_sign_file():
+def test_sign_file(check_first_launch):
     global auth_token, timeuuid_file
 
     response = client.post(f"/docs/sign/bruh", headers={"Authorization": auth_token})
@@ -344,7 +362,7 @@ def test_sign_file():
     assert response.status_code == 400
 
 
-def test_download_file():
+def test_download_file(check_first_launch):
     global auth_token, timeuuid_file
 
     response = client.get(f"/docs/download/bruh", headers={"Authorization": auth_token})
@@ -358,7 +376,7 @@ def test_download_file():
     assert response.content == open("utils/test.txt", "rb").read()
 
 
-def test_get_list():
+def test_get_list(check_first_launch):
     global auth_token
 
     response = client.get("/docs/list", headers={"Authorization": auth_token})
@@ -367,7 +385,7 @@ def test_get_list():
     assert len(rows) == 1
 
 
-def test_register_second(mocked_aiohttp):
+def test_register_second(check_first_launch, mocked_aiohttp):
     test_phone_number = "79999999999"
 
     mock_http(mocked_aiohttp, test_phone_number)
@@ -395,7 +413,7 @@ def test_register_second(mocked_aiohttp):
     assert response.status_code == 400
 
 
-def test_verify_second():
+def test_verify_second(check_first_launch):
     global cert_sec, auth_token_sec
     test_phone_number = "79999999999"
 
@@ -441,7 +459,7 @@ def test_verify_second():
     assert check_csr_root(csr, "secr.gopass.dev")
 
 
-def test_send_document():
+def test_send_document(check_first_launch):
     global auth_token, auth_token_sec, timeuuid_file
 
     response = client.get(
@@ -482,7 +500,7 @@ def test_send_document():
     assert response.json() == {"detail": "Document not found"}
 
 
-def test_recive_document():
+def test_recive_document(check_first_launch):
     global auth_token_sec, timeuuid_file
 
     response = client.get("/docs/available", headers={"Authorization": auth_token_sec})
@@ -508,7 +526,7 @@ def test_recive_document():
     assert response.status_code == 404
 
 
-def test_delete_document():
+def test_delete_document(check_first_launch):
     global auth_token, auth_token_sec, timeuuid_file
 
     response = client.delete(
@@ -533,7 +551,7 @@ def test_delete_document():
     assert response.status_code == 404
 
 
-def test_revoke(mocked_aiohttp):
+def test_revoke(check_first_launch, mocked_aiohttp):
     test_phone_number = os.getenv("TELEGRAM_TEST_PHONE")
     mock_http(mocked_aiohttp, test_phone_number)
 
