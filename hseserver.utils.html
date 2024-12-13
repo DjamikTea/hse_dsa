@@ -113,8 +113,31 @@
 <section id="hseserver-utils-file-module">
 <h2>hseserver.utils.file module<a class="headerlink" href="#hseserver-utils-file-module" title="Link to this heading">¶</a></h2>
 </section>
-<section id="hseserver-utils-sign-module">
-<h2>hseserver.utils.sign module<a class="headerlink" href="#hseserver-utils-sign-module" title="Link to this heading">¶</a></h2>
+<section id="module-hseserver.utils.sign">
+<span id="hseserver-utils-sign-module"></span><h2>hseserver.utils.sign module<a class="headerlink" href="#module-hseserver.utils.sign" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="hseserver.utils.sign.check_document">
+<span class="sig-prename descclassname"><span class="pre">hseserver.utils.sign.</span></span><span class="sig-name descname"><span class="pre">check_document</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sha256</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pubkey</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeuuid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">server_pubkey</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/hseserver/utils/sign.html#check_document"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseserver.utils.sign.check_document" title="Link to this definition">¶</a></dt>
+<dd><p>Проверяет подпись документа
+:param signature: подпись документа
+:param sha256: sha256 файла
+:param pubkey: публичный ключ
+:param timeuuid: timeuuid документа
+:param server_pubkey: публичный ключ сервера
+:return: результат проверки</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseserver.utils.sign.sign_document">
+<span class="sig-prename descclassname"><span class="pre">hseserver.utils.sign.</span></span><span class="sig-name descname"><span class="pre">sign_document</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeuuid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sha256</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">private_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">certificate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/hseserver/utils/sign.html#sign_document"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseserver.utils.sign.sign_document" title="Link to this definition">¶</a></dt>
+<dd><p>Подписывает документ
+:param timeuuid: timeuuid документа
+:param private_key: приватный ключ
+:param certificate: сертификат
+:param sha256: sha256 файла
+:return: подписанный документ</p>
+</dd></dl>
+
 </section>
 <section id="module-hseserver.utils">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-hseserver.utils" title="Link to this heading">¶</a></h2>
