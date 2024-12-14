@@ -1,6 +1,7 @@
 import pytest
 import sys
 import os
+
 SCRIPT_DIR = os.path.dirname(os.path.abspath("./client/hseclient"))
 print(SCRIPT_DIR)
 sys.path.append(os.path.dirname(SCRIPT_DIR))
@@ -123,7 +124,7 @@ def test_generate_csr_missing_key(mock_gost_dsa):
     """Test generate_csr raises ValueError for missing private_key."""
     with pytest.raises(TypeError):
         generate_csr(
-            private_key=None, 
+            private_key=None,
             public_key="valid_pubkey",
             country="RU",
             organization="TestOrg",
@@ -149,6 +150,6 @@ def test_sign_document_empty_private_key(mock_gost_dsa):
         sign_document(
             timeuuid="uuid123",
             sha256="hash123",
-            private_key="",  
+            private_key="",
             certificate="cert123",
         )
