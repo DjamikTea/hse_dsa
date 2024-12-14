@@ -119,14 +119,12 @@ from hseclient.content.crypt import (
     sign_document,
 )
 
-# Negative tests using invalid inputs
-
 
 def test_generate_csr_missing_key(mock_gost_dsa):
     """Test generate_csr raises ValueError for missing private_key."""
     with pytest.raises(TypeError):
         generate_csr(
-            private_key=None,  # Missing private key
+            private_key=None, 
             public_key="valid_pubkey",
             country="RU",
             organization="TestOrg",
@@ -152,6 +150,6 @@ def test_sign_document_empty_private_key(mock_gost_dsa):
         sign_document(
             timeuuid="uuid123",
             sha256="hash123",
-            private_key="",  # Empty private key
+            private_key="",  
             certificate="cert123",
         )

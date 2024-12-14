@@ -3,7 +3,7 @@ name: Client tests
 on:
   push:
     paths:
-        - crypto/**
+        - client/**
 
 jobs:
   build:

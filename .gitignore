@@ -11,3 +11,5 @@ private_key.pem
 auth_token.json
 dist
 mysql
+data
+download
