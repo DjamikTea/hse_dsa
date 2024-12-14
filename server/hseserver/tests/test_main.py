@@ -201,7 +201,7 @@ def test_verify(check_first_launch):
         "/login/verify",
         params={
             "phone_number": test_phone_number,
-            "code": "123456",
+            "code": "123457",
             "csr": json.dumps(csr),
         },
     )
@@ -573,7 +573,7 @@ def test_revoke(check_first_launch, mocked_aiohttp):
     assert response.json() == {"detail": "Too many requests, try again later"}
 
     response = client.get(
-        "/revoke/verify", params={"phone": test_phone_number, "code": "123456"}
+        "/revoke/verify", params={"phone": test_phone_number, "code": "123458"}
     )
     assert response.json() == {"detail": "Invalid verification code"}
 

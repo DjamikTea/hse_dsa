@@ -1,5 +1,6 @@
 import json
 import logging
+import os
 from datetime import datetime, timedelta, timezone
 
 from fastapi import APIRouter, Depends, HTTPException, Request
@@ -8,6 +9,7 @@ from random import randint
 from hsecrypto import GostDSA
 
 from hseserver.app.database import get_db
+from hseserver.app.greensms import Otp
 from hseserver.app.telegram_gateway import TelegramGatewayAPI
 import secrets
 
@@ -16,6 +18,7 @@ from hseserver.utils.csr import sign_csr
 router = APIRouter()
 logger = logging.getLogger(__name__)
 tg = TelegramGatewayAPI()
+grsms = Otp()
 
 
 def generate_bearer_token():
@@ -43,7 +46,6 @@ async def register(
     :return: {"message": "Verification code sent"}
     """
     cursor, conn = db
-    verif_code = randint(100000, 999999)
     ip = request.headers.get("X-Real-IP")
 
     if ip is None:
@@ -73,11 +75,17 @@ async def register(
     user = cursor.fetchone()
     if user is not None:
         raise HTTPException(status_code=400, detail="Public key revoked")
-    resp = await tg.send_verification_message(phone_number, code=str(verif_code))
-    if not resp["ok"]:
-        raise HTTPException(
-            status_code=400, detail="Failed to send verification message"
-        )
+
+    if os.getenv("OTP", "GREEN_SMS") == "TG":
+        verif_code = randint(100000, 999999)
+        resp = await tg.send_verification_message(phone_number, code=str(verif_code))
+        if not resp["ok"]:
+            raise HTTPException(
+                status_code=400, detail="Failed to send verification message"
+            )
+    else:
+        verif_code = await grsms.send_otp(phone_number)
+        resp = {"result": {"request_id": "green_sms"}}
     cursor.execute(
         "INSERT INTO user_register (fio, phone_number, pubkey, ip, time, verif_code, request_id) "
         "VALUES (%s, %s, %s, %s, NOW(), %s, %s)",
