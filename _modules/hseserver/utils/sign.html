@@ -31,7 +31,8 @@
           <div class="body" role="main">
             
   <h1>Source code for hseserver.utils.sign</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timezone</span>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timezone</span>
 <span class="kn">from</span> <span class="nn">hsecrypto</span> <span class="kn">import</span> <span class="n">GostDSA</span>
 <span class="kn">from</span> <span class="nn">.csr</span> <span class="kn">import</span> <span class="n">check_csr_root</span>
 
@@ -93,7 +94,9 @@
     <span class="k">if</span> <span class="n">timeuuid</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">timeuuid</span> <span class="o">!=</span> <span class="n">signature</span><span class="p">[</span><span class="s2">&quot;timeuuid&quot;</span><span class="p">]:</span>
             <span class="k">return</span> <span class="kc">False</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">check_csr_root</span><span class="p">(</span><span class="n">signature</span><span class="p">[</span><span class="s2">&quot;cert&quot;</span><span class="p">],</span> <span class="s2">&quot;secr.gopass.dev&quot;</span><span class="p">,</span> <span class="n">server_pubkey</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">check_csr_root</span><span class="p">(</span>
+        <span class="n">signature</span><span class="p">[</span><span class="s2">&quot;cert&quot;</span><span class="p">],</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;DOMAIN&quot;</span><span class="p">,</span> <span class="s2">&quot;hse.gopass.dev&quot;</span><span class="p">),</span> <span class="n">server_pubkey</span>
+    <span class="p">):</span>
         <span class="k">return</span> <span class="kc">False</span>
     <span class="k">return</span> <span class="n">crypto</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="n">signature</span><span class="p">[</span><span class="s2">&quot;sign&quot;</span><span class="p">],</span> <span class="nb">str</span><span class="p">(</span><span class="n">sigx</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(),</span> <span class="n">pubkey</span><span class="p">)</span></div>
 

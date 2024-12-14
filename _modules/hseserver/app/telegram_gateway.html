@@ -220,6 +220,16 @@
     <span class="n">mocked_aiohttp</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
         <span class="s2">&quot;https://gatewayapi.telegram.org/revokeVerificationMessage&quot;</span><span class="p">,</span>
         <span class="n">payload</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;ok&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;result&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+    <span class="p">)</span>
+
+    <span class="n">mocked_aiohttp</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+        <span class="s2">&quot;https://api3.greensms.ru/account/token&quot;</span><span class="p">,</span>
+        <span class="n">payload</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;access_token&quot;</span><span class="p">:</span> <span class="s2">&quot;1234567890&quot;</span><span class="p">},</span>
+    <span class="p">)</span>
+
+    <span class="n">mocked_aiohttp</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+        <span class="s2">&quot;https://api3.greensms.ru/call/send&quot;</span><span class="p">,</span>
+        <span class="n">payload</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;code&quot;</span><span class="p">:</span> <span class="s2">&quot;123456&quot;</span><span class="p">},</span>
     <span class="p">)</span></div>
 
 </pre></div>
