@@ -111,6 +111,7 @@ def test_sign_document(mock_gost_dsa, sample_keys):
     assert signed_doc["cert"] == certificate
     assert "sign" in signed_doc
 
+
 def test_generate_csr_missing_key(mock_gost_dsa):
     """Test generate_csr raises ValueError for missing private_key."""
     with pytest.raises(TypeError):
