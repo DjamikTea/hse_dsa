@@ -7,15 +7,15 @@
 
     <title>hseserver package &#8212; hse_dsa 0.1.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d1102ebc" />
-    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=c058f7c8" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=686e5160" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
     <script src="_static/documentation_options.js?v=01f34227"></script>
-    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="hseserver.app package" href="hseserver.app.html" />
-    <link rel="prev" title="hseclient package" href="hseclient.html" />
+    <link rel="prev" title="hseclient.content package" href="hseclient.content.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -43,23 +43,19 @@
 <li class="toctree-l2"><a class="reference internal" href="hseserver.app.html#subpackages">Subpackages</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="hseserver.app.endpoints.html">hseserver.app.endpoints package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="hseserver.app.endpoints.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="hseserver.app.endpoints.html#module-hseserver.app.endpoints.auth">hseserver.app.endpoints.auth module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="hseserver.app.endpoints.html#module-hseserver.app.endpoints.docs">hseserver.app.endpoints.docs module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="hseserver.app.endpoints.html#module-hseserver.app.endpoints.revoke">hseserver.app.endpoints.revoke module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hseserver.app.endpoints.html#hseserver-app-endpoints-auth-module">hseserver.app.endpoints.auth module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hseserver.app.endpoints.html#hseserver-app-endpoints-docs-module">hseserver.app.endpoints.docs module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hseserver.app.endpoints.html#hseserver-app-endpoints-revoke-module">hseserver.app.endpoints.revoke module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="hseserver.app.endpoints.html#module-hseserver.app.endpoints.root">hseserver.app.endpoints.root module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="hseserver.app.endpoints.html#module-hseserver.app.endpoints.tests">hseserver.app.endpoints.tests module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hseserver.app.endpoints.html#hseserver-app-endpoints-tests-module">hseserver.app.endpoints.tests module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="hseserver.app.endpoints.html#module-hseserver.app.endpoints">Module contents</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="hseserver.app.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="hseserver.app.html#module-hseserver.app.database">hseserver.app.database module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="hseserver.app.html#hseserver.app.database.check_token"><code class="docutils literal notranslate"><span class="pre">check_token()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="hseserver.app.html#hseserver.app.database.get_db"><code class="docutils literal notranslate"><span class="pre">get_db()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="hseserver.app.html#module-hseserver.app.main">hseserver.app.main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hseserver.app.html#hseserver-app-database-module">hseserver.app.database module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hseserver.app.html#hseserver-app-main-module">hseserver.app.main module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hseserver.app.html#module-hseserver.app.telegram_gateway">hseserver.app.telegram_gateway module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="hseserver.app.html#hseserver.app.telegram_gateway.TelegramGatewayAPI"><code class="docutils literal notranslate"><span class="pre">TelegramGatewayAPI</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="hseserver.app.html#hseserver.app.telegram_gateway.TelegramGatewayAPI.check_send_ability"><code class="docutils literal notranslate"><span class="pre">TelegramGatewayAPI.check_send_ability()</span></code></a></li>
@@ -76,28 +72,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="hseserver.tests.html">hseserver.tests package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="hseserver.tests.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="hseserver.tests.html#module-hseserver.tests.test_main">hseserver.tests.test_main module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="hseserver.tests.html#hseserver.tests.test_main.check_first_launch"><code class="docutils literal notranslate"><span class="pre">check_first_launch()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="hseserver.tests.html#hseserver.tests.test_main.mocked_aiohttp"><code class="docutils literal notranslate"><span class="pre">mocked_aiohttp()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="hseserver.tests.html#hseserver.tests.test_main.test_auth"><code class="docutils literal notranslate"><span class="pre">test_auth()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="hseserver.tests.html#hseserver.tests.test_main.test_delete_document"><code class="docutils literal notranslate"><span class="pre">test_delete_document()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="hseserver.tests.html#hseserver.tests.test_main.test_download_file"><code class="docutils literal notranslate"><span class="pre">test_download_file()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="hseserver.tests.html#hseserver.tests.test_main.test_first_launch"><code class="docutils literal notranslate"><span class="pre">test_first_launch()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="hseserver.tests.html#hseserver.tests.test_main.test_get_list"><code class="docutils literal notranslate"><span class="pre">test_get_list()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="hseserver.tests.html#hseserver.tests.test_main.test_mysql_select"><code class="docutils literal notranslate"><span class="pre">test_mysql_select()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="hseserver.tests.html#hseserver.tests.test_main.test_read_main"><code class="docutils literal notranslate"><span class="pre">test_read_main()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="hseserver.tests.html#hseserver.tests.test_main.test_recive_document"><code class="docutils literal notranslate"><span class="pre">test_recive_document()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="hseserver.tests.html#hseserver.tests.test_main.test_register"><code class="docutils literal notranslate"><span class="pre">test_register()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="hseserver.tests.html#hseserver.tests.test_main.test_register_second"><code class="docutils literal notranslate"><span class="pre">test_register_second()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="hseserver.tests.html#hseserver.tests.test_main.test_revoke"><code class="docutils literal notranslate"><span class="pre">test_revoke()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="hseserver.tests.html#hseserver.tests.test_main.test_send_document"><code class="docutils literal notranslate"><span class="pre">test_send_document()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="hseserver.tests.html#hseserver.tests.test_main.test_sign_file"><code class="docutils literal notranslate"><span class="pre">test_sign_file()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="hseserver.tests.html#hseserver.tests.test_main.test_telegram_gateway"><code class="docutils literal notranslate"><span class="pre">test_telegram_gateway()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="hseserver.tests.html#hseserver.tests.test_main.test_upload_file"><code class="docutils literal notranslate"><span class="pre">test_upload_file()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="hseserver.tests.html#hseserver.tests.test_main.test_verify"><code class="docutils literal notranslate"><span class="pre">test_verify()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="hseserver.tests.html#hseserver.tests.test_main.test_verify_second"><code class="docutils literal notranslate"><span class="pre">test_verify_second()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="hseserver.tests.html#hseserver-tests-test-main-module">hseserver.tests.test_main module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hseserver.tests.html#module-hseserver.tests">Module contents</a></li>
 </ul>
 </li>
@@ -110,12 +85,7 @@
 <li class="toctree-l3"><a class="reference internal" href="hseserver.utils.html#hseserver.utils.csr.sign_csr"><code class="docutils literal notranslate"><span class="pre">sign_csr()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="hseserver.utils.html#module-hseserver.utils.file">hseserver.utils.file module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="hseserver.utils.html#hseserver.utils.file.download_file"><code class="docutils literal notranslate"><span class="pre">download_file()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="hseserver.utils.html#hseserver.utils.file.sign_file"><code class="docutils literal notranslate"><span class="pre">sign_file()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="hseserver.utils.html#hseserver.utils.file.upload_file"><code class="docutils literal notranslate"><span class="pre">upload_file()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="hseserver.utils.html#hseserver-utils-file-module">hseserver.utils.file module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hseserver.utils.html#module-hseserver.utils.sign">hseserver.utils.sign module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="hseserver.utils.html#hseserver.utils.sign.check_document"><code class="docutils literal notranslate"><span class="pre">check_document()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="hseserver.utils.html#hseserver.utils.sign.sign_document"><code class="docutils literal notranslate"><span class="pre">sign_document()</span></code></a></li>
@@ -173,7 +143,7 @@
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
   <li><a href="modules.html">hse_dsa</a><ul>
-      <li>Previous: <a href="hseclient.html" title="previous chapter">hseclient package</a></li>
+      <li>Previous: <a href="hseclient.content.html" title="previous chapter">hseclient.content package</a></li>
       <li>Next: <a href="hseserver.app.html" title="next chapter">hseserver.app package</a></li>
   </ul></li>
   </ul></li>
@@ -195,7 +165,7 @@
       &#169;2024, Morzan6.
       
       |
-      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.0.2</a>
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.1.3</a>
       &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
       
       |
