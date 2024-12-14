@@ -1,12 +1,15 @@
 import sqlite3
 
+
 class Database:
     def __init__(self, db_file: str = "content/client.sqlite"):
         self.conn = sqlite3.connect(db_file)
         self.cursor = self.conn.cursor()
 
         # check if table exists
-        self.cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='known_users';")
+        self.cursor.execute(
+            "SELECT name FROM sqlite_master WHERE type='table' AND name='known_users';"
+        )
         if not self.cursor.fetchone():
             query = """
                     create table known_users
@@ -24,7 +27,9 @@ class Database:
             """
             self.cursor.execute(query)
 
-        self.cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='docs_available';")
+        self.cursor.execute(
+            "SELECT name FROM sqlite_master WHERE type='table' AND name='docs_available';"
+        )
         if not self.cursor.fetchone():
             query1 = """
             create table docs_available
@@ -48,8 +53,6 @@ class Database:
             """
             self.cursor.execute(query1)
             self.cursor.execute(query2)
-
-
 
     def __del__(self):
         self.conn.close()

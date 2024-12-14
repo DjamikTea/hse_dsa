@@ -15,7 +15,12 @@ from tabulate import tabulate
 from hseclient.content import json_data, crypt, api, cglobal
 from hseclient.content.cprint import p_error, p_success
 from hseclient.content.database import Database
-from hseclient.content.json_data import write_token, write_phone_number, read_phone_number, write_root_pubkey
+from hseclient.content.json_data import (
+    write_token,
+    write_phone_number,
+    read_phone_number,
+    write_root_pubkey,
+)
 
 
 def get_external_ip():
@@ -119,7 +124,9 @@ def register():
             p_success("Регистрация прошла успешно.")
             return True
         else:
-            p_error("Внимание: Ошибка при проверке корневого сертификата. Используйте на свой страх и риск.")
+            p_error(
+                "Внимание: Ошибка при проверке корневого сертификата. Используйте на свой страх и риск."
+            )
             accept = input("Продолжить? (y/n): ")
             if accept.lower() == "y":
                 p_success("Регистрация прошла успешно.")
@@ -140,11 +147,7 @@ def get_full_name() -> str:
 def get_phone_number():
     """Запрос номера телефона."""
     phone_number = input("Введите номер телефона: ")
-    if (
-            not phone_number.isdigit()
-            or len(phone_number) != 11
-            or phone_number[0] != "7"
-    ):
+    if not phone_number.isdigit() or len(phone_number) != 11 or phone_number[0] != "7":
         print(
             "Ошибка: некорректный номер телефона. Формат: 11 цифр, без +, начинается с 7."
         )
@@ -246,7 +249,14 @@ def list_files():
         for i in range(len(documents)):
             documents[i] = {
                 key: documents[i][key]
-                for key in ["timeuuid", "filename", "created", "sha256", "sign_verified", "can_access"]
+                for key in [
+                    "timeuuid",
+                    "filename",
+                    "created",
+                    "sha256",
+                    "sign_verified",
+                    "can_access",
+                ]
             }
         headers = "keys"
         table = tabulate(documents, headers=headers, tablefmt="pretty")
@@ -268,7 +278,14 @@ def check_new_docs(db: Database):
         for i in range(len(documents)):
             documents[i] = {
                 key: documents[i][key]
-                for key in ["timeuuid", "filename", "created", "sign", "sha256", "sender_phone"]
+                for key in [
+                    "timeuuid",
+                    "filename",
+                    "created",
+                    "sign",
+                    "sha256",
+                    "sender_phone",
+                ]
             }
             docs_view.append(
                 {
@@ -293,8 +310,13 @@ def check_new_docs(db: Database):
                 continue
             db.execute(
                 "INSERT INTO docs_available (timeuuid, filename, created, sign, sha256, sender_phone) VALUES (?, ?, ?, ?, ?, ?);",
-                document["timeuuid"], document["filename"], document["created"], document["sign"], document["sha256"],
-                document["sender_phone"])
+                document["timeuuid"],
+                document["filename"],
+                document["created"],
+                document["sign"],
+                document["sha256"],
+                document["sender_phone"],
+            )
         p_success("Документы успешно обновлены.")
         return True
 
@@ -312,7 +334,9 @@ def get_sender_docs(db: Database, timeuuid: str):
     else:
         p_success(f"Файл успешно скачан: {file_path}")
 
-    current_metadata = db.query("SELECT * FROM docs_available WHERE timeuuid = ?;", timeuuid)
+    current_metadata = db.query(
+        "SELECT * FROM docs_available WHERE timeuuid = ?;", timeuuid
+    )
     if current_metadata is None:
         p_error("Ошибка: метаданные не найдены.")
         return False
@@ -333,23 +357,37 @@ def get_sender_docs(db: Database, timeuuid: str):
     else:
         print("Ключ отправителя не отозван.")
 
-
-    pubkey_know = db.query("SELECT pubkey FROM known_users WHERE phone_number = ?;", current_metadata[0][6])
+    pubkey_know = db.query(
+        "SELECT pubkey FROM known_users WHERE phone_number = ?;", current_metadata[0][6]
+    )
 
     if not pubkey_know:
         print("Отправитель не найден в известных номерах.")
         engl_or_spanish = input("Хотите добавить его? (y/n): ")
         if engl_or_spanish.lower().strip() == "y":
-            db.execute("INSERT INTO known_users (phone_number, pubkey) VALUES (?, ?);", current_metadata[0][6],
-                     pubkey)
+            db.execute(
+                "INSERT INTO known_users (phone_number, pubkey) VALUES (?, ?);",
+                current_metadata[0][6],
+                pubkey,
+            )
             p_success("Отправитель добавлен.")
-            pubkey_know = db.query("SELECT pubkey FROM known_users WHERE phone_number = ?;", current_metadata[0][6])
+            pubkey_know = db.query(
+                "SELECT pubkey FROM known_users WHERE phone_number = ?;",
+                current_metadata[0][6],
+            )
         else:
             p_error("Отправитель не добавлен.")
             return False
 
-    result = crypt.check_document(signaturex, sha256_file, pubkey_know[0][0], json_data.read_host().split("//")[1],
-                                  timeuuid, json_data.read_root_pubkey(), current_metadata[0][6])
+    result = crypt.check_document(
+        signaturex,
+        sha256_file,
+        pubkey_know[0][0],
+        json_data.read_host().split("//")[1],
+        timeuuid,
+        json_data.read_root_pubkey(),
+        current_metadata[0][6],
+    )
     if result:
         p_success("Подпись документа верна.")
         asyncio.run(api.accept_doc(timeuuid))
@@ -372,6 +410,7 @@ def delete_file(timeuuid: str):
     else:
         p_success("Файл успешно удален.")
         return True
+
 
 def auth():
     response, status = asyncio.run(api.get_auth(read_phone_number()))
@@ -404,6 +443,7 @@ def auth():
         write_token(token)
         p_success("Подпись верна.")
         return True
+
 
 def revoke():
     response, status = asyncio.run(api.revoke(read_phone_number()))

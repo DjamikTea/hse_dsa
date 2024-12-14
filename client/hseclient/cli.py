@@ -11,7 +11,6 @@ class MyCLI(cmd.Cmd):
     pubkey = None
     url = None
 
-
     def __init__(self):
         super().__init__()
 
@@ -109,7 +108,6 @@ class MyCLI(cmd.Cmd):
         """
         timeuuid = input("Введите timeuuid документа: ")
         fn.delete_file(timeuuid)
-
 
 
 def run():

@@ -39,6 +39,7 @@ def generate_csr(
     csr["client_sign"] = crypto.sign(str(csr).encode(), private_key)
     return csr
 
+
 def check_csr_root(
     csr: dict, server_domain: str | None = None, server_pubkey: str | None = None
 ) -> bool:
@@ -81,8 +82,6 @@ def check_csr_root(
     return result
 
 
-
-
 def sign_document(
     timeuuid: str, sha256: str, private_key: str, certificate: str
 ) -> dict:
@@ -103,6 +102,7 @@ def sign_document(
     crypto = GostDSA()
     signature["sign"] = crypto.sign(str(signature).encode(), private_key)
     return signature
+
 
 def check_document(
     signature: dict,

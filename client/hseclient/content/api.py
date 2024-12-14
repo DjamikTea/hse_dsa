@@ -4,6 +4,7 @@ import aiohttp
 from hseclient.content.json_data import read_host, read_token
 from hseclient.content.cglobal import download_dir
 
+
 async def register(number_phone: str, fio: str, pubkey: str):
     """
     Регистрация пользователя.
@@ -22,6 +23,7 @@ async def register(number_phone: str, fio: str, pubkey: str):
             },
         ) as response:
             return await response.json(), response.status
+
 
 async def verify(number_phone: str, sms_code: str, csr: str):
     """
@@ -42,6 +44,7 @@ async def verify(number_phone: str, sms_code: str, csr: str):
         ) as response:
             return await response.json(), response.status
 
+
 async def upload_file(file_path: str, sha256: str):
     """
     Загрузка файла.
@@ -52,9 +55,7 @@ async def upload_file(file_path: str, sha256: str):
     async with aiohttp.ClientSession() as session:
         token = read_token()
         form = aiohttp.FormData()
-        form.add_field(
-            "file", open(file_path, "rb"), filename=file_path.split("/")[-1]
-        )
+        form.add_field("file", open(file_path, "rb"), filename=file_path.split("/")[-1])
 
         async with session.put(
             f"{read_host()}/docs/upload",
@@ -62,6 +63,7 @@ async def upload_file(file_path: str, sha256: str):
             data=form,
         ) as response:
             return await response.json(), response.status
+
 
 async def sign_document(timeuuid: str, signature: str):
     """
@@ -78,6 +80,7 @@ async def sign_document(timeuuid: str, signature: str):
         ) as response:
             return await response.json(), response.status
 
+
 async def send_document(timeuuid: str, phone_number: str):
     """
     Отправка документа.
@@ -93,6 +96,7 @@ async def send_document(timeuuid: str, phone_number: str):
         ) as response:
             return await response.json(), response.status
 
+
 async def get_my_files():
     """
     Получение списка файлов.
@@ -105,6 +109,7 @@ async def get_my_files():
             headers={"Authorization": f"{token}"},
         ) as response:
             return await response.json(), response.status
+
 
 async def delete_file(timeuuid: str):
     """
@@ -120,6 +125,7 @@ async def delete_file(timeuuid: str):
         ) as response:
             return await response.json(), response.status
 
+
 async def get_available_docs():
     """
     Получение доступных документов.
@@ -132,6 +138,7 @@ async def get_available_docs():
             headers={"Authorization": f"{token}"},
         ) as response:
             return await response.json(), response.status
+
 
 async def accept_doc(timeuuid: str):
     """
@@ -146,6 +153,7 @@ async def accept_doc(timeuuid: str):
             headers={"Authorization": f"{token}"},
         ) as response:
             return await response.json(), response.status
+
 
 async def get_file(timeuuid: str):
     """
@@ -168,6 +176,7 @@ async def get_file(timeuuid: str):
             else:
                 return await response.json(), response.status
 
+
 async def revoke(phone_number: str):
     """
     Отзыв ключа и удаление аккаунта.
@@ -180,6 +189,7 @@ async def revoke(phone_number: str):
             params={"phone": phone_number},
         ) as response:
             return await response.json(), response.status
+
 
 async def revoke_verify(phone_number: str, code: str):
     """
@@ -194,6 +204,7 @@ async def revoke_verify(phone_number: str, code: str):
         ) as response:
             return await response.json(), response.status
 
+
 async def revoke_check(pubkey: str):
     """
     Проверка отзыва ключа.
@@ -207,6 +218,7 @@ async def revoke_check(pubkey: str):
         ) as response:
             return await response.json(), response.status
 
+
 async def get_auth(phone_number: str):
     """
     Авторизация.
@@ -219,6 +231,7 @@ async def get_auth(phone_number: str):
             params={"phone": phone_number},
         ) as response:
             return await response.json(), response.status
+
 
 async def auth(phone: str, signed_trs: str):
     """
