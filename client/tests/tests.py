@@ -7,12 +7,13 @@ print(SCRIPT_DIR)
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 from unittest.mock import Mock, patch
 from datetime import datetime, timezone
-from hseclient.content.crypt import (  
+from hseclient.content.crypt import (
     generate_csr,
     check_csr_root,
     sign_document,
     check_document,
 )
+
 
 class MockGostDSA:
     def sign(self, data, private_key):
@@ -73,8 +74,11 @@ def test_check_csr_root_valid_negative(mock_gost_dsa, sample_csr):
         },
         "root_sign": "013123123".zfill(64),
     }
-    result = check_csr_root(sample_csr, server_domain="example.com", server_pubkey="server_public")
+    result = check_csr_root(
+        sample_csr, server_domain="example.com", server_pubkey="server_public"
+    )
     assert result is not True
+
 
 def test_check_csr_root_invalid_pubkey(mock_gost_dsa, sample_csr):
     sample_csr["root"] = {
@@ -84,7 +88,9 @@ def test_check_csr_root_invalid_pubkey(mock_gost_dsa, sample_csr):
         },
         "root_sign": "013123123".zfill(64),
     }
-    result = check_csr_root(sample_csr, server_domain="example.com", server_pubkey="server_public")
+    result = check_csr_root(
+        sample_csr, server_domain="example.com", server_pubkey="server_public"
+    )
     assert result is False
 
 
@@ -105,6 +111,7 @@ def test_sign_document(mock_gost_dsa, sample_keys):
     assert signed_doc["cert"] == certificate
     assert "sign" in signed_doc
 
+
 import pytest
 from hseclient.content.crypt import (
     generate_csr,
@@ -113,6 +120,7 @@ from hseclient.content.crypt import (
 )
 
 # Negative tests using invalid inputs
+
 
 def test_generate_csr_missing_key(mock_gost_dsa):
     """Test generate_csr raises ValueError for missing private_key."""
@@ -126,6 +134,7 @@ def test_generate_csr_missing_key(mock_gost_dsa):
             ip="127.0.0.1",
             fio="Ivan Ivanov",
         )
+
 
 def test_check_csr_root_missing_root(mock_gost_dsa, sample_csr):
     """Test check_csr_root raises KeyError if root_ca is missing."""
