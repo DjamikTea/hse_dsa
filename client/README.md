@@ -8,9 +8,7 @@ poetry install
 ## How to usage:
 
 ```
-python hseclient/cli.py
-```
-```
+cd hseclient/
 poetry run client
 ```
 ---
