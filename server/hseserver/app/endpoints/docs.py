@@ -50,6 +50,10 @@ async def new_document(
         raise HTTPException(
             status_code=400, detail=f"Hashes do not match: {sha256_file}"
         )
+    elif len(content) > 10 * 1024 * 1024:
+        raise HTTPException(status_code=400, detail="File is too large")
+    elif len(file_name) == 0:
+        raise HTTPException(status_code=400, detail="File name is empty")
 
     with open(file_location, "wb") as f:
         f.write(content)
@@ -142,7 +146,7 @@ async def download_document(
         else:
             raise HTTPException(status_code=403, detail="Forbidden")
 
-    return FileResponse(document["path"])
+    return FileResponse(document["path"], headers={"filename": document["filename"]})
 
 
 @router.delete("/delete/{timeuuid}")
@@ -168,6 +172,7 @@ async def delete_document(
         raise HTTPException(status_code=403, detail="Forbidden")
 
     cursor.execute("DELETE FROM documents WHERE timeuuid = %s", (timeuuid,))
+    cursor.execute("DELETE FROM new_docs_available WHERE timeuuid = %s", (timeuuid,))
     conn.commit()
     os.remove(document["path"])
     return {"message": "Document deleted"}
@@ -238,14 +243,15 @@ async def send_document(
         ),
     )
     cursor.execute(
-        "INSERT INTO new_docs_available (user_id, timeuuid, filename, created, sign, sha256) "
-        "VALUES (%s, %s, %s, NOW(), %s, %s)",
+        "INSERT INTO new_docs_available (user_id, timeuuid, filename, created, sign, sha256, sender_phone) "
+        "VALUES (%s, %s, %s, NOW(), %s, %s, %s)",
         (
             reciver["id"],
             timeuuid,
             document["filename"],
             document["sign"],
             document["sha256"],
+            user["phone_number"],
         ),
     )
     conn.commit()

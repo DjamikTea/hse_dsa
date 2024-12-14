@@ -6,6 +6,11 @@ router = APIRouter()
 
 @router.get("/items")
 async def read_item(item_id: str, db=Depends(get_db)):
+    """
+    Тестовый метод
+    :param item_id:
+    :return:
+    """
     cursor, conn = db
     cursor.execute("SELECT * FROM items WHERE find_val = %s", (item_id,))
     item = cursor.fetchone()

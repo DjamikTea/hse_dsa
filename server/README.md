@@ -12,6 +12,7 @@
 	•	Доступный домен
 	•	Возможность открыть порты 80 и 443 на вашем хосте
 	•	Действущий токен на Telegram Gateway и донат Павлу Дурову. 
+    •	Если нету на донат Пашке, то использовать GreenSMS.
 
 # Переменные окружения
 
@@ -21,14 +22,21 @@
 	•	MYSQL_PASSWORD: Пароль пользователя базы данных.
 	•	TELEGRAM_GATEWAY_TOKEN: Токен для Telegram Gateway.
 	•	TELEGRAM_TEST_PHONE: Номер телефона для тестовых уведомлений. (Телефон на котором зарегестрирован Gateway)
+    •	GREENSMS_TOKEN: Токен для GreenSMS.
 	•	DB_PASSWORD: Пароль пользователя базы данных.
+    •	ORGANIZATION: Название вашей организации.
 	•	DOMAIN: Ваш домен.
 	•	EMAIL: Ваш email для рекламы от Let’s Encrypt.
+    •	OTP: Тип OTP. (TG или GREENSMS)
+
+p.s. 
+Только заметил что для телеграмма нужно минимум 100 долларов на счету, поэтому я быстро заменил на greensms.
+Код для телеграмма оставил и если нужно, то в .env установите OTP=TG
 
 В файле nginx.conf необходимо указать ваш реальный домен вместо example.com
 
 # Шаги для запуска
-```
+```bash
 # Установка Docker
 for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
 sudo apt-get update
@@ -49,13 +57,17 @@ sudo docker run hello-world
 cd server
 
 mkdir -p certbot/www certbot/certs
-mkdir -p certbot/certs/live/example.com    # Вместо example.com укажите ваш домен !!!!!!
+sudo docker compose up -d --build
+```
 
-# Создаем самоподписанный сертификат чтоб запустился nginx, его потом заменит на сертификат от Let’s Encrypt
-openssl req -x509 -nodes -days 1 -newkey rsa:2048 \ 
--keyout certbot/certs/live/example.com/privkey.pem \ # Вместо example.com укажите ваш домен !!!!!!
--out certbot/certs/live/example.com/fullchain.pem \  # Вместо example.com укажите ваш домен !!!!!!
--subj "/CN=example.com"         # Вместо example.com укажите ваш домен !!!!!!
+# Проверьте чтоб certbot получил сертификаты!
 
-sudo docker compose up -d
+```bash
+sudo docker logs hse-certbot
+```
+
+Если все хорошо, то раскомментируйте последние строки в nginx.conf и перезапустите nginx контейнер.
+
+```bash
+sudo docker restart hse-nginx
 ```

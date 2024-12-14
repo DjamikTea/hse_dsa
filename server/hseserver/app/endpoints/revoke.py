@@ -3,21 +3,30 @@
 #  All rights reserved.
 
 import logging
+import os
 from datetime import datetime, timedelta, timezone
 
 from fastapi import APIRouter, Depends, HTTPException, Request
 from random import randint
 
 from hseserver.app.database import get_db
+from hseserver.app.greensms import Otp
 from hseserver.app.telegram_gateway import TelegramGatewayAPI
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
 tg = TelegramGatewayAPI()
+grsms = Otp()
 
 
 @router.post("")
 async def revoke(phone: str, request: Request, db=Depends(get_db)):
+    """
+    Отправляет код подтверждения на телефон для отзыва ключа и удаления пользователя
+    :param phone:
+    :param request:
+    :return: {"message": "Verification code sent"}
+    """
     cursor, conn = db
 
     cursor.execute("SELECT * FROM users WHERE phone_number = %s", (phone,))
@@ -39,14 +48,19 @@ async def revoke(phone: str, request: Request, db=Depends(get_db)):
                 "DELETE FROM revoke_requests WHERE phone_number = %s", (phone,)
             )
             conn.commit()
-    verif_code = randint(100000, 999999)
     ip = request.client.host
 
-    resp = await tg.send_verification_message(phone, code=str(verif_code))
-    if not resp["ok"]:
-        raise HTTPException(
-            status_code=400, detail="Failed to send verification message"
-        )
+    if os.getenv("OTP", "GREEN_SMS") == "TG":
+        verif_code = randint(100000, 999999)
+        resp = await tg.send_verification_message(phone, code=str(verif_code))
+        if not resp["ok"]:
+            raise HTTPException(
+                status_code=400, detail="Failed to send verification message"
+            )
+    else:
+        verif_code = await grsms.send_otp(phone)
+        resp = {"result": {"request_id": "green_sms"}}
+
     cursor.execute(
         "INSERT INTO revoke_requests (phone_number, pubkey, ip, time, tries, verif_code, request_id)"
         "VALUES (%s, %s, %s, NOW(), 0, %s, %s)",
@@ -58,6 +72,13 @@ async def revoke(phone: str, request: Request, db=Depends(get_db)):
 
 @router.get("/verify")
 async def revoke_verify(phone: str, code: str, request: Request, db=Depends(get_db)):
+    """
+    Подтверждает отзыв ключа и удаление пользователя
+    :param phone:
+    :param code:
+    :param request:
+    :return: {"message": "Key revoked and user deleted"}
+    """
     cursor, conn = db
 
     cursor.execute("SELECT * FROM revoke_requests WHERE phone_number = %s", (phone,))
@@ -91,8 +112,16 @@ async def revoke_verify(phone: str, code: str, request: Request, db=Depends(get_
     return {"message": "Key revoked and user deleted"}
 
 
-@router.get("/check")
+@router.get(
+    "/check",
+    response_model=dict,
+)
 async def check(public_key: str, db=Depends(get_db)):
+    """
+    Проверяет, отозван ли ключ
+    :param public_key:
+    :return: {"revoked": False, "message": "Key not revoked"} or {"revoked": True, "message": "Key revoked"}
+    """
     cursor, conn = db
 
     cursor.execute("SELECT * FROM revoked_keys WHERE pubkey = %s", (public_key,))

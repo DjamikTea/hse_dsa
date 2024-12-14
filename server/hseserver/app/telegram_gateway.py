@@ -171,3 +171,13 @@ def mock_http(mocked_aiohttp, test_phone_number):
         "https://gatewayapi.telegram.org/revokeVerificationMessage",
         payload={"ok": True, "result": True},
     )
+
+    mocked_aiohttp.post(
+        "https://api3.greensms.ru/account/token",
+        payload={"access_token": "1234567890"},
+    )
+
+    mocked_aiohttp.post(
+        "https://api3.greensms.ru/call/send",
+        payload={"code": "123456"},
+    )
