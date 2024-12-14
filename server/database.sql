@@ -100,7 +100,6 @@ create table documents
     can_access   varchar(255),
     PRIMARY KEY (timeuuid),
     UNIQUE (path),
-    UNIQUE (sha256),
     INDEX (user_id)
 );
 
@@ -112,8 +111,9 @@ create table new_docs_available
     timeuuid     CHAR(36)      not null,
     filename     VARCHAR(255)  not null,
     created      timestamp     not null,
-    sign         VARCHAR(4096),
+    sign         VARCHAR(4096) not null,
     sha256       CHAR(64)      not null,
+    sender_phone text(16)      not null,
     INDEX (user_id),
     INDEX (timeuuid)
 );

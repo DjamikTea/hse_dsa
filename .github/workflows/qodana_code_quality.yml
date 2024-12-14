@@ -5,8 +5,6 @@ on:
   push:
     branches: # Specify your branches here
       - main # The 'main' branch
-      - 'releases/*' # The release branches
-
 jobs:
   qodana:
     runs-on: ubuntu-latest
@@ -24,5 +22,5 @@ jobs:
         with:
           pr-mode: false
         env:
-          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_62518881 }}
+          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_1219695300 }}
           QODANA_ENDPOINT: 'https://qodana.cloud'

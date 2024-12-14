@@ -7,9 +7,7 @@ __pycache__/
 .benchmarks
 csr.json
 public_key.pem
-<<<<<<< HEAD
 private_key.pem
 auth_token.json
-=======
->>>>>>> 4de22ca (cli for generate pair key , csr and registration)
 dist
+mysql

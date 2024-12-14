@@ -8,7 +8,6 @@ Subpackages
    :maxdepth: 4
 
    hsecrypto.dsa
-   hsecrypto.hash
    hsecrypto.lib
 
 Module contents
