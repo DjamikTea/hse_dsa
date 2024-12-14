@@ -24,6 +24,10 @@ from hseclient.content.json_data import (
 
 
 def get_external_ip():
+    """
+    Получение внешнего IP-адреса.
+    :return: IP-адрес.
+    """
     try:
         response = requests.get("https://api.ipify.org")
         if response.status_code == 200:
@@ -62,12 +66,18 @@ def set_host():
 
 
 def generate_keys():
+    """
+    Генерация ключей.
+    """
     dsa = GostDSA()
     privkey, pubkey = dsa.generate_key_pair()
     json_data.write_keys(privkey, pubkey)
 
 
 def register():
+    """
+    Регистрация пользователя.
+    """
     try:
         keys = json_data.read_keys()
         if keys["privkey"] is None or keys["pubkey"] is None:
@@ -120,7 +130,7 @@ def register():
         url = json_data.read_host().split("//")[1]
 
         if crypt.check_csr_root(cert, url, None):
-            write_root_pubkey(csr["root"]["root_ca"]["public_key"])
+            write_root_pubkey(cert["root"]["root_ca"]["public_key"])
             p_success("Регистрация прошла успешно.")
             return True
         else:
@@ -304,7 +314,6 @@ def check_new_docs(db: Database):
         ids = []
         for dcs in know_docs:
             ids.append(dcs[0])
-
         for document in documents:
             if document["timeuuid"] in ids:
                 continue
@@ -413,6 +422,9 @@ def delete_file(timeuuid: str):
 
 
 def auth():
+    """
+    Авторизация пользователя.
+    """
     response, status = asyncio.run(api.get_auth(read_phone_number()))
     if status != 200:
         p_error(f"При авторизации: {response.get('detail')}")
@@ -446,6 +458,9 @@ def auth():
 
 
 def revoke():
+    """
+    Отзыв ключа и удаление аккаунта.
+    """
     response, status = asyncio.run(api.revoke(read_phone_number()))
     if status != 200:
         p_error(f"При отзыве ключа: {response.get('detail')}")

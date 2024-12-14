@@ -1,0 +1,30 @@
+name: Client tests
+
+on:
+  push:
+    paths:
+        - client/**
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Tests
+        run: |
+          cd client/
+          python -m pip install --upgrade pip
+          python -m pip install pytest
+          export POETRY_HOME=/opt/poetry
+          python -m venv $POETRY_HOME
+          $POETRY_HOME/bin/pip install poetry
+          $POETRY_HOME/bin/poetry install
+          $POETRY_HOME/bin/poetry run pytest tests/tests.py 
