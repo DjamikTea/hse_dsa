@@ -112,7 +112,10 @@ async def revoke_verify(phone: str, code: str, request: Request, db=Depends(get_
     return {"message": "Key revoked and user deleted"}
 
 
-@router.get("/check", response_model=dict, )
+@router.get(
+    "/check",
+    response_model=dict,
+)
 async def check(public_key: str, db=Depends(get_db)):
     """
     Проверяет, отозван ли ключ

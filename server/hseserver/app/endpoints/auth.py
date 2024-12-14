@@ -34,7 +34,7 @@ def generate_trs():
 
 @router.post("/register")
 async def register(
-        phone_number: str, fio: str, public_key: str, request: Request, db=Depends(get_db)
+    phone_number: str, fio: str, public_key: str, request: Request, db=Depends(get_db)
 ):
     """
     Регистрация пользователя
@@ -57,7 +57,7 @@ async def register(
     user = cursor.fetchone()
     if user is not None:
         if user["time"].replace(tzinfo=timezone.utc) > datetime.now(
-                timezone.utc
+            timezone.utc
         ) - timedelta(minutes=5):
             raise HTTPException(
                 status_code=400, detail="Too many requests, try again later"
@@ -97,7 +97,7 @@ async def register(
 
 @router.get("/verify")
 async def verify(
-        phone_number: str, code: str, csr: str, request: Request, db=Depends(get_db)
+    phone_number: str, code: str, csr: str, request: Request, db=Depends(get_db)
 ):
     """
     Проверка кода верификации
@@ -116,7 +116,7 @@ async def verify(
         raise HTTPException(status_code=400, detail="Register not found")
 
     if user["time"].replace(tzinfo=timezone.utc) < datetime.now(
-            timezone.utc
+        timezone.utc
     ) - timedelta(minutes=5):
         raise HTTPException(status_code=400, detail="Verification code expired")
     ip = request.headers.get("X-Real-IP")
@@ -188,7 +188,7 @@ async def get_auth(phone: str, db=Depends(get_db)):
     authx = cursor.fetchone()
     if authx is not None:
         if authx["timestamp"].replace(tzinfo=timezone.utc) > datetime.now(
-                timezone.utc
+            timezone.utc
         ) - timedelta(minutes=5):
             raise HTTPException(
                 status_code=400, detail="Too many requests, try again later"
@@ -222,7 +222,7 @@ async def auth(phone: str, signed_trs: str, db=Depends(get_db)):
         raise HTTPException(status_code=400, detail="User not found")
 
     if user["timestamp"].replace(tzinfo=timezone.utc) < datetime.now(
-            timezone.utc
+        timezone.utc
     ) - timedelta(seconds=5):
         raise HTTPException(status_code=400, detail="TRS expired")
 
