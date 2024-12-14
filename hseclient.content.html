@@ -14,6 +14,8 @@
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="hseserver package" href="hseserver.html" />
+    <link rel="prev" title="hseclient package" href="hseclient.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -36,8 +38,134 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
 </section>
-<section id="hseclient-content-api-module">
-<h2>hseclient.content.api module<a class="headerlink" href="#hseclient-content-api-module" title="Link to this heading">¶</a></h2>
+<section id="module-hseclient.content.api">
+<span id="hseclient-content-api-module"></span><h2>hseclient.content.api module<a class="headerlink" href="#module-hseclient.content.api" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.api.accept_doc">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hseclient.content.api.</span></span><span class="sig-name descname"><span class="pre">accept_doc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeuuid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hseclient/content/api.html#accept_doc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.api.accept_doc" title="Link to this definition">¶</a></dt>
+<dd><p>Принятие документа.
+:param timeuuid: timeuuid документа.
+:return: JSON, status</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.api.auth">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hseclient.content.api.</span></span><span class="sig-name descname"><span class="pre">auth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phone</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">signed_trs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hseclient/content/api.html#auth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.api.auth" title="Link to this definition">¶</a></dt>
+<dd><p>Проверка подписи.
+:param phone: Номер телефона.
+:param signed_trs: Подписаная транзакция.
+:return: JSON, status</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.api.delete_file">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hseclient.content.api.</span></span><span class="sig-name descname"><span class="pre">delete_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeuuid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hseclient/content/api.html#delete_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.api.delete_file" title="Link to this definition">¶</a></dt>
+<dd><p>Удаление файла.
+:param timeuuid: timeuuid файла.
+:return: JSON, status</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.api.get_auth">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hseclient.content.api.</span></span><span class="sig-name descname"><span class="pre">get_auth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phone_number</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hseclient/content/api.html#get_auth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.api.get_auth" title="Link to this definition">¶</a></dt>
+<dd><p>Авторизация.
+:param phone_number: Номер телефона.
+:return: JSON, status</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.api.get_available_docs">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hseclient.content.api.</span></span><span class="sig-name descname"><span class="pre">get_available_docs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/hseclient/content/api.html#get_available_docs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.api.get_available_docs" title="Link to this definition">¶</a></dt>
+<dd><p>Получение доступных документов.
+:return: JSON, status</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.api.get_file">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hseclient.content.api.</span></span><span class="sig-name descname"><span class="pre">get_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeuuid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hseclient/content/api.html#get_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.api.get_file" title="Link to this definition">¶</a></dt>
+<dd><p>Получение файла.
+:param timeuuid: timeuuid файла.
+:return: file_path, status</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.api.get_my_files">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hseclient.content.api.</span></span><span class="sig-name descname"><span class="pre">get_my_files</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/hseclient/content/api.html#get_my_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.api.get_my_files" title="Link to this definition">¶</a></dt>
+<dd><p>Получение списка файлов.
+:return: JSON, status</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.api.register">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hseclient.content.api.</span></span><span class="sig-name descname"><span class="pre">register</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number_phone</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pubkey</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hseclient/content/api.html#register"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.api.register" title="Link to this definition">¶</a></dt>
+<dd><p>Регистрация пользователя.
+:param number_phone: Номер телефона.
+:param fio: ФИО.
+:param pubkey: Публичный ключ.
+:return: JSON, status</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.api.revoke">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hseclient.content.api.</span></span><span class="sig-name descname"><span class="pre">revoke</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phone_number</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hseclient/content/api.html#revoke"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.api.revoke" title="Link to this definition">¶</a></dt>
+<dd><p>Отзыв ключа и удаление аккаунта.
+:param phone_number: Номер телеф
+:return: JSON, status</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.api.revoke_check">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hseclient.content.api.</span></span><span class="sig-name descname"><span class="pre">revoke_check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pubkey</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hseclient/content/api.html#revoke_check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.api.revoke_check" title="Link to this definition">¶</a></dt>
+<dd><p>Проверка отзыва ключа.
+:param pubkey: Публичный ключ.
+:return: JSON, status</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.api.revoke_verify">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hseclient.content.api.</span></span><span class="sig-name descname"><span class="pre">revoke_verify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phone_number</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hseclient/content/api.html#revoke_verify"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.api.revoke_verify" title="Link to this definition">¶</a></dt>
+<dd><p>Подтверждение отзыва ключа.
+:param code: Код из СМС.
+:return: JSON, status</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.api.send_document">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hseclient.content.api.</span></span><span class="sig-name descname"><span class="pre">send_document</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeuuid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phone_number</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hseclient/content/api.html#send_document"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.api.send_document" title="Link to this definition">¶</a></dt>
+<dd><p>Отправка документа.
+:param timeuuid: timeuuid документа.
+:param phone_number: Номер телефона.
+:return: JSON, status</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.api.sign_document">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hseclient.content.api.</span></span><span class="sig-name descname"><span class="pre">sign_document</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeuuid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">signature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hseclient/content/api.html#sign_document"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.api.sign_document" title="Link to this definition">¶</a></dt>
+<dd><p>Подписывает документ.
+:param timeuuid: timeuuid документа.
+:param signature: Подпись.
+:return: JSON, status</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.api.upload_file">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hseclient.content.api.</span></span><span class="sig-name descname"><span class="pre">upload_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sha256</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hseclient/content/api.html#upload_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.api.upload_file" title="Link to this definition">¶</a></dt>
+<dd><p>Загрузка файла.
+:param file_path: Путь к файлу.
+:param sha256: Хэш файла.
+:return: JSON, status</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.api.verify">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hseclient.content.api.</span></span><span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number_phone</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sms_code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">csr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hseclient/content/api.html#verify"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.api.verify" title="Link to this definition">¶</a></dt>
+<dd><p>Проверка кода из СМС.
+:param number_phone: Номер телефона.
+:param sms_code: Код из СМС.
+:param csr: CSR в формате json.
+:return: JSON, status</p>
+</dd></dl>
+
 </section>
 <section id="module-hseclient.content.cglobal">
 <span id="hseclient-content-cglobal-module"></span><h2>hseclient.content.cglobal module<a class="headerlink" href="#module-hseclient.content.cglobal" title="Link to this heading">¶</a></h2>
@@ -47,11 +175,78 @@
 <dd></dd></dl>
 
 </section>
-<section id="hseclient-content-cprint-module">
-<h2>hseclient.content.cprint module<a class="headerlink" href="#hseclient-content-cprint-module" title="Link to this heading">¶</a></h2>
+<section id="module-hseclient.content.cprint">
+<span id="hseclient-content-cprint-module"></span><h2>hseclient.content.cprint module<a class="headerlink" href="#module-hseclient.content.cprint" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.cprint.p_error">
+<span class="sig-prename descclassname"><span class="pre">hseclient.content.cprint.</span></span><span class="sig-name descname"><span class="pre">p_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hseclient/content/cprint.html#p_error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.cprint.p_error" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.cprint.p_success">
+<span class="sig-prename descclassname"><span class="pre">hseclient.content.cprint.</span></span><span class="sig-name descname"><span class="pre">p_success</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hseclient/content/cprint.html#p_success"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.cprint.p_success" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </section>
-<section id="hseclient-content-crypt-module">
-<h2>hseclient.content.crypt module<a class="headerlink" href="#hseclient-content-crypt-module" title="Link to this heading">¶</a></h2>
+<section id="module-hseclient.content.crypt">
+<span id="hseclient-content-crypt-module"></span><h2>hseclient.content.crypt module<a class="headerlink" href="#module-hseclient.content.crypt" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.crypt.check_csr_root">
+<span class="sig-prename descclassname"><span class="pre">hseclient.content.crypt.</span></span><span class="sig-name descname"><span class="pre">check_csr_root</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">server_domain</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">server_pubkey</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/hseclient/content/crypt.html#check_csr_root"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.crypt.check_csr_root" title="Link to this definition">¶</a></dt>
+<dd><p>Проверка подписи корневого центра CSR.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>csr</strong> – CSR в формате json.</p></li>
+<li><p><strong>server_domain</strong> – Домен сервера.</p></li>
+<li><p><strong>server_pubkey</strong> – Публичный ключ сервера.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Результат проверки.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.crypt.check_document">
+<span class="sig-prename descclassname"><span class="pre">hseclient.content.crypt.</span></span><span class="sig-name descname"><span class="pre">check_document</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sha256</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pubkey</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">server_domain</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeuuid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">server_pubkey</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client_phone_number</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/hseclient/content/crypt.html#check_document"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.crypt.check_document" title="Link to this definition">¶</a></dt>
+<dd><p>Проверяет подпись документа
+:param signature: подпись документа
+:param sha256: sha256 файла
+:param pubkey: публичный ключ
+:param server_domain: домен сервера
+:param timeuuid: timeuuid документа
+:param server_pubkey: публичный ключ сервера
+:param client_phone_number: номер телефона клиента
+:return: результат проверки</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.crypt.generate_csr">
+<span class="sig-prename descclassname"><span class="pre">hseclient.content.crypt.</span></span><span class="sig-name descname"><span class="pre">generate_csr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">private_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">public_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">country</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">organization</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phone_number</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ip</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/hseclient/content/crypt.html#generate_csr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.crypt.generate_csr" title="Link to this definition">¶</a></dt>
+<dd><p>Генерация запроса на подписание сертификата (CSR).
+:param private_key: Приватный ключ.
+:param public_key: Публичный ключ.
+:param country: Двухбуквенный код страны (ISO 3166-1 alpha-2).
+:param organization: Название организации.
+:param phone_number: Номер телефона.
+:param ip: IP-адрес.
+:param fio: ФИО.
+:return: CSR в формате json.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.crypt.sign_document">
+<span class="sig-prename descclassname"><span class="pre">hseclient.content.crypt.</span></span><span class="sig-name descname"><span class="pre">sign_document</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeuuid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sha256</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">private_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">certificate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/hseclient/content/crypt.html#sign_document"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.crypt.sign_document" title="Link to this definition">¶</a></dt>
+<dd><p>Подписывает документ
+:param timeuuid: timeuuid документа
+:param private_key: приватный ключ
+:param certificate: сертификат
+:param sha256: sha256 файла
+:return: подписанный документ</p>
+</dd></dl>
+
 </section>
 <section id="module-hseclient.content.database">
 <span id="hseclient-content-database-module"></span><h2>hseclient.content.database module<a class="headerlink" href="#module-hseclient.content.database" title="Link to this heading">¶</a></h2>
@@ -87,11 +282,173 @@
 </dd></dl>
 
 </section>
-<section id="hseclient-content-fn-module">
-<h2>hseclient.content.fn module<a class="headerlink" href="#hseclient-content-fn-module" title="Link to this heading">¶</a></h2>
+<section id="module-hseclient.content.fn">
+<span id="hseclient-content-fn-module"></span><h2>hseclient.content.fn module<a class="headerlink" href="#module-hseclient.content.fn" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.fn.auth">
+<span class="sig-prename descclassname"><span class="pre">hseclient.content.fn.</span></span><span class="sig-name descname"><span class="pre">auth</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/hseclient/content/fn.html#auth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.fn.auth" title="Link to this definition">¶</a></dt>
+<dd><p>Авторизация пользователя.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.fn.check_new_docs">
+<span class="sig-prename descclassname"><span class="pre">hseclient.content.fn.</span></span><span class="sig-name descname"><span class="pre">check_new_docs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hseclient.content.database.Database" title="hseclient.content.database.Database"><span class="pre">Database</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hseclient/content/fn.html#check_new_docs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.fn.check_new_docs" title="Link to this definition">¶</a></dt>
+<dd><p>Проверяет новые документы и добавляет в базу данных.
+:param db: База данных.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.fn.delete_file">
+<span class="sig-prename descclassname"><span class="pre">hseclient.content.fn.</span></span><span class="sig-name descname"><span class="pre">delete_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeuuid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hseclient/content/fn.html#delete_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.fn.delete_file" title="Link to this definition">¶</a></dt>
+<dd><p>Удаляет документ из базы данных.
+:param db: База данных.
+:param timeuuid: ID документа.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.fn.generate_keys">
+<span class="sig-prename descclassname"><span class="pre">hseclient.content.fn.</span></span><span class="sig-name descname"><span class="pre">generate_keys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/hseclient/content/fn.html#generate_keys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.fn.generate_keys" title="Link to this definition">¶</a></dt>
+<dd><p>Генерация ключей.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.fn.get_external_ip">
+<span class="sig-prename descclassname"><span class="pre">hseclient.content.fn.</span></span><span class="sig-name descname"><span class="pre">get_external_ip</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/hseclient/content/fn.html#get_external_ip"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.fn.get_external_ip" title="Link to this definition">¶</a></dt>
+<dd><p>Получение внешнего IP-адреса.
+:return: IP-адрес.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.fn.get_full_name">
+<span class="sig-prename descclassname"><span class="pre">hseclient.content.fn.</span></span><span class="sig-name descname"><span class="pre">get_full_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/hseclient/content/fn.html#get_full_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.fn.get_full_name" title="Link to this definition">¶</a></dt>
+<dd><p>Запрос ФИО.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.fn.get_phone_number">
+<span class="sig-prename descclassname"><span class="pre">hseclient.content.fn.</span></span><span class="sig-name descname"><span class="pre">get_phone_number</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/hseclient/content/fn.html#get_phone_number"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.fn.get_phone_number" title="Link to this definition">¶</a></dt>
+<dd><p>Запрос номера телефона.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.fn.get_sender_docs">
+<span class="sig-prename descclassname"><span class="pre">hseclient.content.fn.</span></span><span class="sig-name descname"><span class="pre">get_sender_docs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hseclient.content.database.Database" title="hseclient.content.database.Database"><span class="pre">Database</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeuuid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hseclient/content/fn.html#get_sender_docs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.fn.get_sender_docs" title="Link to this definition">¶</a></dt>
+<dd><p>Скачивает файл по ID и проверяет подпись.
+:param db: База данных.
+:param timeuuid: ID файла.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.fn.get_sms_code">
+<span class="sig-prename descclassname"><span class="pre">hseclient.content.fn.</span></span><span class="sig-name descname"><span class="pre">get_sms_code</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/hseclient/content/fn.html#get_sms_code"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.fn.get_sms_code" title="Link to this definition">¶</a></dt>
+<dd><p>Запрос кода из мессенджера.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.fn.list_files">
+<span class="sig-prename descclassname"><span class="pre">hseclient.content.fn.</span></span><span class="sig-name descname"><span class="pre">list_files</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/hseclient/content/fn.html#list_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.fn.list_files" title="Link to this definition">¶</a></dt>
+<dd><p>Выводит список файлов пользователя.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.fn.register">
+<span class="sig-prename descclassname"><span class="pre">hseclient.content.fn.</span></span><span class="sig-name descname"><span class="pre">register</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/hseclient/content/fn.html#register"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.fn.register" title="Link to this definition">¶</a></dt>
+<dd><p>Регистрация пользователя.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.fn.revoke">
+<span class="sig-prename descclassname"><span class="pre">hseclient.content.fn.</span></span><span class="sig-name descname"><span class="pre">revoke</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/hseclient/content/fn.html#revoke"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.fn.revoke" title="Link to this definition">¶</a></dt>
+<dd><p>Отзыв ключа и удаление аккаунта.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.fn.send_document">
+<span class="sig-prename descclassname"><span class="pre">hseclient.content.fn.</span></span><span class="sig-name descname"><span class="pre">send_document</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeuuid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phone_number</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hseclient/content/fn.html#send_document"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.fn.send_document" title="Link to this definition">¶</a></dt>
+<dd><p>Загружает и подписывает документ.
+:param timeuuid: ID документа.
+:param phone_number: Номер телефона получателя.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.fn.set_host">
+<span class="sig-prename descclassname"><span class="pre">hseclient.content.fn.</span></span><span class="sig-name descname"><span class="pre">set_host</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/hseclient/content/fn.html#set_host"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.fn.set_host" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.fn.sign_document">
+<span class="sig-prename descclassname"><span class="pre">hseclient.content.fn.</span></span><span class="sig-name descname"><span class="pre">sign_document</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeuuid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hseclient/content/fn.html#sign_document"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.fn.sign_document" title="Link to this definition">¶</a></dt>
+<dd><p>Подписывает документ и отправляет на сервер.
+:param timeuuid: ID документа.
+:param file_path: путь к файлу.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.fn.upload_file">
+<span class="sig-prename descclassname"><span class="pre">hseclient.content.fn.</span></span><span class="sig-name descname"><span class="pre">upload_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hseclient/content/fn.html#upload_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.fn.upload_file" title="Link to this definition">¶</a></dt>
+<dd><p>Загрузка файла на сервер.
+:param file_path: Путь к файлу.
+:return: ID файла or False</p>
+</dd></dl>
+
 </section>
-<section id="hseclient-content-json-data-module">
-<h2>hseclient.content.json_data module<a class="headerlink" href="#hseclient-content-json-data-module" title="Link to this heading">¶</a></h2>
+<section id="module-hseclient.content.json_data">
+<span id="hseclient-content-json-data-module"></span><h2>hseclient.content.json_data module<a class="headerlink" href="#module-hseclient.content.json_data" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.json_data.read_cert">
+<span class="sig-prename descclassname"><span class="pre">hseclient.content.json_data.</span></span><span class="sig-name descname"><span class="pre">read_cert</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/hseclient/content/json_data.html#read_cert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.json_data.read_cert" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.json_data.read_host">
+<span class="sig-prename descclassname"><span class="pre">hseclient.content.json_data.</span></span><span class="sig-name descname"><span class="pre">read_host</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/hseclient/content/json_data.html#read_host"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.json_data.read_host" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.json_data.read_keys">
+<span class="sig-prename descclassname"><span class="pre">hseclient.content.json_data.</span></span><span class="sig-name descname"><span class="pre">read_keys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/hseclient/content/json_data.html#read_keys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.json_data.read_keys" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.json_data.read_phone_number">
+<span class="sig-prename descclassname"><span class="pre">hseclient.content.json_data.</span></span><span class="sig-name descname"><span class="pre">read_phone_number</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/hseclient/content/json_data.html#read_phone_number"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.json_data.read_phone_number" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.json_data.read_root_pubkey">
+<span class="sig-prename descclassname"><span class="pre">hseclient.content.json_data.</span></span><span class="sig-name descname"><span class="pre">read_root_pubkey</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/hseclient/content/json_data.html#read_root_pubkey"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.json_data.read_root_pubkey" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.json_data.read_token">
+<span class="sig-prename descclassname"><span class="pre">hseclient.content.json_data.</span></span><span class="sig-name descname"><span class="pre">read_token</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/hseclient/content/json_data.html#read_token"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.json_data.read_token" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.json_data.write_cert">
+<span class="sig-prename descclassname"><span class="pre">hseclient.content.json_data.</span></span><span class="sig-name descname"><span class="pre">write_cert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cert</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/hseclient/content/json_data.html#write_cert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.json_data.write_cert" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.json_data.write_keys">
+<span class="sig-prename descclassname"><span class="pre">hseclient.content.json_data.</span></span><span class="sig-name descname"><span class="pre">write_keys</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">private_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">public_key</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/hseclient/content/json_data.html#write_keys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.json_data.write_keys" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.json_data.write_phone_number">
+<span class="sig-prename descclassname"><span class="pre">hseclient.content.json_data.</span></span><span class="sig-name descname"><span class="pre">write_phone_number</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phone_number</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/hseclient/content/json_data.html#write_phone_number"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.json_data.write_phone_number" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.json_data.write_root_pubkey">
+<span class="sig-prename descclassname"><span class="pre">hseclient.content.json_data.</span></span><span class="sig-name descname"><span class="pre">write_root_pubkey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pubkey</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/hseclient/content/json_data.html#write_root_pubkey"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.json_data.write_root_pubkey" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.content.json_data.write_token">
+<span class="sig-prename descclassname"><span class="pre">hseclient.content.json_data.</span></span><span class="sig-name descname"><span class="pre">write_token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/hseclient/content/json_data.html#write_token"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.content.json_data.write_token" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </section>
 <section id="module-hseclient.content">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-hseclient.content" title="Link to this heading">¶</a></h2>
@@ -125,14 +482,25 @@
 </search>
 <script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="modules.html">hse_dsa</a></li>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">hse_dsa</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="hsecrypto.html">hsecrypto package</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="hseclient.html">hseclient package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hseserver.html">hseserver package</a></li>
+</ul>
+</li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">hse_dsa</a><ul>
+  <li><a href="hseclient.html">hseclient package</a><ul>
+      <li>Previous: <a href="hseclient.html" title="previous chapter">hseclient package</a></li>
+      <li>Next: <a href="hseserver.html" title="next chapter">hseserver package</a></li>
+  </ul></li>
+  </ul></li>
   </ul></li>
 </ul>
 </div>

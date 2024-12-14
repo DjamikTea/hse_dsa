@@ -14,7 +14,7 @@
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="hseserver package" href="hseserver.html" />
+    <link rel="next" title="hseclient.content package" href="hseclient.content.html" />
     <link rel="prev" title="hsecrypto.lib package" href="hsecrypto.lib.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -35,14 +35,200 @@
             
   <section id="hseclient-package">
 <h1>hseclient package<a class="headerlink" href="#hseclient-package" title="Link to this heading">¶</a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hseclient.content.html">hseclient.content package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hseclient.content.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hseclient.content.html#module-hseclient.content.api">hseclient.content.api module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.api.accept_doc"><code class="docutils literal notranslate"><span class="pre">accept_doc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.api.auth"><code class="docutils literal notranslate"><span class="pre">auth()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.api.delete_file"><code class="docutils literal notranslate"><span class="pre">delete_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.api.get_auth"><code class="docutils literal notranslate"><span class="pre">get_auth()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.api.get_available_docs"><code class="docutils literal notranslate"><span class="pre">get_available_docs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.api.get_file"><code class="docutils literal notranslate"><span class="pre">get_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.api.get_my_files"><code class="docutils literal notranslate"><span class="pre">get_my_files()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.api.register"><code class="docutils literal notranslate"><span class="pre">register()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.api.revoke"><code class="docutils literal notranslate"><span class="pre">revoke()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.api.revoke_check"><code class="docutils literal notranslate"><span class="pre">revoke_check()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.api.revoke_verify"><code class="docutils literal notranslate"><span class="pre">revoke_verify()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.api.send_document"><code class="docutils literal notranslate"><span class="pre">send_document()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.api.sign_document"><code class="docutils literal notranslate"><span class="pre">sign_document()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.api.upload_file"><code class="docutils literal notranslate"><span class="pre">upload_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.api.verify"><code class="docutils literal notranslate"><span class="pre">verify()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hseclient.content.html#module-hseclient.content.cglobal">hseclient.content.cglobal module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.cglobal.reassign_dir"><code class="docutils literal notranslate"><span class="pre">reassign_dir()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hseclient.content.html#module-hseclient.content.cprint">hseclient.content.cprint module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.cprint.p_error"><code class="docutils literal notranslate"><span class="pre">p_error()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.cprint.p_success"><code class="docutils literal notranslate"><span class="pre">p_success()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hseclient.content.html#module-hseclient.content.crypt">hseclient.content.crypt module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.crypt.check_csr_root"><code class="docutils literal notranslate"><span class="pre">check_csr_root()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.crypt.check_document"><code class="docutils literal notranslate"><span class="pre">check_document()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.crypt.generate_csr"><code class="docutils literal notranslate"><span class="pre">generate_csr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.crypt.sign_document"><code class="docutils literal notranslate"><span class="pre">sign_document()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hseclient.content.html#module-hseclient.content.database">hseclient.content.database module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.database.Database"><code class="docutils literal notranslate"><span class="pre">Database</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="hseclient.content.html#hseclient.content.database.Database.close"><code class="docutils literal notranslate"><span class="pre">Database.close()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hseclient.content.html#hseclient.content.database.Database.execute"><code class="docutils literal notranslate"><span class="pre">Database.execute()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hseclient.content.html#hseclient.content.database.Database.fetchall"><code class="docutils literal notranslate"><span class="pre">Database.fetchall()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hseclient.content.html#hseclient.content.database.Database.fetchone"><code class="docutils literal notranslate"><span class="pre">Database.fetchone()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hseclient.content.html#hseclient.content.database.Database.query"><code class="docutils literal notranslate"><span class="pre">Database.query()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hseclient.content.html#module-hseclient.content.fn">hseclient.content.fn module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.fn.auth"><code class="docutils literal notranslate"><span class="pre">auth()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.fn.check_new_docs"><code class="docutils literal notranslate"><span class="pre">check_new_docs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.fn.delete_file"><code class="docutils literal notranslate"><span class="pre">delete_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.fn.generate_keys"><code class="docutils literal notranslate"><span class="pre">generate_keys()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.fn.get_external_ip"><code class="docutils literal notranslate"><span class="pre">get_external_ip()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.fn.get_full_name"><code class="docutils literal notranslate"><span class="pre">get_full_name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.fn.get_phone_number"><code class="docutils literal notranslate"><span class="pre">get_phone_number()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.fn.get_sender_docs"><code class="docutils literal notranslate"><span class="pre">get_sender_docs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.fn.get_sms_code"><code class="docutils literal notranslate"><span class="pre">get_sms_code()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.fn.list_files"><code class="docutils literal notranslate"><span class="pre">list_files()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.fn.register"><code class="docutils literal notranslate"><span class="pre">register()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.fn.revoke"><code class="docutils literal notranslate"><span class="pre">revoke()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.fn.send_document"><code class="docutils literal notranslate"><span class="pre">send_document()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.fn.set_host"><code class="docutils literal notranslate"><span class="pre">set_host()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.fn.sign_document"><code class="docutils literal notranslate"><span class="pre">sign_document()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.fn.upload_file"><code class="docutils literal notranslate"><span class="pre">upload_file()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hseclient.content.html#module-hseclient.content.json_data">hseclient.content.json_data module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.json_data.read_cert"><code class="docutils literal notranslate"><span class="pre">read_cert()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.json_data.read_host"><code class="docutils literal notranslate"><span class="pre">read_host()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.json_data.read_keys"><code class="docutils literal notranslate"><span class="pre">read_keys()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.json_data.read_phone_number"><code class="docutils literal notranslate"><span class="pre">read_phone_number()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.json_data.read_root_pubkey"><code class="docutils literal notranslate"><span class="pre">read_root_pubkey()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.json_data.read_token"><code class="docutils literal notranslate"><span class="pre">read_token()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.json_data.write_cert"><code class="docutils literal notranslate"><span class="pre">write_cert()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.json_data.write_keys"><code class="docutils literal notranslate"><span class="pre">write_keys()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.json_data.write_phone_number"><code class="docutils literal notranslate"><span class="pre">write_phone_number()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.json_data.write_root_pubkey"><code class="docutils literal notranslate"><span class="pre">write_root_pubkey()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hseclient.content.html#hseclient.content.json_data.write_token"><code class="docutils literal notranslate"><span class="pre">write_token()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hseclient.content.html#module-hseclient.content">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
 </section>
-<section id="hseclient-cli-module">
-<h2>hseclient.cli module<a class="headerlink" href="#hseclient-cli-module" title="Link to this heading">¶</a></h2>
-</section>
-<section id="hseclient-csr-module">
-<h2>hseclient.csr module<a class="headerlink" href="#hseclient-csr-module" title="Link to this heading">¶</a></h2>
+<section id="module-hseclient.cli">
+<span id="hseclient-cli-module"></span><h2>hseclient.cli module<a class="headerlink" href="#module-hseclient.cli" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="hseclient.cli.MyCLI">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hseclient.cli.</span></span><span class="sig-name descname"><span class="pre">MyCLI</span></span><a class="reference internal" href="_modules/hseclient/cli.html#MyCLI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.cli.MyCLI" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Cmd</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="hseclient.cli.MyCLI.do_check_available">
+<span class="sig-name descname"><span class="pre">do_check_available</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hseclient/cli.html#MyCLI.do_check_available"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.cli.MyCLI.do_check_available" title="Link to this definition">¶</a></dt>
+<dd><p>Проверка доступности сервера.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hseclient.cli.MyCLI.do_delete">
+<span class="sig-name descname"><span class="pre">do_delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hseclient/cli.html#MyCLI.do_delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.cli.MyCLI.do_delete" title="Link to this definition">¶</a></dt>
+<dd><p>Удаление документа.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hseclient.cli.MyCLI.do_download">
+<span class="sig-name descname"><span class="pre">do_download</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hseclient/cli.html#MyCLI.do_download"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.cli.MyCLI.do_download" title="Link to this definition">¶</a></dt>
+<dd><p>Скачивание документа.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hseclient.cli.MyCLI.do_generate">
+<span class="sig-name descname"><span class="pre">do_generate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hseclient/cli.html#MyCLI.do_generate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.cli.MyCLI.do_generate" title="Link to this definition">¶</a></dt>
+<dd><p>Команда для генерации пары ключей.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hseclient.cli.MyCLI.do_login">
+<span class="sig-name descname"><span class="pre">do_login</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hseclient/cli.html#MyCLI.do_login"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.cli.MyCLI.do_login" title="Link to this definition">¶</a></dt>
+<dd><p>Авторизация пользователя.
+Запускает пошаговый процесс ввода данных.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hseclient.cli.MyCLI.do_my_files">
+<span class="sig-name descname"><span class="pre">do_my_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hseclient/cli.html#MyCLI.do_my_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.cli.MyCLI.do_my_files" title="Link to this definition">¶</a></dt>
+<dd><p>Получение списка своих файлов.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hseclient.cli.MyCLI.do_register">
+<span class="sig-name descname"><span class="pre">do_register</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hseclient/cli.html#MyCLI.do_register"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.cli.MyCLI.do_register" title="Link to this definition">¶</a></dt>
+<dd><p>Регистрация пользователя.
+Запускает пошаговый процесс ввода данных.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hseclient.cli.MyCLI.do_revoke">
+<span class="sig-name descname"><span class="pre">do_revoke</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hseclient/cli.html#MyCLI.do_revoke"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.cli.MyCLI.do_revoke" title="Link to this definition">¶</a></dt>
+<dd><p>Удаление пользователя.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hseclient.cli.MyCLI.do_send">
+<span class="sig-name descname"><span class="pre">do_send</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hseclient/cli.html#MyCLI.do_send"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.cli.MyCLI.do_send" title="Link to this definition">¶</a></dt>
+<dd><p>Отправка документа.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hseclient.cli.MyCLI.do_sign">
+<span class="sig-name descname"><span class="pre">do_sign</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hseclient/cli.html#MyCLI.do_sign"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.cli.MyCLI.do_sign" title="Link to this definition">¶</a></dt>
+<dd><p>Подпись документа.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hseclient.cli.MyCLI.do_upload">
+<span class="sig-name descname"><span class="pre">do_upload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hseclient/cli.html#MyCLI.do_upload"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.cli.MyCLI.do_upload" title="Link to this definition">¶</a></dt>
+<dd><p>Загрузка файла на сервер.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hseclient.cli.MyCLI.privkey">
+<span class="sig-name descname"><span class="pre">privkey</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#hseclient.cli.MyCLI.privkey" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hseclient.cli.MyCLI.prompt">
+<span class="sig-name descname"><span class="pre">prompt</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'&gt;&gt;</span> <span class="pre">'</span></em><a class="headerlink" href="#hseclient.cli.MyCLI.prompt" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hseclient.cli.MyCLI.pubkey">
+<span class="sig-name descname"><span class="pre">pubkey</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#hseclient.cli.MyCLI.pubkey" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hseclient.cli.MyCLI.url">
+<span class="sig-name descname"><span class="pre">url</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#hseclient.cli.MyCLI.url" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hseclient.cli.run">
+<span class="sig-prename descclassname"><span class="pre">hseclient.cli.</span></span><span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/hseclient/cli.html#run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hseclient.cli.run" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </section>
 <section id="module-hseclient">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-hseclient" title="Link to this heading">¶</a></h2>
@@ -91,7 +277,7 @@
   <li><a href="index.html">Documentation overview</a><ul>
   <li><a href="modules.html">hse_dsa</a><ul>
       <li>Previous: <a href="hsecrypto.lib.html" title="previous chapter">hsecrypto.lib package</a></li>
-      <li>Next: <a href="hseserver.html" title="next chapter">hseserver package</a></li>
+      <li>Next: <a href="hseclient.content.html" title="next chapter">hseclient.content package</a></li>
   </ul></li>
   </ul></li>
 </ul>
