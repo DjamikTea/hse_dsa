@@ -15,7 +15,7 @@ from tabulate import tabulate
 from hseclient.content import json_data, crypt, api, cglobal
 from hseclient.content.cprint import p_error, p_success
 from hseclient.content.database import Database
-from hseclient.content.json_data import write_token, write_phone_number, read_phone_number
+from hseclient.content.json_data import write_token, write_phone_number, read_phone_number, write_root_pubkey
 
 
 def get_external_ip():
@@ -115,6 +115,7 @@ def register():
         url = json_data.read_host().split("//")[1]
 
         if crypt.check_csr_root(cert, url, None):
+            write_root_pubkey(csr["root"]["root_ca"]["public_key"])
             p_success("Регистрация прошла успешно.")
             return True
         else:
@@ -153,9 +154,9 @@ def get_phone_number():
 
 def get_sms_code():
     """Запрос кода из мессенджера."""
-    sms_code = input("Введите код из Telegram: ")
-    if not sms_code.isdigit() or len(sms_code) != 6:
-        print("Ошибка: код должен состоять из 6 цифр.")
+    sms_code = input("Введите последние 4 цифры из звонка: ")
+    if not sms_code.isdigit() or len(sms_code) != 4:
+        print("Ошибка: код должен состоять из 4 цифр.")
         return get_sms_code()
     return sms_code
 
@@ -267,7 +268,7 @@ def check_new_docs(db: Database):
         for i in range(len(documents)):
             documents[i] = {
                 key: documents[i][key]
-                for key in ["timeuuid", "filename", "created", "sign", "sha256", "ssender_phone"]
+                for key in ["timeuuid", "filename", "created", "sign", "sha256", "sender_phone"]
             }
             docs_view.append(
                 {
@@ -281,12 +282,20 @@ def check_new_docs(db: Database):
         table = tabulate(docs_view, headers=headers, tablefmt="pretty")
         print(table)
 
+        know_docs = db.query("SELECT timeuuid FROM docs_available;")
+
+        ids = []
+        for dcs in know_docs:
+            ids.append(dcs[0])
+
         for document in documents:
+            if document["timeuuid"] in ids:
+                continue
             db.execute(
                 "INSERT INTO docs_available (timeuuid, filename, created, sign, sha256, sender_phone) VALUES (?, ?, ?, ?, ?, ?);",
                 document["timeuuid"], document["filename"], document["created"], document["sign"], document["sha256"],
                 document["sender_phone"])
-        p_success("Документы успешно добавлены.")
+        p_success("Документы успешно обновлены.")
         return True
 
 
@@ -309,28 +318,38 @@ def get_sender_docs(db: Database, timeuuid: str):
         return False
 
     sha256_file = hashlib.sha256(open(file_path, "rb").read()).hexdigest()
-    if current_metadata["sha256"] != sha256_file:
+    if current_metadata[0][5] != sha256_file:
         p_error("Ошибка: хэш файла не совпадает.")
         return False
 
-    signaturex = json.loads(current_metadata["sign"])
-    pubkey = signaturex["client"]["public_key"]
+    signaturex = json.loads(current_metadata[0][4])
+    pubkey = signaturex["cert"]["client"]["public_key"]
 
-    pubkey_know = db.query("SELECT pubkey FROM known_users WHERE phone_number = ?;", current_metadata["phone_number"])
+    revoke_ch, stat = asyncio.run(api.revoke_check(pubkey))
 
-    if pubkey_know is None:
+    if revoke_ch.get("revoked"):
+        p_error("Отправитель отозван.")
+        return False
+    else:
+        print("Ключ отправителя не отозван.")
+
+
+    pubkey_know = db.query("SELECT pubkey FROM known_users WHERE phone_number = ?;", current_metadata[0][6])
+
+    if not pubkey_know:
         print("Отправитель не найден в известных номерах.")
         engl_or_spanish = input("Хотите добавить его? (y/n): ")
-        if engl_or_spanish.lower() == "y":
-            db.execute("INSERT INTO known_users (phone_number, pubkey) VALUES (?, ?);", current_metadata["phone_number"],
+        if engl_or_spanish.lower().strip() == "y":
+            db.execute("INSERT INTO known_users (phone_number, pubkey) VALUES (?, ?);", current_metadata[0][6],
                      pubkey)
             p_success("Отправитель добавлен.")
+            pubkey_know = db.query("SELECT pubkey FROM known_users WHERE phone_number = ?;", current_metadata[0][6])
         else:
             p_error("Отправитель не добавлен.")
             return False
 
-    result = crypt.check_document(signaturex, sha256_file, pubkey_know["pubkey"], json_data.read_host().split("//")[1],
-                                  timeuuid, json_data.read_root_pubkey(), current_metadata["sender_phone"])
+    result = crypt.check_document(signaturex, sha256_file, pubkey_know[0][0], json_data.read_host().split("//")[1],
+                                  timeuuid, json_data.read_root_pubkey(), current_metadata[0][6])
     if result:
         p_success("Подпись документа верна.")
         asyncio.run(api.accept_doc(timeuuid))

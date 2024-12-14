@@ -160,7 +160,7 @@ async def get_file(timeuuid: str):
             headers={"Authorization": f"{token}"},
         ) as response:
             if response.status == 200:
-                file_path = f"{download_dir}{response.headers.get('filename')}"
+                file_path = f"{download_dir}/{response.headers.get('filename')}"
                 with open(file_path, "wb") as f:
                     f.write(await response.read())
                 print("Download success")
@@ -177,7 +177,7 @@ async def revoke(phone_number: str):
     async with aiohttp.ClientSession() as session:
         async with session.post(
             f"{read_host()}/revoke",
-            headers={"phone": phone_number},
+            params={"phone": phone_number},
         ) as response:
             return await response.json(), response.status
 
@@ -190,7 +190,7 @@ async def revoke_verify(phone_number: str, code: str):
     async with aiohttp.ClientSession() as session:
         async with session.get(
             f"{read_host()}/revoke/verify",
-            headers={"phone": phone_number, "code": code},
+            params={"phone": phone_number, "code": code},
         ) as response:
             return await response.json(), response.status
 
@@ -203,7 +203,7 @@ async def revoke_check(pubkey: str):
     async with aiohttp.ClientSession() as session:
         async with session.get(
             f"{read_host()}/revoke/check",
-            headers={"pubkey": pubkey},
+            params={"public_key": pubkey},
         ) as response:
             return await response.json(), response.status
 

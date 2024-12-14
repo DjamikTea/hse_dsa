@@ -78,8 +78,6 @@ def check_csr_root(
     result = crypto.check(
         csr["root_sign"], str(csrx).encode(), csr["root"]["root_ca"]["public_key"]
     )
-    if result:
-        write_root_pubkey(csr["root"]["root_ca"]["public_key"])
     return result
 
 
