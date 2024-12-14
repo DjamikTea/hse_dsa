@@ -151,5 +151,5 @@ def test_sign_document_empty_private_key(mock_gost_dsa):
             timeuuid="uuid123",
             sha256="hash123",
             private_key="",
-            certificate="cert123",
+            certificate="cert1234",
         )

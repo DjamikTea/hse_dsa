@@ -27,4 +27,4 @@ jobs:
           python -m venv $POETRY_HOME
           $POETRY_HOME/bin/pip install poetry
           $POETRY_HOME/bin/poetry install
-          poetry run pytest tests/tests.py 
+          $POETRY_HOME/bin/poetry run pytest tests/tests.py 
