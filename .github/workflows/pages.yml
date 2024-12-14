@@ -30,6 +30,10 @@ jobs:
           pip install -r requirements.txt
           cd ..
           pip install https://github.com/DjamikTea/hse_dsa/releases/download/0.1.1/hsecrypto-0.1.1-py3-none-any.whl
+          cd client
+          $POETRY_HOME/bin/poetry export --without-hashes --format=requirements.txt > requirements.txt
+          pip install -r requirements.txt
+          cd ..
 
 
       - name: Generate Sphinx documentation
