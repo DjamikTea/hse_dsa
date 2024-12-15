@@ -1,6 +1,6 @@
 # DSA INFRASTRUCTURE
 
-Project for HSE
+Электронный документооборот с использованием ГОСТ подписи
 
 Документация: [https://djamiktea.github.io/hse_dsa/]
 
